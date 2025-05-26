@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeentt - Cadastro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+    }
+    
+    .sidebar {
+      background: linear-gradient(180deg, #00337a 0%, #00337a 100%);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .sidebar.active {
+      transform: translateX(0);
+    }
+    
+    .sidebar li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .top-bar {
+      background: linear-gradient(135deg, #00337a 0%, #00337a 100%);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .form-input {
+      transition: all 0.2s ease;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .form-input:focus {
+      border-color: #00337a;
+      box-shadow: 0 0 0 3px rgba(0, 51, 122, 0.2);
+    }
+    
+    .btn-submit {
+      background: linear-gradient(135deg, #00337a 0%, #00337a 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 51, 122, 0.3);
+    }
+    
+    .file-input {
+      border: 2px dashed #cbd5e1;
+      transition: all 0.2s ease;
+    }
+    
+    .file-input:hover {
+      border-color: #00337a;
+      background-color: #f8fafc;
+    }
+    
+    .file-input-label {
+      cursor: pointer;
+    }
+    
+    .file-input-label:hover .file-input-icon {
+      color: #00337a;
+    }
+    
+    /* Overlay for sidebar when active */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 30;
+    }
+    
+    .overlay.active {
+      display: block;
+    }
+    
+    /* Animation for form elements */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .form-group {
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-group:nth-child(3) { animation-delay: 0.3s; }
+    .form-group:nth-child(4) { animation-delay: 0.4s; }
+    .form-group:nth-child(5) { animation-delay: 0.5s; }
+    .form-group:nth-child(6) { animation-delay: 0.6s; }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #00337a;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #002a63;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen">
+  <!-- Overlay -->
+  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+  
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 bg-[#00337a] text-white z-40 shadow-lg">
+    <div class="p-4 text-center border-b border-blue-700">
+      <h1 class="text-2xl font-bold">ZEENTT</h1>
+      <p class="text-blue-200 text-sm">Sistema de Gestão</p>
+    </div>
+    <ul class="py-4 overflow-y-auto h-[calc(100%-80px)]">
+      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="menu.html" class="flex items-center"><i class="fas fa-home mr-3"></i> Início</a></li>
+      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="cadastro.html" class="flex items-center"><i class="fas fa-plus mr-3"></i> Cadastro</a></li>
+      <li class="px-4 py-3 bg-blue-900 hover:bg-opacity-10 hover:bg-white transition"><a href="cardapio.html" class="flex items-center"><i class="fas fa-utensils mr-3"></i> Cardápio</a></li>
+      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="pedido.html" class="flex items-center"><i class="fas fa-concierge-bell mr-3"></i> Pedidos</a></li>
+      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="cozinha.html" class="flex items-center"><i class="fas fa-blender mr-3"></i> Cozinha</a></li>
+      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="relatorio.html" class="flex items-center"><i class="fas fa-chart-bar mr-3"></i> Relatórios</a></li>
+      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="suporte.html" class="flex items-center"><i class="fas fa-headset mr-3"></i> Suporte</a></li>
+      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="informacoes.html" class="flex items-center"><i class="fas fa-info-circle mr-3"></i> Informações</a></li>
+      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="servico.html" class="flex items-center"><i class="fas fa-tools mr-3"></i> Serviços</a></li>
+    </ul>
+  </div>
+
+  <!-- Topbar -->
+  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 py-3 text-white shadow-md">
+    <div class="left-icons">
+      <button onclick="toggleMenu()" class="p-2 rounded-full hover:bg-white/10 transition">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+    </div>
+    <div class="logo">
+      <span class="text-xl font-bold">ZEENTT</span>
+    </div>
+    <div class="right-icons flex items-center space-x-3">
+      <button onclick="window.location.href='menu.html'" class="p-2 rounded-full hover:bg-white/10 transition">
+        <i class="fas fa-home text-xl"></i>
+      </button>
+      <button onclick="fazerLogoff()" class="p-2 rounded-full hover:bg-white/10 transition">
+        <i class="fas fa-sign-out-alt text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-20 pb-16 px-4">
+    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Cadastro de Itens do Cardápio</h1>
+        <button onclick="window.location.href='cardapio.html'" class="flex items-center text-sm text-blue-600 hover:text-blue-800">
+          <i class="fas fa-arrow-left mr-1"></i> Voltar ao Cardápio
+        </button>
+      </div>
+      
+      <form action="salvar_item.php" method="POST" enctype="multipart/form-data" class="space-y-5">
+        <!-- Código -->
+        <div class="form-group">
+          <label for="codigo" class="block text-sm font-medium text-gray-700 mb-1">Código do Item</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-hashtag text-gray-400"></i>
+            </div>
+            <input type="number" id="codigo" name="codigo"
+                   class="form-input w-full pl-10 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                   placeholder="Ex: 1001" required>
+          </div>
+        </div>
+        
+        <!-- Nome -->
+        <div class="form-group">
+          <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome do Item</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-tag text-gray-400"></i>
+            </div>
+            <input type="text" id="nome" name="nome"
+                   class="form-input w-full pl-10 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                   placeholder="Ex: Filé à Parmegiana" required>
+          </div>
+        </div>
+        
+        <!-- Tipo -->
+        <div class="form-group">
+          <label for="tipo" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Item</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-list text-gray-400"></i>
+            </div>
+            <select id="tipo" name="tipo"
+                    class="form-input w-full pl-10 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-200" required>
+              <option value="">Selecione o tipo</option>
+              <option value="Prato Principal">Prato Principal</option>
+              <option value="Sobremesa">Sobremesa</option>
+              <option value="Bebida">Bebida</option>
+              <option value="Acompanhamento">Acompanhamento</option>
+              <option value="Entrada">Entrada</option>
+              <option value="Salada">Salada</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Descrição -->
+        <div class="form-group">
+          <label for="descricao" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+          <div class="relative">
+            <div class="absolute top-3 left-3">
+              <i class="fas fa-align-left text-gray-400"></i>
+            </div>
+            <textarea id="descricao" name="descricao" rows="3"
+                      class="form-input w-full pl-10 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                      placeholder="Descreva o prato, ingredientes, modo de preparo, etc." required></textarea>
+          </div>
+        </div>
+        
+        <!-- Valor -->
+        <div class="form-group">
+          <label for="valor" class="block text-sm font-medium text-gray-700 mb-1">Valor (R$)</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-dollar-sign text-gray-400"></i>
+            </div>
+            <input type="number" id="valor" name="valor" step="0.01"
+                    class="form-input w-full pl-10 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-indigo-200"
+                    placeholder="Ex: 29.90" required>
+          </div>
+        </div>
+        
+        <!-- Imagem -->
+        <div class="form-group">
+          <label for="imagem" class="block text-sm font-medium text-gray-700 mb-1">Imagem do Item</label>
+          <div class="file-input rounded-lg p-4 text-center">
+            <label for="imagem" class="file-input-label">
+              <div class="flex flex-col items-center justify-center space-y-2">
+                <i class="file-input-icon fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                <p class="text-sm text-gray-600">Clique para selecionar ou arraste uma imagem</p>
+                <p class="text-xs text-gray-500">Formatos suportados: JPG, PNG (Máx. 5MB)</p>
+              </div>
+              <input type="file" id="imagem" name="imagem" accept="image/*"
+                      class="hidden" required>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Botão de Envio -->
+        <div class="pt-4">
+          <button type="submit" class="btn-submit w-full py-3 rounded-lg text-white font-bold shadow-md hover:shadow-lg">
+            <i class="fas fa-save mr-2"></i> Salvar Item
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-white py-3 shadow-inner z-20">
+    <div class="container mx-auto px-4">
+      <p class="text-center text-sm text-gray-600">&copy; 2025 ZEENTT - Todos os direitos reservados</p>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle sidebar
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      if (sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      } else {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Logoff function
+    function fazerLogoff() {
+      Swal.fire({
+        title: 'Tem certeza?',
+        text: "Você realmente deseja sair do sistema?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#00337a',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, sair',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'login.html';
+        }
+      });
+    }
+
+    // Preview image when selected
+    document.getElementById('imagem').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        // Validate file size (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('O arquivo é muito grande. O tamanho máximo permitido é 5MB.');
+          resetFileInput();
+          return;
+        }
+        
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (!validTypes.includes(file.type)) {
+          alert('Formato de arquivo não suportado. Use JPG ou PNG.');
+          resetFileInput();
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const fileInput = document.querySelector('.file-input');
+          fileInput.innerHTML = `
+            <div class="flex flex-col items-center">
+              <img src="${e.target.result}" class="h-32 w-full object-cover rounded-lg mb-2">
+              <span class="text-sm text-gray-600 truncate max-w-xs">${file.name}</span>
+              <button onclick="resetFileInput()" class="mt-2 text-red-500 hover:text-red-700 text-sm">
+                <i class="fas fa-trash mr-1"></i> Remover
+              </button>
+            </div>
+          `;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Reset file input
+    function resetFileInput() {
+      const fileInput = document.querySelector('.file-input');
+      fileInput.innerHTML = `
+        <label for="imagem" class="file-input-label">
+          <div class="flex flex-col items-center justify-center space-y-2">
+            <i class="file-input-icon fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+            <p class="text-sm text-gray-600">Clique para selecionar ou arraste uma imagem</p>
+            <p class="text-xs text-gray-500">Formatos suportados: JPG, PNG (Máx. 5MB)</p>
+          </div>
+          <input type="file" id="imagem" name="imagem" accept="image/*" class="hidden" required>
+        </label>
+      `;
+      document.getElementById('imagem').value = '';
+    }
+    
+    // Form validation before submit
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const codigo = document.getElementById('codigo').value;
+      const nome = document.getElementById('nome').value;
+      const tipo = document.getElementById('tipo').value;
+      const descricao = document.getElementById('descricao').value;
+      const valor = document.getElementById('valor').value;
+      const imagem = document.getElementById('imagem').files[0];
+      
+      if (!codigo || !nome || !tipo || !descricao || !valor || !imagem) {
+        e.preventDefault();
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      }
+      
+      if (valor <= 0) {
+        e.preventDefault();
+        alert('O valor deve ser maior que zero.');
+        return;
+      }
+    });
+  </script>
+  
+  <!-- SweetAlert for better alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
+<script></script>
+  
+</body>
+</html>

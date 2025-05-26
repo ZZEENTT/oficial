@@ -1,0 +1,166 @@
+/* 
+   Login CSS - Zeentt
+   Estilização da tela de login para o sistema Zeentt
+*/
+
+/* Configurações Globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #004AAD;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container principal */
+.container {
+    background-color: #004AAD;
+    color: white;
+    width: 85%;
+    max-width: 400px;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 74, 173, 0.3);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Logo */
+.container img {
+    display: block;
+    margin: 0 auto 25px auto;
+    transition: transform 0.3s ease;
+}
+
+.container img:hover {
+    transform: scale(1.05);
+}
+
+/* Campos de formulário */
+#loginForm input {
+    width: 80%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+    display: flexbox;
+}
+
+#loginForm input:focus {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+#loginForm input::placeholder {
+    color: #888;
+}
+
+/* Botão de entrar */
+#loginForm button {
+    width: 80%;
+    padding: 14px;
+    background-color: #ffffff;
+    color: #004AAD;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#loginForm button:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+#loginForm button:active {
+    transform: translateY(-1px);
+}
+
+/* Mensagens de feedback */
+.mensagem-login {
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease-in;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Slogan ou texto de rodapé */
+.slogan {
+    text-align: center;
+    margin-top: 0px;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 1px;
+}
+.logo {
+    text-align: center;
+    margin-top: 0px;
+    font-size: 50PX;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 1px;
+}
+
+/* Efeito de destaque nos campos ao digitar */
+#loginForm input:not(:placeholder-shown) {
+    border-left: 4px solid #ffffff;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsividade */
+@media screen and (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 30px 20px;
+    }
+    
+    #loginForm button {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .container {
+        width: 90%;
+        padding: 35px 25px;
+    }
+
+    #loginForm {
+        align-items: center;
+    }
+
+    #loginForm input,
+    #loginForm button {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    .slogan {
+        font-size: 11px;
+    }
+}

@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZEENTT - Sistemas Inteligentes para Comércio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zeentt: '#00337a',
+                        zeenttLight: '#1a4a8a',
+                        zeenttLighter: '#336199',
+                        zeenttDark: '#00255a',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 6s infinite cubic-bezier(0.4, 0, 0.6, 1)',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #00255a 0%, #00337a 50%, #1a4a8a 100%);
+        }
+        
+        .tech-pattern {
+            background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 15px 15px;
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 51, 122, 0.15), 0 10px 10px -5px rgba(0, 51, 122, 0.05);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: white;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #00337a 0%, #1a4a8a 100%);
+            transition: width 1.5s ease-out;
+        }
+        
+        .glow {
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .tech-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .tech-icon:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px rgba(0, 51, 122, 0.4));
+        }
+        
+        .animated-dots::after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50 antialiased">
+    <!-- Header/Navigation -->
+    <header class="bg-zeentt text-white shadow-lg sticky top-0 z-50 tech-pattern">
+      <div class="container mx-auto px-6 py-4">
+        <div class="flex justify-between items-center">
+          <!-- Logo + Nome -->
+          <div class="flex items-center space-x-2">
+            <div class="">
+              <img src="logo.png" alt="Logo ZEENTT" class="w-6 h-6 object-contain">
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight">ZEENTT</h1>
+          </div>
+    
+          <!-- Menu Desktop -->
+          <nav class="hidden lg:flex space-x-8">
+            <a href="#inicio" class="nav-link font-medium">Início</a>
+            <a href="#servicos" class="nav-link font-medium">Serviços</a>
+            <a href="#sobre" class="nav-link font-medium">Sobre Nós</a>
+            <a href="#diferenciais" class="nav-link font-medium">Diferenciais</a>
+            <a href="#contato" class="nav-link font-medium">Contato</a>
+            <a href="#equipe" class="nav-link font-medium">Equipe</a>
+            <a href="#FAQ" class="nav-link font-medium">FAQ</a>
+            <a href="https://websonsantana.github.io/ZEENTT/login.html"
+               class="bg-white text-zeentt font-bold py-2 px-4 rounded-lg hover:bg-opacity-90 transition duration-300 shadow-lg glow">
+              Área de Membros
+            </a>
+          </nav>
+    
+          <!-- Botão Menu Mobile -->
+          <button id="menuToggle" class="lg:hidden text-white focus:outline-none">
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+    
+      <!-- Menu Mobile Deslizante -->
+      <div id="mobileMenu"
+           class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform translate-x-full transition-transform duration-300 z-50 lg:hidden">
+        <div class="flex justify-between items-center px-4 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-bold text-zeentt">Menu</h2>
+          <button id="closeMenu" class="text-gray-600 text-xl hover:text-zeentt">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <nav class="flex flex-col px-4 py-4 space-y-4">
+          <a href="#inicio" class="text-gray-800 font-medium">Início</a>
+          <a href="#servicos" class="text-gray-800 font-medium">Serviços</a>
+          <a href="#sobre" class="text-gray-800 font-medium">Sobre Nós</a>
+          <a href="#diferenciais" class="text-gray-800 font-medium">Diferenciais</a>
+          <a href="#contato" class="text-gray-800 font-medium">Contato</a>
+          <a href="#equipe" class="text-gray-800 font-medium">Equipe</a>
+          <a href="#FAQ" class="text-gray-800 font-medium">FAQ</a>
+          <a href="https://websonsantana.github.io/ZEENTT/login.html"
+             class="bg-white text-zeentt font-bold py-4 px-8 rounded-lg hover:bg-opacity-90 transition duration-300 text-center shadow-lg glow">
+            Área de Membros
+          </a>
+        </nav>
+      </div>
+    </header>
+    
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-gradient text-white py-24 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIj48L3JlY3Q+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIj48L3JlY3Q+PC9zdmc+')"></div>
+        </div>
+        <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center relative z-10">
+            <div class="lg:w-1/2 mb-16 lg:mb-0">
+                <div class="inline-block bg-white bg-opacity-20 rounded-full px-4 py-2 mb-6">
+                    <span class="text-sm font-medium">Soluções Digitais para Comércio</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">Transforme seu negócio com tecnologia <span class="animated-dots"></span></h2>
+                <p class="text-xl mb-8 opacity-90 max-w-2xl">Sistemas inteligentes que automatizam processos, aumentam vendas e reduzem custos para seu comércio.</p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#contato" class="bg-white text-zeentt font-bold py-4 px-8 rounded-lg hover:bg-opacity-90 transition duration-300 text-center shadow-lg glow">Solicitar Demonstração</a>
+                    <a href="#servicos" class="border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white hover:text-zeentt transition duration-300 text-center flex items-center justify-center">
+                        <i class="fas fa-play-circle mr-2"></i> Vídeo Institucional
+                    </a>
+                </div>
+                
+                <div class="mt-12 flex items-center space-x-6">
+                    <div class="flex -space-x-2">
+                        <img src="https://randomuser.me/api/portraits/women/12.jpg" class="w-10 h-10 rounded-full border-2 border-white" alt="Cliente">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-10 h-10 rounded-full border-2 border-white" alt="Cliente">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" class="w-10 h-10 rounded-full border-2 border-white" alt="Cliente">
+                    </div>
+                    <div>
+                        <div class="flex items-center">
+                            <div class="flex -mr-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                            </div>
+                            <span class="ml-2 text-sm font-medium">5.0 (328 avaliações)</span>
+                        </div>
+                        <p class="text-sm opacity-80">+500 clientes satisfeitos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:w-1/2 flex justify-center relative">
+                <div class="relative w-full max-w-xl">
+                    <div class="absolute -top-10 -left-10 w-32 h-32 bg-blue-400 rounded-full filter blur-3xl opacity-20"></div>
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-purple-400 rounded-full filter blur-3xl opacity-20"></div>
+                    
+                    <div class="relative bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl p-2 border border-white border-opacity-20 shadow-2xl overflow-hidden">
+                        <div class="bg-black bg-opacity-50 rounded-xl overflow-hidden">
+                            <div class="bg-gray-900 py-2 px-4 flex items-center">
+                                <div class="flex space-x-2">
+                                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                                <div class="ml-4 text-xs text-gray-400">dashboard-zeentt.html</div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="text-white font-medium">Painel de Controle</h3>
+                                    <div class="text-xs text-gray-400">Atualizado agora</div>
+                                </div>
+                                
+                                <!-- Animated Dashboard -->
+                                <div class="grid grid-cols-2 gap-4 mb-4">
+                                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-3">
+                                        <div class="text-xs text-gray-400 mb-1">Vendas Hoje</div>
+                                        <div class="text-xl font-bold text-white flex items-center">
+                                            <span class="counter" data-target="12453">0</span>
+                                            <span class="text-xs text-green-400 ml-2">+12%</span>
+                                        </div>
+                                    </div>
+                                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-3">
+                                        <div class="text-xs text-gray-400 mb-1">Ticket Médio</div>
+                                        <div class="text-xl font-bold text-white">
+                                            R$ <span class="counter" data-target="87.42">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative h-40 mb-4">
+                                    <canvas id="animatedChart" class="w-full h-full"></canvas>
+                                </div>
+                                
+                                <div class="flex justify-between text-xs text-gray-400">
+                                    <div>Prod. Mais Vendidos</div>
+                                    <div>Ver todos</div>
+                                </div>
+                                
+                                <div class="mt-2 space-y-2">
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs mr-2">1</div>
+                                        <div class="flex-1 text-sm text-white truncate">Batata Frita gourmet</div>
+                                        <div class="text-xs text-gray-400 ml-2">422 unid.</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs mr-2">2</div>
+                                        <div class="flex-1 text-sm text-white truncate">Pizza de Mussarela</div>
+                                        <div class="text-xs text-gray-400 ml-2">389 unid.</div>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 rounded-full bg-yellow-500 flex items-center justify-center text-white text-xs mr-2">3</div>
+                                        <div class="flex-1 text-sm text-white truncate">Carioca</div>
+                                        <div class="text-xs text-gray-400 ml-2">290 unid.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Clients Logo Cloud -->
+    <div class="bg-white py-8 shadow-sm">
+        <div class="container mx-auto px-6">
+            <div class="text-center text-gray-500 text-sm mb-6">Nossos Clientes</div>
+            <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-8">
+                <img src="toka.png" alt="Toka da tapioca" class="h-8 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="toka.png" alt="Toka da tapioca" class="h-10 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="toka.png" alt="Toka da tapioca" class="h-12 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="toka.png" alt="Toka da tapioca"class="h-9 opacity-60 hover:opacity-100 transition duration-300">
+                <img src="toka.png" alt="Toka da tapioca" class="h-8 opacity-60 hover:opacity-100 transition duration-300">
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <section id="servicos" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-zeentt bg-opacity-10 text-zeentt rounded-full px-4 py-1 mb-4">
+                    <span class="text-sm font-medium">Nossas Soluções</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Sistemas completos para seu comércio</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Tecnologia de ponta para automatizar processos, aumentar vendas e melhorar a experiência do cliente.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="bg-white rounded-xl overflow-hidden card-hover">
+                    <div class="relative h-48 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-zeentt to-zeenttLight flex items-center justify-center">
+                            <i class="fas fa-cash-register text-white text-6xl opacity-20"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-30"></div>
+                        <div class="absolute bottom-0 left-0 p-6">
+                            <div class="w-12 h-12 bg-white rounded-lg shadow-md flex items-center justify-center text-zeentt text-xl mb-2">
+                                <i class="fas fa-cash-register"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Sistema PDV</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">Solução completa para gestão de vendas com emissão fiscal, controle de caixa e integração com múltiplos pagamentos.</p>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Emissão de NFC-e e SAT fiscal</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Controle de comandas e mesas</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Relatórios gerenciais em tempo real</span>
+                            </li>
+                        </ul>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-zeentt font-medium flex items-center hover:underline">
+                                Saiba mais <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <div class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Mais popular</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="bg-white rounded-xl overflow-hidden card-hover">
+                    <div class="relative h-48 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center">
+                            <i class="fas fa-warehouse text-white text-6xl opacity-20"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-30"></div>
+                        <div class="absolute bottom-0 left-0 p-6">
+                            <div class="w-12 h-12 bg-white rounded-lg shadow-md flex items-center justify-center text-purple-600 text-xl mb-2">
+                                <i class="fas fa-warehouse"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">Gestão de Estoque</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">Controle preciso de inventário com alertas de reposição, rastreamento de lotes e integração com fornecedores.</p>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Controle por código de barras e QR Code</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Gestão de validade e lote</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Inventário com leitor móvel</span>
+                            </li>
+                        </ul>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-purple-600 font-medium flex items-center hover:underline">
+                                Saiba mais <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <div class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Em promoção</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="bg-white rounded-xl overflow-hidden card-hover">
+                    <div class="relative h-48 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-teal-600 to-teal-800 flex items-center justify-center">
+                            <i class="fas fa-mobile-alt text-white text-6xl opacity-20"></i>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black to-transparent opacity-30"></div>
+                        <div class="absolute bottom-0 left-0 p-6">
+                            <div class="w-12 h-12 bg-white rounded-lg shadow-md flex items-center justify-center text-teal-600 text-xl mb-2">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-white">App para Clientes</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">Aplicativo personalizado para fidelização de clientes com catálogo digital, pedidos online e programa de pontos.</p>
+                        <ul class="space-y-3 mb-6">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Versões para iOS e Android</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Push notifications</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                <span class="text-gray-700">Integração com sistema PDV</span>
+                            </li>
+                        </ul>
+                        <div class="flex justify-between items-center">
+                            <a href="#" class="text-teal-600 font-medium flex items-center hover:underline">
+                                Saiba mais <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <div class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full">Novidade</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="#" class="inline-flex items-center text-zeentt font-medium hover:underline">
+                    Ver todos os serviços <i class="fas fa-chevron-down ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-zeentt text-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold mb-2">
+                        <span class="counter" data-target="500">0</span>+
+                    </div>
+                    <div class="text-lg opacity-90">Clientes Atendidos</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold mb-2">
+                        <span class="counter" data-target="98">0</span>%
+                    </div>
+                    <div class="text-lg opacity-90">Satisfação dos Clientes</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold mb-2">
+                        R$ <span class="counter" data-target="125">0</span>M+
+                    </div>
+                    <div class="text-lg opacity-90">Em Vendas Geradas</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-4xl md:text-5xl font-bold mb-2">
+                        <span class="counter" data-target="15">0</span>+
+                    </div>
+                    <div class="text-lg opacity-90">Anos no Mercado</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="diferenciais" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
+                    <div class="inline-block bg-zeentt bg-opacity-10 text-zeentt rounded-full px-4 py-1 mb-4">
+                        <span class="text-sm font-medium">Diferenciais</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Por que escolher a ZEENTT?</h2>
+                    <p class="text-lg text-gray-600 mb-8">Nossas soluções são desenvolvidas com tecnologia de ponta para oferecer a melhor experiência e resultados para seu negócio.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-zeentt bg-opacity-10 text-zeentt flex items-center justify-center">
+                                    <i class="fas fa-bolt"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Performance Inigualável</h3>
+                                <p class="text-gray-600">Sistemas otimizados que funcionam mesmo com internet instável, garantindo disponibilidade constante.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-zeentt bg-opacity-10 text-zeentt flex items-center justify-center">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Segurança de Dados</h3>
+                                <p class="text-gray-600">Criptografia avançada e backups automáticos para proteger suas informações e operações.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-zeentt bg-opacity-10 text-zeentt flex items-center justify-center">
+                                    <i class="fas fa-sync-alt"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Atualizações Constantes</h3>
+                                <p class="text-gray-600">Melhorias e novas funcionalidades lançadas regularmente, sem custos adicionais.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div class="relative">
+                        <div class="absolute -top-8 -left-8 w-32 h-32 bg-blue-400 rounded-full filter blur-3xl opacity-20"></div>
+                        <div class="absolute -bottom-8 -right-8 w-32 h-32 bg-purple-400 rounded-full filter blur-3xl opacity-20"></div>
+                        
+                        <div class="relative bg-gray-50 rounded-2xl p-8 border border-gray-200 shadow-lg">
+                            <div class="mb-8">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Tecnologias que utilizamos</h3>
+                                <div class="flex flex-wrap gap-4">
+                                    <div class="tech-icon w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" class="w-8 h-8" alt="React">
+                                    </div>
+                                    <div class="tech-icon w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" class="w-8 h-8" alt="Node.js">
+                                    </div>
+                                    <div class="tech-icon w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" class="w-8 h-8" alt="TypeScript">
+                                    </div>
+                                    <div class="tech-icon w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/aws/aws-original.svg" class="w-8 h-8" alt="AWS">
+                                    </div>
+                                    <div class="tech-icon w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" class="w-8 h-8" alt="Docker">
+                                    </div>
+                                    <div class="tech-icon w-16 h-16 bg-white rounded-xl shadow-md flex items-center justify-center">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" class="w-8 h-8" alt="PostgreSQL">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-4">Nossos diferenciais técnicos</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between mb-2">
+                                            <span class="text-sm font-medium text-gray-700">Tempo de resposta</span>
+                                            <span class="text-sm font-medium text-gray-700">98%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 98%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between mb-2">
+                                            <span class="text-sm font-medium text-gray-700">Disponibilidade</span>
+                                            <span class="text-sm font-medium text-gray-700">99.9%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 99.9%"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <div class="flex justify-between mb-2">
+                                            <span class="text-sm font-medium text-gray-700">Satisfação do cliente</span>
+                                            <span class="text-sm font-medium text-gray-700">97%</span>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress-fill" style="width: 97%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-zeentt bg-opacity-10 text-zeentt rounded-full px-4 py-1 mb-4">
+                    <span class="text-sm font-medium">Depoimentos</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">O que nossos clientes dizem</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Empresas que transformaram seus resultados com nossas soluções.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-8">
+                        <div class="flex items-center mb-6">
+                            <div class="flex -space-x-2">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-12 h-12 rounded-full border-2 border-white" alt="Cliente">
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-bold">Ana Carolina</h4>
+                                <p class="text-gray-600 text-sm">Supermercado Preço Bom</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">"Depois de implementar o sistema da ZEENTT, reduzimos em 35% as perdas por validade vencida e melhoramos nosso giro de estoque. O atendimento da equipe é excepcional!"</p>
+                        <div class="flex items-center">
+                            <div class="flex -mr-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                            </div>
+                            <span class="ml-2 text-sm text-gray-600">5.0 - 3 meses atrás</span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-zeentt bg-opacity-10 text-zeentt rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Resultados alcançados:</p>
+                                <p class="text-xs text-gray-600">+28% em vendas | -35% em perdas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                    <div class="p-8">
+                        <div class="flex items-center mb-6">
+                            <div class="flex -space-x-2">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-12 h-12 rounded-full border-2 border-white" alt="Cliente">
+                            </div>
+                            <div class="ml-4">
+                                <h4 class="font-bold">Roberto Almeida</h4>
+                                <p class="text-gray-600 text-sm">Restaurante Sabor da Terra</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-6">"O aplicativo para clientes que a ZEENTT desenvolveu para nós aumentou em 40% nossas vendas online. A integração com o PDV é perfeita e os clientes adoram a facilidade."</p>
+                        <div class="flex items-center">
+                            <div class="flex -mr-1">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <i class="fas fa-star text-yellow-400"></i>
+                            </div>
+                            <span class="ml-2 text-sm text-gray-600">5.0 - 1 mês atrás</span>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-zeentt bg-opacity-10 text-zeentt rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Resultados alcançados:</p>
+                                <p class="text-xs text-gray-600">+40% em vendas online | 4.8 avaliação no app</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="#" class="inline-flex items-center text-zeentt font-medium hover:underline">
+                    Ver mais depoimentos <i class="fas fa-chevron-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-zeenttDark to-zeentt text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Pronto para transformar seu comércio?</h2>
+            <p class="text-xl opacity-90 mb-8 max-w-3xl mx-auto">Agende uma demonstração gratuita e descubra como nossas soluções podem impulsionar seus resultados.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 max-w-md mx-auto">
+                <a href="#contato" class="bg-white text-zeentt font-bold py-4 px-8 rounded-lg hover:bg-opacity-90 transition duration-300 shadow-lg glow">Agendar Demonstração</a>
+                <a href="tel:+5581981521109" class="border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white hover:text-zeentt transition duration-300 flex items-center justify-center">
+                    <i class="fas fa-phone-alt mr-2"></i> WhatsApp
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contato" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row">
+                <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
+                    <div class="inline-block bg-zeentt bg-opacity-10 text-zeentt rounded-full px-4 py-1 mb-4">
+                        <span class="text-sm font-medium">Contato</span>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Fale com nossa equipe</h2>
+                    <p class="text-lg text-gray-600 mb-8">Estamos prontos para entender suas necessidades e apresentar a melhor solução para seu negócio.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-zeentt bg-opacity-10 text-zeentt rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Endereço</h3>
+                                <p class="text-gray-600">Av. Paulista, 1000 - 10º andar<br>São Paulo - SP, 01310-100</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-zeentt bg-opacity-10 text-zeentt rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-phone-alt"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Telefone</h3>
+                                <p class="text-gray-600">(11) 1234-5678<br>(11) 98765-4321 (WhatsApp)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-zeentt bg-opacity-10 text-zeentt rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">E-mail</h3>
+                                <p class="text-gray-600">contato@zeentt.com.br<br>comercial@zeentt.com.br</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-zeentt bg-opacity-10 text-zeentt rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-lg font-semibold text-gray-900">Horário</h3>
+                                <p class="text-gray-600">Segunda a Sexta: 8h às 18h<br>Sábado: 8h às 12h</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Siga-nos</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-10 h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-zeentt hover:text-white transition duration-300 flex items-center justify-center">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-zeentt hover:text-white transition duration-300 flex items-center justify-center">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-zeentt hover:text-white transition duration-300 flex items-center justify-center">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-gray-100 text-gray-700 hover:bg-zeentt hover:text-white transition duration-300 flex items-center justify-center">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div class="bg-gray-50 rounded-xl p-8 shadow-lg">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-6">Envie sua mensagem</h3>
+                        <form class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">Nome</label>
+                                    <input type="text" id="nome" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-zeentt focus:border-zeentt transition duration-300">
+                                </div>
+                                <div>
+                                    <label for="empresa" class="block text-sm font-medium text-gray-700 mb-2">Empresa</label>
+                                    <input type="text" id="empresa" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-zeentt focus:border-zeentt transition duration-300">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">E-mail</label>
+                                    <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-zeentt focus:border-zeentt transition duration-300">
+                                </div>
+                                <div>
+                                    <label for="telefone" class="block text-sm font-medium text-gray-700 mb-2">Telefone</label>
+                                    <input type="tel" id="telefone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-zeentt focus:border-zeentt transition duration-300">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="servico" class="block text-sm font-medium text-gray-700 mb-2">Serviço de interesse</label>
+                                <select id="servico" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-zeentt focus:border-zeentt transition duration-300">
+                                    <option value="">Selecione um serviço</option>
+                                    <option value="pdv">Sistema PDV</option>
+                                    <option value="estoque">Gestão de Estoque</option>
+                                    <option value="bi">Business Intelligence</option>
+                                    <option value="app">App para Clientes</option>
+                                    <option value="entregas">Gestão de Entregas</option>
+                                    <option value="personalizado">Sistema Personalizado</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-2">Mensagem</label>
+                                <textarea id="mensagem" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-zeentt focus:border-zeentt transition duration-300"></textarea>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full bg-zeentt text-white font-bold py-4 px-8 rounded-lg hover:bg-zeenttLight transition duration-300 shadow-lg glow flex items-center justify-center">
+                                    <i class="fas fa-paper-plane mr-2"></i> Enviar Mensagem
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                      <div class="">
+                        <img src="logo.png" alt="Logo ZEENTT" class="w-6 h-6 object-contain">
+                        </div>
+                        <h2 class="text-xl font-bold tracking-tight">ZEENTT</h2>
+                    </div>
+                    <p class="text-gray-400 mb-6">Soluções tecnológicas para impulsionar seu comércio e simplificar sua gestão.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-zeentt transition duration-300 flex items-center justify-center">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-zeentt transition duration-300 flex items-center justify-center">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-zeentt transition duration-300 flex items-center justify-center">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 hover:bg-zeentt transition duration-300 flex items-center justify-center">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Serviços</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Sistema PDV</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Gestão de Estoque</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Business Intelligence</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">App para Clientes</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Sistemas Personalizados</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Empresa</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Sobre Nós</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Equipe</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Trabalhe Conosco</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contato</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Assine nossa newsletter para receber novidades e dicas.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Seu e-mail" class="px-4 py-3 rounded-l-lg bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-zeentt w-full">
+                        <button type="submit" class="bg-zeentt hover:bg-zeenttLight px-4 rounded-r-lg transition duration-300">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2023 ZEENTT Sistemas. Todos os direitos reservados.
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Termos de Uso</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Política de Privacidade</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="fixed bottom-8 right-8 w-12 h-12 bg-zeentt text-white rounded-full shadow-lg hidden transition duration-300 hover:bg-zeenttLight hover:shadow-xl">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Back to Top Button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('hidden');
+            } else {
+                backToTopButton.classList.add('hidden');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Counter Animation
+        const counters = document.querySelectorAll('.counter');
+        const speed = 200;
+        
+        function animateCounters() {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const increment = target / speed;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(animateCounters, 1);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+        
+        // Animated Chart
+        const ctx = document.getElementById('animatedChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'],
+                datasets: [{
+                    label: 'Vendas (R$)',
+                    data: [1200, 1900, 3000, 5000, 2000, 3000, 4500],
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderColor: 'rgba(0, 123, 255, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: 'rgba(0, 123, 255, 1)',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Animate chart data periodically
+        setInterval(() => {
+            const newData = chart.data.datasets[0].data.map(value => {
+                const variation = Math.random() * 1000 - 500;
+                return Math.max(500, value + variation);
+            });
+            
+            chart.data.datasets[0].data = newData;
+            chart.update();
+        }, 3000);
+        
+        // Initialize animations when page loads
+        window.addEventListener('load', () => {
+            animateCounters();
+            
+            // Animate progress bars
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        });
+        // Menu Hamburguer
+        const menuToggle = document.getElementById('menuToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+const closeMenu = document.getElementById('closeMenu');
+
+menuToggle.addEventListener('click', () => {
+    mobileMenu.classList.remove('translate-x-full');
+    mobileMenu.classList.add('translate-x-0');
+});
+
+closeMenu.addEventListener('click', () => {
+    mobileMenu.classList.remove('translate-x-0');
+    mobileMenu.classList.add('translate-x-full');
+});
+
+
+    </script>
+</body>
+</html>

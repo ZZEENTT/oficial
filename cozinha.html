@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeentt - Cozinha</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          screens: {
+            'xs': '480px',
+          },
+          colors: {
+            primary: '#d8315b',
+            secondary: '#00337a',
+            accent: '#1e3a8a',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --primary-color: #d8315b;
+      --secondary-color: #00337a;
+      --accent-color: #1e3a8a;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Loader e animação de digitação */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+    
+    #loader.fade-out {
+      opacity: 0;
+    }
+    
+    .loader-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .loader-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid #fff;
+      width: 100%;
+      height: 100%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .typing-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background-color: currentColor;
+      margin-left: 2px;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    /* Logo icon */
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      margin-right: 8px;
+    }
+    
+    .logo-icon-inner {
+      width: 100%;
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(216, 49, 91, 0.6);
+      animation: pulse-shadow 2s infinite;
+    }
+    
+    .logo-icon-inner:before {
+      content: 'Z';
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    }
+    
+    .logo-icon-inner:after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: rotate(25deg);
+      animation: shine 3s infinite;
+    }
+    
+    .logo-particles .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+    
+    .logo-particles .particle:nth-child(1) {
+      top: 20%;
+      left: 20%;
+      animation: float 3s infinite;
+    }
+    
+    .logo-particles .particle:nth-child(2) {
+      top: 20%;
+      right: 20%;
+      animation: float 2.5s infinite 0.3s;
+    }
+    
+    .logo-particles .particle:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation: float 3.5s infinite 0.5s;
+    }
+    
+    .logo-particles .particle:nth-child(4) {
+      bottom: 20%;
+      right: 20%;
+      animation: float 3s infinite 0.7s;
+    }
+    
+    @keyframes pulse-shadow {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(216, 49, 91, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(216, 49, 91, 0.9);
+      }
+    }
+    
+    @keyframes shine {
+      0% {
+        left: -100%;
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.1;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(-5px) scale(1.2);
+        opacity: 1;
+      }
+    }
+    
+    /* Sidebar e navegação */
+    .sidebar {
+      transition: all 0.3s ease;
+      transform: translateX(-100%);
+      background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      z-index: 40;
+    }
+    
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    
+    .top-bar {
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    }
+    
+    /* Cards e elementos de UI */
+    .pedido-card {
+      transition: all 0.3s ease;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .pedido-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-icon {
+      transition: all 0.2s ease;
+    }
+    
+    .btn-icon:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Tela de carregamento -->
+  <div id="loader" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-gradient-to-br from-[var(--secondary-color)] to-[var(--accent-color)]">
+    <div class="loader-icon">
+      <div class="loader-spinner"></div>
+    </div>
+    <h2 class="text-white text-2xl font-bold mt-4 mb-2">Carregando</h2>
+    <p class="text-blue-200 text-sm">Aguarde um momento...</p>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 text-white z-40 shadow-lg">
+    <div class="p-4 flex flex-col items-center border-b border-blue-700/50">
+      <div class="flex items-center mb-2">
+        <div class="logo-icon">
+          <div class="logo-icon-inner">
+            <div class="logo-particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </div>
+        </div>
+        <h1 class="text-2xl font-bold ml-2">ZEENTT</h1>
+      </div>
+      <p class="text-blue-200 text-sm">Sistema de Gestão</p>
+    </div>
+    <ul class="py-4">
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="menu.html" class="flex items-center">
+          <i class="fas fa-home mr-3 text-blue-200"></i> 
+          <span>Início</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cadastro.html" class="flex items-center">
+          <i class="fas fa-plus-circle mr-3 text-blue-200"></i> 
+          <span>Cadastro</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cardapio.html" class="flex items-center">
+          <i class="fas fa-utensils mr-3 text-blue-200"></i> 
+          <span>Cardápio</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="pedido.html" class="flex items-center">
+          <i class="fas fa-concierge-bell mr-3 text-blue-200"></i> 
+          <span>Pedidos</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 bg-white/20 hover:bg-white/30 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cozinha.html" class="flex items-center">
+          <i class="fas fa-blender mr-3 text-[var(--primary-color)]"></i> 
+          <span>Cozinha</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="relatorio.html" class="flex items-center">
+          <i class="fas fa-chart-bar mr-3 text-blue-200"></i> 
+          <span>Relatórios</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="suporte.html" class="flex items-center">
+          <i class="fas fa-headset mr-3 text-blue-200"></i> 
+          <span>Suporte</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="informacoes.html" class="flex items-center">
+          <i class="fas fa-info-circle mr-3 text-blue-200"></i> 
+          <span>Informações</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="servico.html" class="flex items-center">
+          <i class="fas fa-tools mr-3 text-blue-200"></i> 
+          <span>Serviços</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Overlay for sidebar -->
+  <div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30" onclick="toggleMenu()"></div>
+  
+  <!-- Top Bar -->
+  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
+    <div class="left-icons lg:hidden">
+      <button onclick="toggleMenu()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-bars text-lg sm:text-xl"></i>
+      </button>
+    </div>
+    <div class="logo flex items-center">
+      <div class="logo-icon hidden xs:block">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+          </div>
+        </div>
+      </div>
+      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
+    </div>
+    
+    <!-- Menu horizontal para telas grandes -->
+    <nav class="hidden lg:flex items-center space-x-6 ml-10">
+      <a href="menu.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
+        <i class="fas fa-home mr-2"></i> Início
+      </a>
+      <a href="cadastro.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
+        <i class="fas fa-plus-circle mr-2"></i> Cadastro
+      </a>
+      <a href="cardapio.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
+        <i class="fas fa-utensils mr-2"></i> Cardápio
+      </a>
+      <a href="pedido.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
+        <i class="fas fa-concierge-bell mr-2"></i> Pedidos
+      </a>
+      <a href="cozinha.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center text-blue-200">
+        <i class="fas fa-blender mr-2"></i> Cozinha
+      </a>
+    </nav>
+    
+    <div class="right-icons flex items-center space-x-2 sm:space-x-4">
+      <div class="hidden sm:block lg:hidden">
+        <button onclick="window.location.href='menu.html'" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+          <i class="fas fa-home text-lg sm:text-xl"></i>
+        </button>
+      </div>
+      <button onclick="fazerLogoff()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-sign-out-alt text-lg sm:text-xl"></i>
+      </button>
+    </div>
+  </header>
+  <!-- Conteúdo principal -->
+  <main class="mt-24 mb-24 px-4 container mx-auto">
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-2xl font-bold text-[var(--secondary-color)] mb-4 flex items-center">
+        <i class="fas fa-blender text-[var(--primary-color)] mr-3"></i> Área da Cozinha
+      </h2>
+      <p class="text-gray-600 mb-4">Gerencie os pedidos que precisam ser preparados.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Coluna Preparando -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-3 font-bold text-lg flex items-center">
+          <i class="fas fa-fire mr-2"></i> Preparando
+        </div>
+        <div class="divide-y divide-gray-100">
+          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-lg text-gray-800">#12567</span>
+              <span class="text-sm text-gray-500">10:25</span>
+            </div>
+            <div class="mt-2 flex items-center text-sm text-gray-600">
+              <i class="fas fa-utensils mr-2 text-yellow-500"></i> 2x Combo Clássico
+            </div>
+            <div class="mt-1 flex justify-end">
+              <button class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
+                <i class="fas fa-check mr-1"></i> Finalizar
+              </button>
+            </div>
+          </div>
+          
+          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-1s">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-lg text-gray-800">#12568</span>
+              <span class="text-sm text-gray-500">10:30</span>
+            </div>
+            <div class="mt-2 flex items-center text-sm text-gray-600">
+              <i class="fas fa-utensils mr-2 text-yellow-500"></i> 1x Combo Especial
+            </div>
+            <div class="mt-1 flex justify-end">
+              <button class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
+                <i class="fas fa-check mr-1"></i> Finalizar
+              </button>
+            </div>
+          </div>
+          
+          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-2s">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-lg text-gray-800">#12569</span>
+              <span class="text-sm text-gray-500">10:35</span>
+            </div>
+            <div class="mt-2 flex items-center text-sm text-gray-600">
+              <i class="fas fa-utensils mr-2 text-yellow-500"></i> 3x Combo Família
+            </div>
+            <div class="mt-1 flex justify-end">
+              <button class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
+                <i class="fas fa-check mr-1"></i> Finalizar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Coluna Finalizado -->
+      <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-3 font-bold text-lg flex items-center">
+          <i class="fas fa-check-circle mr-2"></i> Finalizado
+        </div>
+        <div class="divide-y divide-gray-100">
+          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-lg text-gray-800">#12560</span>
+              <span class="text-sm text-gray-500">09:45</span>
+            </div>
+            <div class="mt-2 flex items-center text-sm text-gray-600">
+              <i class="fas fa-utensils mr-2 text-green-500"></i> 1x Combo Clássico
+            </div>
+            <div class="mt-1 flex justify-end">
+              <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
+                <i class="fas fa-clock mr-1"></i> Finalizado às 10:05
+              </span>
+            </div>
+          </div>
+          
+          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-1s">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-lg text-gray-800">#12561</span>
+              <span class="text-sm text-gray-500">09:50</span>
+            </div>
+            <div class="mt-2 flex items-center text-sm text-gray-600">
+              <i class="fas fa-utensils mr-2 text-green-500"></i> 2x Combo Especial
+            </div>
+            <div class="mt-1 flex justify-end">
+              <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
+                <i class="fas fa-clock mr-1"></i> Finalizado às 10:15
+              </span>
+            </div>
+          </div>
+          
+          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-2s">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-lg text-gray-800">#12562</span>
+              <span class="text-sm text-gray-500">10:00</span>
+            </div>
+            <div class="mt-2 flex items-center text-sm text-gray-600">
+              <i class="fas fa-utensils mr-2 text-green-500"></i> 1x Combo Família
+            </div>
+            <div class="mt-1 flex justify-end">
+              <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
+                <i class="fas fa-clock mr-1"></i> Finalizado às 10:20
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-white py-2 md:py-3 shadow-inner z-20">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center justify-center md:justify-between text-center md:text-left">
+        <p class="text-xs sm:text-sm text-gray-600">&copy; 2025 ZEENTT - Todos os direitos reservados</p>
+        <div class="hidden md:flex items-center mt-2 md:mt-0 space-x-4">
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Toggle sidebar
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      if (sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      } else {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    // Tela de carregamento e animação de digitação
+    window.addEventListener('load', function() {
+      // Ocultar a tela de carregamento após 2 segundos
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('fade-out');
+        
+        setTimeout(() => {
+          loader.style.display = 'none';
+          // Iniciar animação de digitação após a tela de carregamento
+          const zeenttText = document.getElementById('zeentt-text');
+          typeEffect(zeenttText, 'ZEENTT', 150);
+          
+          // Animar os cards da cozinha
+          animateCards();
+        }, 500);
+      }, 1500);
+    });
+    
+    // Animação de digitação do texto ZEENTT
+    function typeEffect(element, text, speed) {
+      let i = 0;
+      element.textContent = '';
+      
+      // Criar um elemento de cursor piscante
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      cursor.textContent = '|';
+      element.appendChild(cursor);
+      
+      const timer = setInterval(function() {
+        if (i < text.length) {
+          // Inserir o texto antes do cursor
+          element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+          i++;
+        } else {
+          clearInterval(timer);
+          // Remover o cursor após a animação
+          setTimeout(() => {
+            cursor.remove();
+            // Adicionar classe de animação após a digitação
+            element.classList.add('animate__animated', 'animate__pulse');
+          }, 500);
+        }
+      }, speed);
+    }
+    
+    // Animar os cards da cozinha
+    function animateCards() {
+      // Animar os cards com efeito de entrada
+      const cards = document.querySelectorAll('.bg-white.rounded-lg');
+      cards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.add('animate__animated', 'animate__fadeInUp');
+        }, index * 200);
+      });
+    }
+    
+    // Logoff function
+    function fazerLogoff() {
+      if (confirm('Tem certeza que deseja sair do sistema?')) {
+        window.location.href = 'login.html';
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de OS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Controle de OS</h1>
+    <form id="osForm">
+      <input type="text" id="numeroOS" placeholder="Número da OS" required>
+      <input type="text" id="responsavel" placeholder="Responsável" required>
+      <input type="text" id="bloco" placeholder="Bloco" required>
+      <input type="text" id="apartamento" placeholder="Apartamento" required>
+      <input type="text" id="detalhamento" placeholder="Detalhamento" required>
+      <button type="submit">Adicionar OS</button>
+    </form>
+
+    <input type="text" id="searchInput" placeholder="Buscar por número da OS">
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nº OS</th>
+          <th>Responsável</th>
+          <th>Bloco</th>
+          <th>Apartamento</th>
+          <th>Detalhamento</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="osList"></tbody>
+    </table>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const osForm = document.getElementById('osForm');
+  const osList = document.getElementById('osList');
+  const searchInput = document.getElementById('searchInput');
+
+  let osArray = JSON.parse(localStorage.getItem('osArray')) || [];
+
+  function saveToLocalStorage() {
+    localStorage.setItem('osArray', JSON.stringify(osArray));
+  }
+
+  function renderOSList() {
+    osList.innerHTML = '';
+    osArray.forEach((os, index) => {
+      const row = document.createElement('tr');
+
+      row.innerHTML = `
+        <td>${os.numero}</td>
+        <td>${os.responsavel}</td>
+        <td>${os.bloco}</td>
+        <td>${os.apartamento}</td>
+        <td>${os.detalhamento}</td>
+        <td>${os.status}</td>
+        <td>
+          <button class="acao finalizar" onclick="updateStatus(${index}, 'Finalizada')">Finalizar</button>
+          <button class="acao pendente" onclick="updateStatus(${index}, 'Pendente')">Pendente</button>
+          <button class="acao excluir" onclick="deleteOS(${index})">Excluir</button>
+        </td>
+      `;
+
+      osList.appendChild(row);
+    });
+  }
+
+  window.updateStatus = (index, status) => {
+    osArray[index].status = status;
+    saveToLocalStorage();
+    renderOSList();
+  };
+
+  window.deleteOS = (index) => {
+    if (confirm('Deseja excluir esta OS?')) {
+      osArray.splice(index, 1);
+      saveToLocalStorage();
+      renderOSList();
+    }
+  };
+
+  osForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const numeroOS = document.getElementById('numeroOS').value.trim();
+    const responsavel = document.getElementById('responsavel').value.trim();
+    const bloco = document.getElementById('bloco').value.trim();
+    const apartamento = document.getElementById('apartamento').value.trim();
+    const detalhamento = document.getElementById('detalhamento').value.trim();
+
+    const duplicado = osArray.some(os => os.numero === numeroOS);
+
+    if (duplicado) {
+      alert('Já existe uma OS com esse número.');
+      return;
+    }
+
+    const novaOS = {
+      numero: numeroOS,
+      responsavel,
+      bloco,
+      apartamento,
+      detalhamento,
+      status: 'Pendente'
+    };
+
+    osArray.push(novaOS);
+    saveToLocalStorage();
+    osForm.reset();
+    renderOSList();
+  });
+
+  searchInput.addEventListener('input', () => {
+    const termo = searchInput.value.trim().toLowerCase();
+    const linhas = osList.getElementsByTagName('tr');
+    Array.from(linhas).forEach(linha => {
+      const texto = linha.textContent.toLowerCase();
+      linha.style.display = texto.includes(termo) ? '' : 'none';
+    });
+  });
+
+  renderOSList();
+});
+</script>

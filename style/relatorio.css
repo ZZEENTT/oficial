@@ -1,0 +1,181 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+    
+    header {
+      background-color: #004AAD; /* Azul do cabeçalho */
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+    
+    
+    
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 0 80px;
+      align-content: space-between;
+      justify-content: space-evenly;
+      align-items: baseline;
+      justify-items: stretch;
+  }
+    .item {
+      background-color:#fff; /* Azul dos itens */
+      color: white;
+      padding: 2px;
+      border-radius: 50%; /* Arredondamento dos itens */
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease; /* Transição para o efeito */
+    }
+    
+    .item:hover {
+      transform: scale(1.1); /* Efeito de ampliação ao passar o mouse */
+    }
+    
+    .item.selected {
+      background-color: #ffffff; /* Verde para item selecionado */
+    }
+    
+    .item i {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+    
+    footer {
+      background-color: #004AAD; /* Azul do rodapé */
+      color: white;
+      text-align: center;
+    }
+   h1 {
+    display: none;
+   }
+   .titulo-item {
+    display: none;         /* Escondido por padrão */
+    margin-top: 10px;
+    font-size: 16px;
+    color: #004AAD;        /* Cor desejada */
+    font-weight: bold;
+    text-align: center;
+  }
+  button {
+    font-size: 16px;
+    transition: background-color 0.3s ease; /* Transição para o efeito */
+    display: flex; /* Enables Flexbox layout */
+    justify-content: flex-end; /* Aligns content to the right */
+    margin-top: 20px;
+  }
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    position: relative;
+    flex-direction: row-reverse;
+  }
+  
+  .menu-icon {
+    font-size: 2em;
+    cursor: pointer;
+  }
+  
+  .logout-button {
+    background-color: #004AAD; ;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    margin-top: 40px;
+  }
+  
+  .item {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 140px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .img_menu img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+  }
+  
+  .item p {
+    margin-top: 10px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  
+  .logout-button:hover {
+    background-color: #004AAD; 
+  }
+  
+  /* Centralizar o logo mesmo com os outros dois itens nas pontas */
+  .top-bar img {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  /* Animações */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Responsividade */
+  @media screen and (max-width: 480px) {
+    .container {
+        width: 100%;
+        padding: 30px 20px;
+    }
+    
+    #loginForm button {
+        width: 80%;
+    }
+  }
+  
+  @media screen and (max-width: 800px) {
+    .container {
+        width: 90%;
+        padding: 35px 25px;
+    }
+  
+    #loginForm {
+        align-items: center;
+    }
+  
+    #loginForm input,
+    #loginForm button {
+        width: 100%;
+        max-width: 350px;
+    }
+  
+    .slogan {
+        font-size: 11px;
+    }
+  }

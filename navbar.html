@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar</title>
+    <link rel="stylesheet" href="css/style.css">
+    <nav class="menu-global">
+      <ul>
+        <li><a href="menu.html"><i class="fas fa-home"></i> Início</a></li>
+        <li><a href="cadastro.html"><i class="fas fa-plus"></i> Cadastro</a></li>
+        <li><a href="cardapio.html"><i class="fas fa-utensils"></i> Cardápio</a></li>
+        <li><a href="pedido.html"><i class="fas fa-concierge-bell"></i> Pedidos</a></li>
+        <li><a href="cozinha.html"><i class="fas fa-blender"></i> Cozinha</a></li>
+        <li><a href="relatorio.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
+        <li><a href="suporte.html"><i class="fas fa-headset"></i> Suporte</a></li>
+      </ul>
+  </nav>
+  
+  <style>
+  .menu-global {
+    background: #333;
+    padding: 10px;
+  }
+  .menu-global ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  .menu-global a {
+    color: #fff;
+    text-decoration: none;
+  }
+  </style>
+<script>
+    fetch("navbar.html")
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById("menu-container").innerHTML = data;
+      });
+  </script>  
+  </html>

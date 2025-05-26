@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeentt - Serviços</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --primary-color: #0a2463;
+            --secondary-color: #3e92cc;
+            --accent-color: #d8315b;
+            --light-color: #fffaff;
+            --dark-color: #1e1b18;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-accent: linear-gradient(135deg, var(--accent-color), #ff7e5f);
+            --card-glow-color: rgba(216, 49, 91, 0.3);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Cg fill-rule="evenodd"%3E%3Cg fill="%230a2463" fill-opacity="0.02"%3E%3Cpath opacity=".5" d="M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: var(--gradient-primary);
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 250px;
+            z-index: 40;
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 70px;
+        }
+        
+        .sidebar li {
+            margin: 8px 0;
+        }
+        
+        .sidebar li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+        
+        .sidebar li:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar li a i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Ícone Z animado */
+        .z-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--accent-color);
+            border-radius: 8px;
+            margin-right: 10px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(216, 49, 91, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        .z-icon:before {
+            content: "Z";
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .z-icon:after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+            opacity: 0;
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 5px rgba(216, 49, 91, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(216, 49, 91, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(216, 49, 91, 0.5); }
+        }
+        
+        @keyframes shine {
+            0% { opacity: 0; transform: scale(0.1); }
+            50% { opacity: 0.5; }
+            100% { opacity: 0; transform: scale(2); }
+        }
+        
+        .top-bar {
+            background: linear-gradient(135deg, #00337a 0%, #00337a 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 30;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .service-card {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            background: white;
+            height: 100%;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .service-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        footer {
+            background: white;
+            border-top: 1px solid #eaeaea;
+            padding: 15px 0;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 20;
+        }
+    </style>
+</head>
+<body class="pagina-servicos bg-gray-50">
+  <!-- Tela de Carregamento -->
+  <div id="loader">
+    <div class="loader-content">
+      <div class="loader-icon">
+        <div class="loader-spinner"></div>
+      </div>
+      <h2 class="text-white text-2xl font-bold mb-2">ZEENTT</h2>
+      <p class="text-blue-200">Carregando...</p>
+    </div>
+  </div>
+  
+  <!-- Sidebar Overlay -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" onclick="toggleMenu()"></div>
+  
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 max-w-[85vw] text-white z-40 shadow-lg">
+    <div class="p-5 text-center border-b border-blue-700 logo-area">
+      <div class="flex justify-center items-center mb-2">
+        <div class="logo-icon">
+          <div class="logo-icon-inner">
+            <div class="logo-particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </div>
+        </div>
+        <h1 class="text-2xl font-bold animate__animated animate__fadeIn ml-2">ZEENTT</h1>
+      </div>
+      <p class="text-blue-200 text-sm">Sistema de Gestão</p>
+    </div>
+    <ul class="py-4 px-2">
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="menu.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-home mr-3 text-blue-300"></i> 
+          <span>Início</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cadastro.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-plus mr-3 text-blue-300"></i> 
+          <span>Cadastro</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cardapio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-utensils mr-3 text-blue-300"></i> 
+          <span>Cardápio</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="pedido.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-concierge-bell mr-3 text-blue-300"></i> 
+          <span>Pedidos</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cozinha.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-blender mr-3 text-blue-300"></i> 
+          <span>Cozinha</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="relatorio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-chart-bar mr-3 text-blue-300"></i> 
+          <span>Relatórios</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="suporte.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-headset mr-3 text-blue-300"></i> 
+          <span>Suporte</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="informacoes.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-info-circle mr-3 text-blue-300"></i> 
+          <span>Informações</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300 bg-white/10">
+        <a href="servico.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-tools mr-3 text-blue-300"></i> 
+          <span>Serviços</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- Top Bar -->
+  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
+    <div class="left-icons lg:hidden">
+      <button onclick="toggleMenu()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-bars text-lg sm:text-xl"></i>
+      </button>
+    </div>
+    <div class="logo flex items-center">
+      <div class="logo-icon hidden xs:block">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+          </div>
+        </div>
+      </div>
+      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
+    </div>
+    
+    <!-- Menu horizontal para telas grandes -->
+    <div class="hidden lg:flex items-center space-x-1">
+      <a href="menu.html" class="px-3 py-2 rounded-lg hover:bg-white/10 transition-all flex items-center">
+        <i class="fas fa-home mr-2"></i>
+        <span>Início</span>
+      </a>
+      <a href="cadastro.html" class="px-3 py-2 rounded-lg hover:bg-white/10 transition-all flex items-center">
+        <i class="fas fa-plus mr-2"></i>
+        <span>Cadastro</span>
+      </a>
+      <a href="cardapio.html" class="px-3 py-2 rounded-lg hover:bg-white/10 transition-all flex items-center">
+        <i class="fas fa-utensils mr-2"></i>
+        <span>Cardápio</span>
+      </a>
+      <a href="pedido.html" class="px-3 py-2 rounded-lg hover:bg-white/10 transition-all flex items-center">
+        <i class="fas fa-concierge-bell mr-2"></i>
+        <span>Pedidos</span>
+      </a>
+    </div>
+    
+    <div class="right-icons flex items-center space-x-2">
+      <button onclick="fazerLogoff()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all" title="Sair">
+        <i class="fas fa-sign-out-alt text-lg sm:text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="pt-20 md:pt-24 pb-16 md:pb-20 px-4">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2 md:mb-3 text-center page-title animate__animated animate__fadeInDown">Serviços Zeentt</h1>
+      <p class="text-center text-gray-600 max-w-2xl mx-auto mb-8 md:mb-12 text-sm md:text-base animate__animated animate__fadeIn animate__delay-1s">Conheça nossa linha completa de soluções para o seu negócio</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" data-aos="fade-up" data-aos-delay="200">
+        <!-- Zeentt Service -->
+        <div class="service-card overflow-hidden">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zeentt Service" class="service-img transition-transform duration-500 transform group-hover:scale-110">
+            <div class="absolute top-0 right-0 bg-accent-color text-white px-3 py-1 text-sm font-medium">
+              Premium
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">Zeentt Service</h3>
+            <p class="text-gray-600 mb-4">Solução completa para gestão de serviços e atendimentos com agendamento inteligente.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-primary-color font-semibold">A partir de R$ 199/mês</span>
+              <button class="bg-gradient-to-r from-primary-color to-secondary-color hover:from-secondary-color hover:to-primary-color text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-sm">
+                Saiba mais
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zeentt Food -->
+        <div class="service-card overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zeentt Food" class="service-img transition-transform duration-500 transform group-hover:scale-110">
+            <div class="absolute top-0 right-0 bg-accent-color text-white px-3 py-1 text-sm font-medium">
+              Mais vendido
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">Zeentt Food</h3>
+            <p class="text-gray-600 mb-4">Sistema completo para restaurantes, lanchonetes e delivery com controle de pedidos e estoque.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-primary-color font-semibold">A partir de R$ 249/mês</span>
+              <button class="bg-gradient-to-r from-primary-color to-secondary-color hover:from-secondary-color hover:to-primary-color text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-sm">
+                Saiba mais
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Zeentt Eventos -->
+        <div class="service-card overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Zeentt Eventos" class="service-img transition-transform duration-500 transform group-hover:scale-110">
+            <div class="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 text-sm font-medium">
+              Novo
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-gray-800">Zeentt Eventos</h3>
+            <p class="text-gray-600 mb-4">Plataforma para gestão de eventos, venda de ingressos e controle de acesso.</p>
+            <div class="flex justify-between items-center">
+              <span class="text-primary-color font-semibold">A partir de R$ 299/mês</span>
+              <button class="bg-gradient-to-r from-primary-color to-secondary-color hover:from-secondary-color hover:to-primary-color text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg text-sm">
+                Saiba mais
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Diferenciais -->
+      <div class="mt-16 bg-white rounded-xl shadow-md p-6 md:p-8" data-aos="fade-up" data-aos-delay="500">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">Por que escolher a Zeentt?</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="text-center p-4">
+            <div class="bg-primary-color/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-rocket text-primary-color text-2xl"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">Alta Performance</h3>
+            <p class="text-gray-600 text-sm">Sistemas otimizados para máxima velocidade e eficiência.</p>
+          </div>
+          
+          <div class="text-center p-4">
+            <div class="bg-primary-color/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-shield-alt text-primary-color text-2xl"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">Segurança Total</h3>
+            <p class="text-gray-600 text-sm">Proteção de dados e backups automáticos em nuvem.</p>
+          </div>
+          
+          <div class="text-center p-4">
+            <div class="bg-primary-color/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-headset text-primary-color text-2xl"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">Suporte 24/7</h3>
+            <p class="text-gray-600 text-sm">Equipe especializada disponível todos os dias da semana.</p>
+          </div>
+          
+          <div class="text-center p-4">
+            <div class="bg-primary-color/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-sync-alt text-primary-color text-2xl"></i>
+            </div>
+            <h3 class="font-semibold text-gray-800 mb-2">Atualizações Constantes</h3>
+            <p class="text-gray-600 text-sm">Novas funcionalidades e melhorias lançadas regularmente.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-12 text-center" data-aos="fade-up" data-aos-delay="600">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">Pronto para transformar seu negócio?</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto mb-6">Entre em contato conosco e descubra como a Zeentt pode ajudar a impulsionar seus resultados.</p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <button class="bg-gradient-to-r from-accent-color to-red-500 hover:from-red-500 hover:to-accent-color text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+            Solicitar demonstração
+          </button>
+          <button class="bg-white border border-primary-color text-primary-color hover:bg-primary-color hover:text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
+            Falar com consultor
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-white py-2 shadow-inner z-20">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center">
+        <p class="text-gray-600 text-xs">&copy; 2025 ZEENTT</p>
+        <div class="flex space-x-3">
+          <a href="#" class="text-gray-500 hover:text-primary-color transition-colors text-sm"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-gray-500 hover:text-primary-color transition-colors text-sm"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Toggle sidebar
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      if (sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      } else {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Logoff function with confirmation
+    function fazerLogoff() {
+      if (confirm('Tem certeza que deseja sair do sistema?')) {
+        // Implement logoff logic here
+        window.location.href = 'index.html';
+      }
+    }
+    
+    // Inicializar AOS (Animate on Scroll)
+    AOS.init({
+      duration: 800,
+      easing: 'ease-out-cubic',
+      once: true
+    });
+    
+    // Tela de carregamento
+    window.addEventListener('load', function() {
+      // Ocultar a tela de carregamento após 1.5 segundos
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.style.display = 'none';
+      }, 1500);
+      
+      // Iniciar animação de digitação do nome ZEENTT
+      const zeenttText = document.getElementById('zeentt-text');
+      if (zeenttText) {
+        typeEffect(zeenttText, 'ZEENTT', 150);
+      }
+    });
+    
+    // Função para animação de digitação
+    function typeEffect(element, text, speed) {
+      element.innerHTML = '';
+      let i = 0;
+      const timer = setInterval(function() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(timer);
+        }
+      }, speed);
+    }
+  </script>
+</body>
+</html>
+
+    
+

@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeentt - Cardápio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          screens: {
+            'xs': '480px',
+          },
+          colors: {
+            primary: '#d8315b',
+            secondary: '#00337a',
+            accent: '#1e3a8a',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --primary-color: #d8315b;
+      --secondary-color: #00337a;
+      --accent-color: #1e3a8a;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Loader e animação de digitação */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+    
+    #loader.fade-out {
+      opacity: 0;
+    }
+    
+    .loader-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .loader-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid #fff;
+      width: 100%;
+      height: 100%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .typing-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background-color: currentColor;
+      margin-left: 2px;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    /* Logo icon */
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      margin-right: 8px;
+    }
+    
+    .logo-icon-inner {
+      width: 100%;
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(216, 49, 91, 0.6);
+      animation: pulse-shadow 2s infinite;
+    }
+    
+    .logo-icon-inner:before {
+      content: 'Z';
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    }
+    
+    .logo-icon-inner:after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: rotate(25deg);
+      animation: shine 3s infinite;
+    }
+    
+    .logo-particles .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+    
+    .logo-particles .particle:nth-child(1) {
+      top: 20%;
+      left: 20%;
+      animation: float 3s infinite;
+    }
+    
+    .logo-particles .particle:nth-child(2) {
+      top: 20%;
+      right: 20%;
+      animation: float 2.5s infinite 0.3s;
+    }
+    
+    .logo-particles .particle:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation: float 3.5s infinite 0.5s;
+    }
+    
+    .logo-particles .particle:nth-child(4) {
+      bottom: 20%;
+      right: 20%;
+      animation: float 3s infinite 0.7s;
+    }
+    
+    @keyframes pulse-shadow {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(216, 49, 91, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(216, 49, 91, 0.9);
+      }
+    }
+    
+    @keyframes shine {
+      0% {
+        left: -100%;
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.1;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(-5px) scale(1.2);
+        opacity: 1;
+      }
+    }
+    
+    /* Sidebar e navegação */
+    .sidebar {
+      transition: all 0.3s ease;
+      transform: translateX(-100%);
+      background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
+    }
+    
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    
+    .top-bar {
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    }
+    
+    /* Cards e elementos de UI */
+    .item {
+      transition: all 0.3s ease;
+    }
+    
+    .item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .item-info {
+      transition: all 0.2s ease;
+    }
+    
+    .btn-icon {
+      transition: all 0.2s ease;
+    }
+    
+    .btn-icon:hover {
+      transform: translateY(-2px);
+    }
+    
+    /* Carrinho lateral */
+    .carrinho-lateral {
+      transition: all 0.3s ease;
+      transform: translateX(100%);
+    }
+    
+    .carrinho-lateral.open {
+      transform: translateX(0);
+    }
+    
+    /* Modal */
+    .modal {
+      transition: opacity 0.3s ease;
+    }
+    
+    /* Checkbox personalizado */
+    .item-checkbox:checked + .item-info {
+      box-shadow: 0 0 0 3px var(--primary-color);
+    }
+    
+    .item-checkbox {
+      position: absolute;
+      opacity: 0;
+    }
+    
+    /* Botão de adicionar */
+    .btn-add {
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+      transition: all 0.3s ease;
+    }
+    
+    .btn-add:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 51, 122, 0.3);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+  <!-- Tela de carregamento -->
+  <div id="loader" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-gradient-to-br from-[var(--secondary-color)] to-[var(--accent-color)]">
+    <div class="loader-icon">
+      <div class="loader-spinner"></div>
+    </div>
+    <h2 class="text-white text-2xl font-bold mt-4 mb-2">ZEENTT</h2>
+    <p class="text-blue-200 text-sm">Carregando...</p>
+  </div>
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 text-white z-40 shadow-lg">
+    <div class="p-4 flex flex-col items-center border-b border-blue-700/50">
+      <div class="flex items-center mb-2">
+        <div class="logo-icon">
+          <div class="logo-icon-inner">
+            <div class="logo-particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </div>
+        </div>
+        <h1 class="text-2xl font-bold ml-2">ZEENTT</h1>
+      </div>
+      <p class="text-blue-200 text-sm">Sistema de Gestão</p>
+    </div>
+    <ul class="py-4">
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="menu.html" class="flex items-center">
+          <i class="fas fa-home mr-3 text-blue-200"></i> 
+          <span>Início</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cadastro.html" class="flex items-center">
+          <i class="fas fa-plus-circle mr-3 text-blue-200"></i> 
+          <span>Cadastro</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 bg-white/20 hover:bg-white/30 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cardapio.html" class="flex items-center">
+          <i class="fas fa-utensils mr-3 text-[var(--primary-color)]"></i> 
+          <span>Cardápio</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="pedido.html" class="flex items-center">
+          <i class="fas fa-concierge-bell mr-3 text-blue-200"></i> 
+          <span>Pedidos</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cozinha.html" class="flex items-center">
+          <i class="fas fa-blender mr-3 text-blue-200"></i> 
+          <span>Cozinha</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="relatorio.html" class="flex items-center">
+          <i class="fas fa-chart-bar mr-3 text-blue-200"></i> 
+          <span>Relatórios</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="suporte.html" class="flex items-center">
+          <i class="fas fa-headset mr-3 text-blue-200"></i> 
+          <span>Suporte</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="informacoes.html" class="flex items-center">
+          <i class="fas fa-info-circle mr-3 text-blue-200"></i> 
+          <span>Informações</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="servico.html" class="flex items-center">
+          <i class="fas fa-tools mr-3 text-blue-200"></i> 
+          <span>Serviços</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Overlay for sidebar -->
+  <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30" onclick="toggleMenu()"></div>
+
+  <!-- Top Bar -->
+  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
+    <div class="left-icons lg:hidden">
+      <button onclick="toggleMenu()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-bars text-lg sm:text-xl"></i>
+      </button>
+    </div>
+    <div class="logo flex items-center">
+      <div class="logo-icon hidden xs:block">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+          </div>
+        </div>
+      </div>
+      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
+    </div>
+    
+    <!-- Menu horizontal para telas grandes -->
+    <nav class="hidden lg:flex items-center space-x-6 ml-10">
+      <a href="menu.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
+        <i class="fas fa-home mr-2"></i> Início
+      </a>
+      <a href="cadastro.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
+        <i class="fas fa-plus-circle mr-2"></i> Cadastro
+      </a>
+      <a href="cardapio.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center text-blue-200">
+        <i class="fas fa-utensils mr-2"></i> Cardápio
+      </a>
+      <a href="pedido.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
+        <i class="fas fa-concierge-bell mr-2"></i> Pedidos
+      </a>
+      <a href="relatorio.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
+        <i class="fas fa-chart-bar mr-2"></i> Relatórios
+      </a>
+    </nav>
+    
+    <div class="right-icons flex items-center space-x-2 sm:space-x-4">
+      <div class="hidden sm:block lg:hidden">
+        <button onclick="window.location.href='menu.html'" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+          <i class="fas fa-home text-lg sm:text-xl"></i>
+        </button>
+      </div>
+      <button onclick="fazerLogoff()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-sign-out-alt text-lg sm:text-xl"></i>
+      </button>
+      <div class="relative">
+        <button onclick="toggleCarrinho()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all relative">
+          <i class="fas fa-shopping-cart text-lg sm:text-xl"></i>
+          <span id="cart-count" class="absolute -top-2 -right-2 bg-[var(--primary-color)] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center animate__animated animate__pulse animate__infinite">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+
+  <!-- Fixed Header with Total -->
+  <div class="fixed top-16 left-0 right-0 bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] text-white px-4 py-2 shadow-md z-20 flex justify-between items-center">
+    <div class="flex items-center">
+      <i class="fas fa-shopping-basket mr-2 text-[var(--primary-color)]"></i>
+      <span class="font-medium">Total Selecionado:</span>
+    </div>
+    <span id="total" class="font-bold text-lg">R$ 0.00</span>
+  </div>
+
+  <!-- Main Content -->
+  <main class="mt-28 mb-24 px-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Item 1 -->
+      <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+        <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+        <div class="item-info cursor-pointer" onclick="showModal(this.parentElement)">
+          <img src="img/test/combo.jpg" alt="Combo dos Clássicos" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="item-title font-bold text-lg mb-1">Combo dos Clássicos</h3>
+            <p class="text-gray-600 text-sm mb-2">2 Sanduíches + Batata + Bebida. Escolha entre Big Mac, Cheddar McMelt...</p>
+            <p class="item-price text-[#00337a] font-bold">a partir de R$ 52,90</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+        <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+        <div class="item-info cursor-pointer" onclick="showModal(this.parentElement)">
+          <img src="img/test/4lanches.jpg" alt="4 Pequenos Preços" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="item-title font-bold text-lg mb-1">4 Pequenos Preços</h3>
+            <p class="text-gray-600 text-sm mb-2">Escolha 4 itens entre Cheeseburger, McFiesta, Chicken Jr...</p>
+            <p class="item-price text-[#00337a] font-bold">a partir de R$ 32,00</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+        <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+        <div class="item-info cursor-pointer" onclick="showModal(this.parentElement)">
+          <img src="img/test/nuggets.jpg" alt="Oferta Nuggets" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="item-title font-bold text-lg mb-1">Oferta Nuggets</h3>
+            <p class="text-gray-600 text-sm mb-2">1 McOferta Média Clássica + acompanhamento (Nuggets, Cheeseburger ou McFlurry).</p>
+            <p class="item-price text-[#00337a] font-bold">a partir de R$ 43,90</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+        <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+        <div class="item-info cursor-pointer" onclick="showModal(this.parentElement)">
+          <img src="img/test/media.jpg" alt="Ofertas Médias" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="item-title font-bold text-lg mb-1">Ofertas Médias</h3>
+            <p class="text-gray-600 text-sm mb-2">2 McOfertas Médias Clássicas para compartilhar.</p>
+            <p class="item-price text-[#00337a] font-bold">a partir de R$ 68,90</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+        <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+        <div class="item-info cursor-pointer" onclick="showModal(this.parentElement)">
+          <img src="img/test/2sanduiche.jpg" alt="2 Sanduíches com desconto" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="item-title font-bold text-lg mb-1">2 Sanduíches com desconto</h3>
+            <p class="text-gray-600 text-sm mb-2">Leve 2 sanduíches com desconto entre várias opções.</p>
+            <p class="item-price text-[#00337a] font-bold">a partir de R$ 30,90</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Fixed Footer with Add Button -->
+  <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg px-4 py-3 z-20">
+    <button onclick="adicionarSelecionadosAoPedido()" class="btn-add w-full text-white font-bold py-3 px-4 rounded-lg transition-all transform hover:-translate-y-1 animate__animated animate__fadeIn">
+      <i class="fas fa-cart-plus mr-2"></i> Adicionar ao Pedido
+    </button>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="fixed bottom-12 left-0 right-0 bg-white py-2 md:py-3 shadow-inner z-10">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center justify-center md:justify-between text-center md:text-left">
+        <p class="text-xs sm:text-sm text-gray-600">&copy; 2025 ZEENTT - Todos os direitos reservados</p>
+        <div class="hidden md:flex items-center mt-2 md:mt-0 space-x-4">
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div class="modal-content bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-gray-100">
+      <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] py-2 px-4 flex justify-between items-center text-white">
+        <h3 class="font-bold">Detalhes do Item</h3>
+        <button onclick="closeModal()" class="text-white hover:text-red-200 transition-colors">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="modalDetails" class="p-6">
+        <!-- Modal content will be inserted here -->
+      </div>
+      <div class="px-6 pb-6 flex justify-between">
+        <button onclick="closeModal()" class="modal-close bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded-lg transition-all transform hover:-translate-y-1 flex items-center">
+          <i class="fas fa-arrow-left mr-2"></i> Voltar
+        </button>
+        <button onclick="adicionarModalAoPedido()" class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] hover:from-[var(--accent-color)] hover:to-[var(--secondary-color)] text-white font-bold py-3 px-6 rounded-lg shadow-md transition-all transform hover:-translate-y-1 flex items-center">
+          <i class="fas fa-cart-plus mr-2"></i> Adicionar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping Cart Sidebar -->
+  <div id="carrinho-lateral" class="carrinho-lateral fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-lg z-50 overflow-y-auto">
+    <div class="carrinho-header bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] text-white p-4 flex justify-between items-center shadow-md">
+      <div class="flex items-center">
+        <div class="mr-3 text-[var(--primary-color)] bg-white/10 p-2 rounded-full">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h2 class="text-xl font-bold">Seu Carrinho</h2>
+      </div>
+      <button onclick="toggleCarrinho()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <ul id="carrinho-itens" class="divide-y divide-gray-200">
+      <!-- Cart items will be inserted here -->
+    </ul>
+    <div class="carrinho-footer bg-gray-50 p-4 border-t border-gray-200 shadow-inner">
+      <div class="flex justify-between items-center bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] text-white p-3 rounded-lg shadow-md mb-3">
+        <strong class="text-lg flex items-center">
+          <i class="fas fa-receipt mr-2 text-[var(--primary-color)]"></i> Total:
+        </strong>
+        <strong class="text-lg">R$ <span id="carrinho-total" class="text-white">0.00</span></strong>
+      </div>
+      <button onclick="finalizarPedido()" class="w-full mt-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition-all transform hover:-translate-y-1 animate__animated animate__pulse animate__infinite animate__slower">
+        <i class="fas fa-check-circle mr-2"></i> Finalizar Pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- Overlay for cart -->
+  <div id="carrinho-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleCarrinho()"></div>
+
+  <script>
+    // Global variables
+    let cartItems = [];
+    let currentModalItem = null;
+    let selectedItems = [];
+
+    // Toggle sidebar menu
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      
+      if (sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      } else {
+        sidebar.classList.add('open');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    // Tela de carregamento e animação de digitação
+    window.addEventListener('load', function() {
+      // Ocultar a tela de carregamento após 2 segundos
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('fade-out');
+        
+        setTimeout(() => {
+          loader.style.display = 'none';
+          // Iniciar animação de digitação após a tela de carregamento
+          const zeenttText = document.getElementById('zeentt-text');
+          typeEffect(zeenttText, 'ZEENTT', 150);
+          
+          // Animar os itens do cardápio com fade-in
+          const items = document.querySelectorAll('.item');
+          items.forEach((item, index) => {
+            setTimeout(() => {
+              item.classList.add('animate__animated', 'animate__fadeInUp');
+            }, index * 100);
+          });
+        }, 500);
+      }, 1500);
+    });
+    
+    // Animação de digitação do texto ZEENTT
+    function typeEffect(element, text, speed) {
+      let i = 0;
+      element.textContent = '';
+      
+      // Criar um elemento de cursor piscante
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      cursor.textContent = '|';
+      element.appendChild(cursor);
+      
+      const timer = setInterval(function() {
+        if (i < text.length) {
+          // Inserir o texto antes do cursor
+          element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+          i++;
+        } else {
+          clearInterval(timer);
+          // Remover o cursor após a animação
+          setTimeout(() => {
+            cursor.remove();
+            // Adicionar classe de animação após a digitação
+            element.classList.add('animate__animated', 'animate__pulse');
+          }, 500);
+        }
+      }, speed);
+    }
+
+    // Toggle shopping cart
+    function toggleCarrinho() {
+      const carrinho = document.getElementById('carrinho-lateral');
+      const overlay = document.getElementById('carrinho-overlay');
+      carrinho.classList.toggle('open');
+      
+      // Mostrar/ocultar overlay com animação
+      if (carrinho.classList.contains('open')) {
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        // Animar itens do carrinho
+        setTimeout(() => {
+          const items = document.querySelectorAll('#carrinho-itens li');
+          items.forEach((item, index) => {
+            item.classList.add('animate__animated', 'animate__fadeInRight');
+            item.style.animationDelay = `${index * 100}ms`;
+          });
+        }, 100);
+      } else {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    // Show modal with item details
+    function showModal(itemElement) {
+      const modal = document.getElementById('modal');
+      const modalDetails = document.getElementById('modalDetails');
+      const modalContent = modal.querySelector('.modal-content');
+      
+      const imgSrc = itemElement.querySelector('img').src;
+      const title = itemElement.querySelector('.item-title').textContent;
+      const price = itemElement.querySelector('.item-price').textContent;
+      const description = itemElement.querySelector('p').textContent;
+      
+      currentModalItem = {
+        img: imgSrc,
+        title: title,
+        price: parseFloat(price.replace('a partir de R$ ', '').replace(',', '.')),
+        description: description
+      };
+      
+      modalDetails.innerHTML = `
+        <img src="${imgSrc}" alt="${title}" class="w-full h-48 object-cover rounded-lg mb-4 shadow-md animate__animated animate__fadeIn">
+        <h3 class="text-xl font-bold mb-2 text-[var(--secondary-color)] animate__animated animate__fadeInUp animate__delay-1s">${title}</h3>
+        <p class="text-gray-700 mb-4 animate__animated animate__fadeInUp animate__delay-2s">${description}</p>
+        <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] p-3 rounded-lg text-white font-bold text-lg shadow-md animate__animated animate__fadeInUp animate__delay-3s">
+          ${price}
+        </div>
+      `;
+      
+      modal.classList.remove('hidden');
+      // Adicionar animação ao modal
+      modalContent.classList.add('animate__animated', 'animate__zoomIn');
+      
+      // Adicionar efeito de blur ao fundo
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close modal
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      const modalContent = modal.querySelector('.modal-content');
+      
+      // Adicionar animação de saída
+      modalContent.classList.remove('animate__zoomIn');
+      modalContent.classList.add('animate__zoomOut');
+      
+      // Aguardar a animação terminar antes de esconder o modal
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        modalContent.classList.remove('animate__zoomOut');
+        document.body.style.overflow = 'auto';
+      }, 300);
+    }
+
+    // Add item from modal to cart
+    function adicionarModalAoPedido() {
+      if (currentModalItem) {
+        addToCart(currentModalItem);
+        closeModal();
+      }
+    }
+
+    // Add selected items to cart
+    function adicionarSelecionadosAoPedido() {
+      const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+      checkboxes.forEach(checkbox => {
+        const itemElement = checkbox.closest('.item');
+        const imgSrc = itemElement.querySelector('img').src;
+        const title = itemElement.querySelector('.item-title').textContent;
+        const priceText = itemElement.querySelector('.item-price').textContent;
+        const price = parseFloat(priceText.replace('a partir de R$ ', '').replace(',', '.'));
+        const description = itemElement.querySelector('p').textContent;
+        
+        addToCart({
+          img: imgSrc,
+          title: title,
+          price: price,
+          description: description
+        });
+        
+        checkbox.checked = false;
+        updateSelectedItems();
+      });
+    }
+
+    // Add item to cart
+    function addToCart(item) {
+      cartItems.push(item);
+      updateCart();
+    }
+
+    // Update cart UI
+    function updateCart() {
+      const carrinhoItens = document.getElementById('carrinho-itens');
+      const carrinhoTotal = document.getElementById('carrinho-total');
+      const cartCount = document.getElementById('cart-count');
+      
+      carrinhoItens.innerHTML = '';
+      let total = 0;
+      
+      // Animação do contador do carrinho
+      cartCount.classList.add('animate__animated', 'animate__rubberBand');
+      setTimeout(() => {
+        cartCount.classList.remove('animate__rubberBand');
+      }, 1000);
+      
+      if (cartItems.length === 0) {
+        // Mostrar mensagem de carrinho vazio
+        const emptyMessage = document.createElement('div');
+        emptyMessage.className = 'p-8 text-center text-gray-500 animate__animated animate__fadeIn';
+        emptyMessage.innerHTML = `
+          <i class="fas fa-shopping-cart text-4xl mb-4 text-gray-300"></i>
+          <p>Seu carrinho está vazio</p>
+          <p class="text-sm mt-2">Adicione itens do cardápio para continuar</p>
+        `;
+        carrinhoItens.appendChild(emptyMessage);
+      } else {
+        // Adicionar itens ao carrinho com animações
+        cartItems.forEach((item, index) => {
+          total += item.price;
+          
+          const li = document.createElement('li');
+          li.className = 'p-4 flex items-start border-b border-gray-100 hover:bg-gray-50 transition-colors duration-300';
+          li.innerHTML = `
+            <img src="${item.img}" alt="${item.title}" class="w-16 h-16 object-cover rounded-lg shadow-sm mr-3">
+            <div class="flex-1">
+              <h3 class="font-medium text-[var(--secondary-color)]">${item.title}</h3>
+              <p class="text-gray-600 text-sm">${item.description.substring(0, 50)}...</p>
+              <p class="text-[var(--primary-color)] font-bold mt-1">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+            </div>
+            <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-300 p-2 rounded-full hover:bg-gray-100">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          `;
+          
+          // Adicionar classes de animação
+          li.classList.add('animate__animated', 'animate__fadeInRight');
+          li.style.animationDelay = `${index * 100}ms`;
+          
+          carrinhoItens.appendChild(li);
+        });
+      }
+      
+      // Atualizar total com animação
+      const oldTotal = parseFloat(carrinhoTotal.textContent.replace(',', '.')) || 0;
+      const newTotal = total;
+      
+      if (oldTotal !== newTotal) {
+        carrinhoTotal.parentElement.classList.add('animate__animated', 'animate__pulse');
+        setTimeout(() => {
+          carrinhoTotal.parentElement.classList.remove('animate__pulse');
+        }, 1000);
+      }
+      
+      carrinhoTotal.textContent = total.toFixed(2).replace('.', ',');
+      cartCount.textContent = cartItems.length;
+    }
+
+    // Remove item from cart
+    function removeFromCart(index) {
+      // Animar o item antes de removê-lo
+      const items = document.querySelectorAll('#carrinho-itens li');
+      if (items[index]) {
+        items[index].classList.remove('animate__fadeInRight');
+        items[index].classList.add('animate__animated', 'animate__fadeOutRight');
+        
+        // Aguardar a animação terminar antes de remover
+        setTimeout(() => {
+          cartItems.splice(index, 1);
+          updateCart();
+        }, 500);
+      } else {
+        cartItems.splice(index, 1);
+        updateCart();
+      }
+    }
+
+    // Finalize order
+    function finalizarPedido() {
+      if (cartItems.length === 0) {
+        // Usar um alerta personalizado em vez do alerta padrão
+        const carrinhoHeader = document.querySelector('.carrinho-header');
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 animate__animated animate__shakeX';
+        alertDiv.innerHTML = `
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <p>Seu carrinho está vazio!</p>
+          </div>
+        `;
+        
+        carrinhoHeader.insertAdjacentElement('afterend', alertDiv);
+        
+        // Remover o alerta após alguns segundos
+        setTimeout(() => {
+          alertDiv.classList.remove('animate__shakeX');
+          alertDiv.classList.add('animate__fadeOut');
+          setTimeout(() => alertDiv.remove(), 500);
+        }, 3000);
+        
+        return;
+      }
+      
+      // Animar todos os itens do carrinho
+      const items = document.querySelectorAll('#carrinho-itens li');
+      items.forEach((item, i) => {
+        setTimeout(() => {
+          item.classList.add('animate__animated', 'animate__bounceOut');
+        }, i * 100);
+      });
+      
+      // Mostrar mensagem de sucesso personalizada
+      setTimeout(() => {
+        const carrinhoItens = document.getElementById('carrinho-itens');
+        carrinhoItens.innerHTML = '';
+        
+        const successMessage = document.createElement('div');
+        successMessage.className = 'p-8 text-center text-green-500 animate__animated animate__fadeIn';
+        successMessage.innerHTML = `
+          <div class="bg-green-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-check-circle text-4xl text-green-500"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Pedido Finalizado!</h3>
+          <p class="text-gray-600">Total: R$ ${document.getElementById('carrinho-total').textContent}</p>
+          <p class="text-sm mt-4 text-gray-500">Seu pedido foi enviado para a cozinha</p>
+        `;
+        
+        carrinhoItens.appendChild(successMessage);
+        
+        // Resetar o carrinho após alguns segundos
+        setTimeout(() => {
+          cartItems = [];
+          updateCart();
+          toggleCarrinho();
+        }, 3000);
+      }, 800);
+    }
+
+    // Logoff function
+    function fazerLogoff() {
+      if (confirm('Deseja realmente sair do sistema?')) {
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Update selected items and total
+    function updateSelectedItems() {
+      const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+      const totalElement = document.getElementById('total');
+      let total = 0;
+      
+      checkboxes.forEach(checkbox => {
+        const priceText = checkbox.closest('.item').querySelector('.item-price').textContent;
+        const price = parseFloat(priceText.replace('a partir de R$ ', '').replace(',', '.'));
+        total += price;
+      });
+      
+      totalElement.textContent = total.toFixed(2).replace('.', ',');
+    }
+
+    // Initialize event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Checkbox change event
+      document.querySelectorAll('.item-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedItems);
+      });
+      
+      // Item click event (excluding checkbox)
+      document.querySelectorAll('.item-info').forEach(item => {
+        item.addEventListener('click', function(e) {
+          if (e.target.tagName !== 'INPUT') {
+            showModal(this.parentElement);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

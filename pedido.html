@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeentt - Pedido</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          screens: {
+            'xs': '480px',
+          },
+          colors: {
+            primary: '#d8315b',
+            secondary: '#00337a',
+            accent: '#1e3a8a',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --primary-color: #d8315b;
+      --secondary-color: #00337a;
+      --accent-color: #1e3a8a;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Loader e animação de digitação */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+    
+    #loader.fade-out {
+      opacity: 0;
+    }
+    
+    .loader-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .loader-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid #fff;
+      width: 100%;
+      height: 100%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .typing-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background-color: currentColor;
+      margin-left: 2px;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    /* Logo icon */
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      margin-right: 8px;
+    }
+    
+    .logo-icon-inner {
+      width: 100%;
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(216, 49, 91, 0.6);
+      animation: pulse-shadow 2s infinite;
+    }
+    
+    .logo-icon-inner:before {
+      content: 'Z';
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    }
+    
+    .logo-icon-inner:after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: rotate(25deg);
+      animation: shine 3s infinite;
+    }
+    
+    .logo-particles .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+    
+    .logo-particles .particle:nth-child(1) {
+      top: 20%;
+      left: 20%;
+      animation: float 3s infinite;
+    }
+    
+    .logo-particles .particle:nth-child(2) {
+      top: 20%;
+      right: 20%;
+      animation: float 2.5s infinite 0.3s;
+    }
+    
+    .logo-particles .particle:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation: float 3.5s infinite 0.5s;
+    }
+    
+    .logo-particles .particle:nth-child(4) {
+      bottom: 20%;
+      right: 20%;
+      animation: float 3s infinite 0.7s;
+    }
+    
+    @keyframes pulse-shadow {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(216, 49, 91, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(216, 49, 91, 0.9);
+      }
+    }
+    
+    @keyframes shine {
+      0% {
+        left: -100%;
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.1;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(-5px) scale(1.2);
+        opacity: 1;
+      }
+    }
+    
+    /* Sidebar e navegação */
+    .sidebar {
+      transition: all 0.3s ease;
+      transform: translateX(-100%);
+      background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      z-index: 40;
+    }
+    
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    
+    .top-bar {
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    }
+    
+    /* Cards e elementos de UI */
+    .pedido-card {
+      transition: all 0.3s ease;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .pedido-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-icon {
+      transition: all 0.2s ease;
+    }
+    
+    .btn-icon:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+  <!-- Tela de carregamento -->
+  <div id="loader">
+    <div class="loader-icon">
+      <div class="loader-spinner"></div>
+    </div>
+    <h2 class="text-white text-2xl font-bold mt-4 tracking-wider">ZEENTT</h2>
+    <p class="text-white/80 mt-2">Carregando...</p>
+  </div>
+
+  <!-- Overlay para a barra lateral -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden" onclick="toggleMenu()"></div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 text-white z-40 shadow-lg">
+    <div class="p-4 flex items-center border-b border-white/10">
+      <div class="logo-icon">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+          </div>
+        </div>
+      </div>
+      <span class="text-xl font-bold ml-2">ZEENTT</span>
+    </div>
+    <ul class="py-4">
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="menu.html" class="flex items-center">
+          <i class="fas fa-home mr-3 text-blue-200"></i> 
+          <span>Início</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cadastro.html" class="flex items-center">
+          <i class="fas fa-plus mr-3 text-green-200"></i> 
+          <span>Cadastro</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cardapio.html" class="flex items-center">
+          <i class="fas fa-utensils mr-3 text-yellow-200"></i> 
+          <span>Cardápio</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 bg-white/20 rounded-lg mx-2 my-1">
+        <a href="pedido.html" class="flex items-center">
+          <i class="fas fa-concierge-bell mr-3 text-red-200"></i> 
+          <span>Pedidos</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cozinha.html" class="flex items-center">
+          <i class="fas fa-blender mr-3 text-orange-200"></i> 
+          <span>Cozinha</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="relatorio.html" class="flex items-center">
+          <i class="fas fa-chart-bar mr-3 text-purple-200"></i> 
+          <span>Relatórios</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="suporte.html" class="flex items-center">
+          <i class="fas fa-headset mr-3 text-indigo-200"></i> 
+          <span>Suporte</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="informacoes.html" class="flex items-center">
+          <i class="fas fa-info-circle mr-3 text-blue-200"></i> 
+          <span>Informações</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="servico.html" class="flex items-center">
+          <i class="fas fa-tools mr-3 text-gray-200"></i> 
+          <span>Serviços</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1 mt-8">
+        <a href="#" onclick="fazerLogoff()" class="flex items-center text-red-200">
+          <i class="fas fa-sign-out-alt mr-3"></i> 
+          <span>Sair</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Header -->
+  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
+    <div class="logo flex items-center">
+      <button onclick="toggleMenu()" class="mr-3 sm:mr-4 hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="logo-icon">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+          </div>
+        </div>
+      </div>
+      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
+    </div>
+    <div class="flex items-center space-x-2 sm:space-x-4">
+      <button onclick="window.location.href='menu.html'" class="btn-icon hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
+        <i class="fas fa-home"></i>
+      </button>
+      <button onclick="fazerLogoff()" class="btn-icon hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Conteúdo principal -->
+  <main class="container mx-auto px-4 pt-24 pb-20">
+    <div class="text-center mb-8 animate__animated animate__fadeIn">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+        <i class="fas fa-concierge-bell text-[var(--primary-color)] mr-2"></i> Gerenciamento de Pedidos
+      </h2>
+      <p class="text-gray-600 mb-4">Registre e acompanhe os pedidos dos clientes.</p>
+    </div>
+
+    <!-- Área de Pedido -->
+    <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 animate__animated animate__fadeIn">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <div class="flex items-center mb-4 md:mb-0">
+          <div class="mr-4">
+            <label for="table" class="block text-sm font-medium text-gray-700 mb-1">Mesa:</label>
+            <input type="text" id="table" placeholder="Número da mesa" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent">
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
+          <div class="flex items-center">
+            <span class="text-gray-600 mr-2">Total:</span>
+            <strong id="total-price" class="text-lg text-[var(--primary-color)]">R$ 0,00</strong>
+          </div>
+          <div class="flex items-center">
+            <span class="text-gray-600 mr-2">Itens:</span>
+            <strong id="total-items" class="text-lg text-[var(--primary-color)]">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de Itens -->
+      <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-800 mb-3">Itens do Pedido</h3>
+        <div class="bg-gray-50 rounded-lg p-4 min-h-[100px] max-h-[300px] overflow-y-auto">
+          <ul id="pedido-list" class="divide-y divide-gray-200">
+            <!-- Os itens serão adicionados dinamicamente aqui -->
+            <li class="py-3 flex justify-between items-center text-gray-500 italic">
+              Nenhum item adicionado ao pedido.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Cardápio para adicionar -->
+      <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-800 mb-3">Adicionar Itens</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+          <button onclick="adicionarItem('Hambúrguer', 25)" class="pedido-card bg-white border border-gray-200 p-3 rounded-lg flex flex-col items-center hover:shadow-md transition-all duration-300">
+            <span class="text-2xl mb-2">🍔</span>
+            <span class="font-medium">Hambúrguer</span>
+            <span class="text-sm text-gray-600 mt-1">R$ 25,00</span>
+          </button>
+          <button onclick="adicionarItem('Pizza', 40)" class="pedido-card bg-white border border-gray-200 p-3 rounded-lg flex flex-col items-center hover:shadow-md transition-all duration-300">
+            <span class="text-2xl mb-2">🍕</span>
+            <span class="font-medium">Pizza</span>
+            <span class="text-sm text-gray-600 mt-1">R$ 40,00</span>
+          </button>
+          <button onclick="adicionarItem('Refrigerante', 8)" class="pedido-card bg-white border border-gray-200 p-3 rounded-lg flex flex-col items-center hover:shadow-md transition-all duration-300">
+            <span class="text-2xl mb-2">🥤</span>
+            <span class="font-medium">Refrigerante</span>
+            <span class="text-sm text-gray-600 mt-1">R$ 8,00</span>
+          </button>
+          <button onclick="adicionarItem('Batata Frita', 15)" class="pedido-card bg-white border border-gray-200 p-3 rounded-lg flex flex-col items-center hover:shadow-md transition-all duration-300">
+            <span class="text-2xl mb-2">🍟</span>
+            <span class="font-medium">Batata Frita</span>
+            <span class="text-sm text-gray-600 mt-1">R$ 15,00</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Botões -->
+      <div class="flex justify-end space-x-4">
+        <button onclick="salvarPedido()" class="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-300 flex items-center">
+          <i class="fas fa-save mr-2"></i> Salvar
+        </button>
+        <button onclick="concluirPedido()" class="px-5 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[#c02a51] transition-colors duration-300 flex items-center">
+          <i class="fas fa-check mr-2"></i> Concluir
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-white py-2 md:py-3 shadow-inner z-20">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center justify-center md:justify-between text-center md:text-left">
+        <p class="text-xs sm:text-sm text-gray-600">&copy; 2025 ZEENTT - Todos os direitos reservados</p>
+        <div class="hidden md:flex items-center mt-2 md:mt-0 space-x-4">
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Variáveis globais
+    let pedidoItems = [];
+    let totalPrice = 0;
+    
+    // Toggle sidebar
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      
+      if (sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      } else {
+        sidebar.classList.add('open');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    // Tela de carregamento e animação de digitação
+    window.addEventListener('load', function() {
+      // Ocultar a tela de carregamento após 2 segundos
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('fade-out');
+        
+        setTimeout(() => {
+          loader.style.display = 'none';
+          // Iniciar animação de digitação após a tela de carregamento
+          const zeenttText = document.getElementById('zeentt-text');
+          typeEffect(zeenttText, 'ZEENTT', 150);
+        }, 500);
+      }, 1500);
+    });
+    
+    // Animação de digitação do texto ZEENTT
+    function typeEffect(element, text, speed) {
+      let i = 0;
+      element.textContent = '';
+      
+      // Criar um elemento de cursor piscante
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      cursor.textContent = '|';
+      element.appendChild(cursor);
+      
+      const timer = setInterval(function() {
+        if (i < text.length) {
+          // Inserir o texto antes do cursor
+          element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+          i++;
+        } else {
+          clearInterval(timer);
+          // Remover o cursor após a animação
+          setTimeout(() => {
+            cursor.remove();
+            // Adicionar classe de animação após a digitação
+            element.classList.add('animate__animated', 'animate__pulse');
+          }, 500);
+        }
+      }, speed);
+    }
+    
+    // Adicionar item ao pedido
+    function adicionarItem(nome, preco) {
+      // Verificar se o item já existe no pedido
+      const existingItemIndex = pedidoItems.findIndex(item => item.nome === nome);
+      
+      if (existingItemIndex !== -1) {
+        // Se o item já existe, aumentar a quantidade
+        pedidoItems[existingItemIndex].quantidade++;
+      } else {
+        // Se o item não existe, adicionar ao array
+        pedidoItems.push({
+          nome: nome,
+          preco: preco,
+          quantidade: 1
+        });
+      }
+      
+      // Atualizar a interface
+      atualizarListaPedido();
+      atualizarTotais();
+      
+      // Animação de feedback
+      const totalElement = document.getElementById('total-price');
+      totalElement.classList.add('animate__animated', 'animate__heartBeat');
+      setTimeout(() => {
+        totalElement.classList.remove('animate__animated', 'animate__heartBeat');
+      }, 1000);
+    }
+    
+    // Remover item do pedido
+    function removerItem(index) {
+      if (pedidoItems[index].quantidade > 1) {
+        // Se houver mais de um, diminuir a quantidade
+        pedidoItems[index].quantidade--;
+      } else {
+        // Se houver apenas um, remover o item
+        pedidoItems.splice(index, 1);
+      }
+      
+      // Atualizar a interface
+      atualizarListaPedido();
+      atualizarTotais();
+    }
+    
+    // Atualizar a lista de itens na interface
+    function atualizarListaPedido() {
+      const pedidoList = document.getElementById('pedido-list');
+      pedidoList.innerHTML = '';
+      
+      if (pedidoItems.length === 0) {
+        pedidoList.innerHTML = `
+          <li class="py-3 flex justify-between items-center text-gray-500 italic">
+            Nenhum item adicionado ao pedido.
+          </li>
+        `;
+        return;
+      }
+      
+      pedidoItems.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = 'py-3 flex justify-between items-center animate__animated animate__fadeIn';
+        
+        const itemTotal = item.preco * item.quantidade;
+        
+        li.innerHTML = `
+          <div class="flex items-center">
+            <span class="font-medium">${item.nome}</span>
+            <span class="ml-2 text-sm text-gray-600">(${item.quantidade}x R$ ${item.preco.toFixed(2)})</span>
+          </div>
+          <div class="flex items-center">
+            <span class="mr-4 font-medium">R$ ${itemTotal.toFixed(2)}</span>
+            <button onclick="removerItem(${index})" class="text-red-500 hover:text-red-700 transition-colors duration-300">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+        
+        pedidoList.appendChild(li);
+      });
+    }
+    
+    // Atualizar os totais (preço e quantidade)
+    function atualizarTotais() {
+      const totalPriceElement = document.getElementById('total-price');
+      const totalItemsElement = document.getElementById('total-items');
+      
+      // Calcular o total
+      totalPrice = pedidoItems.reduce((total, item) => total + (item.preco * item.quantidade), 0);
+      const totalItems = pedidoItems.reduce((total, item) => total + item.quantidade, 0);
+      
+      // Atualizar a interface
+      totalPriceElement.textContent = `R$ ${totalPrice.toFixed(2)}`;
+      totalItemsElement.textContent = totalItems;
+    }
+    
+    // Salvar pedido
+    function salvarPedido() {
+      const mesa = document.getElementById('table').value;
+      
+      if (!mesa) {
+        alert('Por favor, informe o número da mesa.');
+        return;
+      }
+      
+      if (pedidoItems.length === 0) {
+        alert('Adicione pelo menos um item ao pedido.');
+        return;
+      }
+      
+      // Aqui você pode implementar a lógica para salvar o pedido no banco de dados
+      // Por enquanto, apenas mostramos uma mensagem de sucesso
+      
+      // Animação de feedback
+      const saveButton = document.querySelector('.bg-blue-500');
+      saveButton.classList.add('animate__animated', 'animate__pulse');
+      setTimeout(() => {
+        saveButton.classList.remove('animate__animated', 'animate__pulse');
+        alert(`Pedido da mesa ${mesa} salvo com sucesso!`);
+      }, 500);
+    }
+    
+    // Concluir pedido
+    function concluirPedido() {
+      const mesa = document.getElementById('table').value;
+      
+      if (!mesa) {
+        alert('Por favor, informe o número da mesa.');
+        return;
+      }
+      
+      if (pedidoItems.length === 0) {
+        alert('Adicione pelo menos um item ao pedido.');
+        return;
+      }
+      
+      // Aqui você pode implementar a lógica para finalizar o pedido e enviá-lo para a cozinha
+      // Por enquanto, apenas mostramos uma mensagem de sucesso e limpamos o pedido
+      
+      // Animação de feedback
+      const concludeButton = document.querySelector('.bg-\\[var\\(--primary-color\\)]');
+      concludeButton.classList.add('animate__animated', 'animate__pulse');
+      setTimeout(() => {
+        concludeButton.classList.remove('animate__animated', 'animate__pulse');
+        alert(`Pedido da mesa ${mesa} enviado para a cozinha!`);
+        
+        // Limpar o pedido
+        pedidoItems = [];
+        atualizarListaPedido();
+        atualizarTotais();
+        document.getElementById('table').value = '';
+      }, 500);
+    }
+    
+    // Logoff function
+    function fazerLogoff() {
+      if (confirm('Tem certeza que deseja sair do sistema?')) {
+        window.location.href = 'login.html';
+      }
+    }
+  </script>
+</body>
+</html>

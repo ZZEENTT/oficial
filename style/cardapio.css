@@ -1,0 +1,11 @@
+h1{
+    font: black;
+}
+
+body{
+    font: 20px Arial, sans-serif;
+    color: #fff;
+    background-color: #004AAD;
+    margin: 0;
+    padding: 0;
+}

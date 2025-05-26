@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeentt - Relatório</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          screens: {
+            'xs': '480px',
+          },
+          colors: {
+            primary: '#d8315b',
+            secondary: '#00337a',
+            accent: '#1e3a8a',
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --primary-color: #d8315b;
+      --secondary-color: #00337a;
+      --accent-color: #1e3a8a;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    /* Loader e animação de digitação */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+    
+    #loader.fade-out {
+      opacity: 0;
+    }
+    
+    .loader-icon {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .loader-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid #fff;
+      width: 100%;
+      height: 100%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .typing-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1em;
+      background-color: currentColor;
+      margin-left: 2px;
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
+    /* Logo icon */
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      margin-right: 8px;
+    }
+    
+    .logo-icon-inner {
+      width: 100%;
+      height: 100%;
+      background-color: var(--primary-color);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(216, 49, 91, 0.6);
+      animation: pulse-shadow 2s infinite;
+    }
+    
+    .logo-icon-inner:before {
+      content: 'Z';
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    }
+    
+    .logo-icon-inner:after {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: -10%;
+      width: 120%;
+      height: 120%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: rotate(25deg);
+      animation: shine 3s infinite;
+    }
+    
+    .logo-particles .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    }
+    
+    .logo-particles .particle:nth-child(1) {
+      top: 20%;
+      left: 20%;
+      animation: float 3s infinite;
+    }
+    
+    .logo-particles .particle:nth-child(2) {
+      top: 20%;
+      right: 20%;
+      animation: float 2.5s infinite 0.3s;
+    }
+    
+    .logo-particles .particle:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation: float 3.5s infinite 0.5s;
+    }
+    
+    .logo-particles .particle:nth-child(4) {
+      bottom: 20%;
+      right: 20%;
+      animation: float 3s infinite 0.7s;
+    }
+    
+    @keyframes pulse-shadow {
+      0%, 100% {
+        box-shadow: 0 0 10px rgba(216, 49, 91, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 20px rgba(216, 49, 91, 0.9);
+      }
+    }
+    
+    @keyframes shine {
+      0% {
+        left: -100%;
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.1;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(-5px) scale(1.2);
+        opacity: 1;
+      }
+    }
+    
+    /* Sidebar e navegação */
+    .sidebar {
+      transition: all 0.3s ease;
+      transform: translateX(-100%);
+      background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      z-index: 40;
+    }
+    
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    
+    .top-bar {
+      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+    }
+    
+    /* Elementos de relatório */
+    .report-card {
+      transition: all 0.3s ease;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .report-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+  <!-- Tela de carregamento -->
+  <div id="loader">
+    <div class="loader-icon">
+      <div class="loader-spinner"></div>
+    </div>
+    <h2 class="text-white text-2xl font-bold mt-4 tracking-wider">ZEENTT</h2>
+    <p class="text-white/80 mt-2">Carregando...</p>
+  </div>
+
+  <!-- Overlay para a barra lateral -->
+  <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden" onclick="toggleMenu()"></div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 text-white z-40 shadow-lg">
+    <div class="p-4 flex items-center border-b border-white/10">
+      <div class="logo-icon">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+          </div>
+        </div>
+      </div>
+      <span class="text-xl font-bold ml-2">ZEENTT</span>
+    </div>
+    <ul class="py-4">
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="menu.html" class="flex items-center">
+          <i class="fas fa-home mr-3 text-blue-200"></i> 
+          <span>Início</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cadastro.html" class="flex items-center">
+          <i class="fas fa-plus mr-3 text-green-200"></i> 
+          <span>Cadastro</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cardapio.html" class="flex items-center">
+          <i class="fas fa-utensils mr-3 text-yellow-200"></i> 
+          <span>Cardápio</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="pedido.html" class="flex items-center">
+          <i class="fas fa-concierge-bell mr-3 text-red-200"></i> 
+          <span>Pedidos</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="cozinha.html" class="flex items-center">
+          <i class="fas fa-blender mr-3 text-orange-200"></i> 
+          <span>Cozinha</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 bg-white/20 rounded-lg mx-2 my-1">
+        <a href="relatorio.html" class="flex items-center">
+          <i class="fas fa-chart-bar mr-3 text-purple-200"></i> 
+          <span>Relatórios</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="suporte.html" class="flex items-center">
+          <i class="fas fa-headset mr-3 text-indigo-200"></i> 
+          <span>Suporte</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="informacoes.html" class="flex items-center">
+          <i class="fas fa-info-circle mr-3 text-blue-200"></i> 
+          <span>Informações</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
+        <a href="servico.html" class="flex items-center">
+          <i class="fas fa-tools mr-3 text-gray-200"></i> 
+          <span>Serviços</span>
+        </a>
+      </li>
+      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1 mt-8">
+        <a href="#" onclick="fazerLogoff()" class="flex items-center text-red-200">
+          <i class="fas fa-sign-out-alt mr-3"></i> 
+          <span>Sair</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <!-- Header -->
+  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
+    <div class="logo flex items-center">
+      <button onclick="toggleMenu()" class="mr-3 sm:mr-4 hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="logo-icon">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+            <span class="particle"></span>
+          </div>
+        </div>
+      </div>
+      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
+    </div>
+    <div class="flex items-center space-x-2 sm:space-x-4">
+      <button onclick="window.location.href='menu.html'" class="btn-icon hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
+        <i class="fas fa-home"></i>
+      </button>
+      <button onclick="fazerLogoff()" class="btn-icon hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </header>
+  <!-- Conteúdo principal -->
+  <main class="container mx-auto px-4 pt-24 pb-20">
+    <div class="text-center mb-8 animate__animated animate__fadeIn">
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
+        <i class="fas fa-chart-bar text-[var(--primary-color)] mr-2"></i> Relatórios e Estatísticas
+      </h2>
+      <p class="text-gray-600 mb-4">Visualize dados e métricas importantes do seu negócio.</p>
+    </div>
+
+    <!-- Filtros -->
+    <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 animate__animated animate__fadeIn">
+      <h3 class="text-lg font-medium text-gray-800 mb-4">Filtros</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <label for="date-start" class="block text-sm font-medium text-gray-700 mb-1">Data Inicial</label>
+          <input type="date" id="date-start" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent">
+        </div>
+        <div>
+          <label for="date-end" class="block text-sm font-medium text-gray-700 mb-1">Data Final</label>
+          <input type="date" id="date-end" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent">
+        </div>
+        <div>
+          <label for="report-type" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Relatório</label>
+          <select id="report-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent">
+            <option value="vendas">Vendas</option>
+            <option value="produtos">Produtos</option>
+            <option value="clientes">Clientes</option>
+            <option value="financeiro">Financeiro</option>
+          </select>
+        </div>
+        <div class="flex items-end">
+          <button onclick="gerarRelatorio()" class="w-full px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[#c02a51] transition-colors duration-300 flex items-center justify-center">
+            <i class="fas fa-search mr-2"></i> Gerar Relatório
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <!-- Card 1 -->
+      <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-gray-800">Vendas Totais</h3>
+          <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+        </div>
+        <p class="text-3xl font-bold text-gray-800 mb-2">R$ 0,00</p>
+        <div class="flex items-center text-sm">
+          <span class="text-gray-500">Sem dados anteriores</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn animate__delay-1s">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-gray-800">Pedidos</h3>
+          <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-500">
+            <i class="fas fa-receipt"></i>
+          </div>
+        </div>
+        <p class="text-3xl font-bold text-gray-800 mb-2">0</p>
+        <div class="flex items-center text-sm">
+          <span class="text-gray-500">Sem dados anteriores</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn animate__delay-2s">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-gray-800">Ticket Médio</h3>
+          <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+            <i class="fas fa-ticket-alt"></i>
+          </div>
+        </div>
+        <p class="text-3xl font-bold text-gray-800 mb-2">R$ 0,00</p>
+        <div class="flex items-center text-sm">
+          <span class="text-gray-500">Sem dados anteriores</span>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn animate__delay-3s">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium text-gray-800">Clientes</h3>
+          <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+            <i class="fas fa-users"></i>
+          </div>
+        </div>
+        <p class="text-3xl font-bold text-gray-800 mb-2">0</p>
+        <div class="flex items-center text-sm">
+          <span class="text-gray-500">Sem dados anteriores</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <!-- Gráfico de Vendas -->
+      <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn">
+        <h3 class="text-lg font-medium text-gray-800 mb-4">Vendas por Período</h3>
+        <div class="chart-container" id="vendas-chart">
+          <canvas id="vendasChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico de Produtos -->
+      <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn animate__delay-1s">
+        <h3 class="text-lg font-medium text-gray-800 mb-4">Produtos Mais Vendidos</h3>
+        <div class="chart-container" id="produtos-chart">
+          <canvas id="produtosChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela de Dados -->
+    <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-medium text-gray-800">Últimos Pedidos</h3>
+        <button class="text-[var(--primary-color)] hover:text-[#c02a51] transition-colors duration-300 flex items-center">
+          <span class="mr-1">Ver todos</span>
+          <i class="fas fa-chevron-right text-xs"></i>
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead>
+            <tr>
+              <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+              <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+              <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+              <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Itens</th>
+              <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+              <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr>
+              <td colspan="6" class="px-6 py-4 text-center text-gray-500">Nenhum pedido encontrado</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-white py-2 md:py-3 shadow-inner z-20">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center justify-center md:justify-between text-center md:text-left">
+        <p class="text-xs sm:text-sm text-gray-600">&copy; 2025 ZEENTT - Todos os direitos reservados</p>
+        <div class="hidden md:flex items-center mt-2 md:mt-0 space-x-4">
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
+            <i class="fab fa-whatsapp"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Toggle sidebar
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      
+      if (sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      } else {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    
+    // Tela de carregamento e animação de digitação
+    window.addEventListener('load', function() {
+      // Ocultar a tela de carregamento após 2 segundos
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('fade-out');
+        
+        setTimeout(() => {
+          loader.style.display = 'none';
+          // Iniciar animação de digitação após a tela de carregamento
+          const zeenttText = document.getElementById('zeentt-text');
+          typeEffect(zeenttText, 'ZEENTT', 150);
+          
+          // Inicializar gráficos
+          initCharts();
+        }, 500);
+      }, 1500);
+    });
+    
+    // Animação de digitação do texto ZEENTT
+    function typeEffect(element, text, speed) {
+      let i = 0;
+      element.textContent = '';
+      
+      // Criar um elemento de cursor piscante
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      cursor.textContent = '|';
+      element.appendChild(cursor);
+      
+      const timer = setInterval(function() {
+        if (i < text.length) {
+          // Inserir o texto antes do cursor
+          element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+          i++;
+        } else {
+          clearInterval(timer);
+          // Remover o cursor após a animação
+          setTimeout(() => {
+            cursor.remove();
+            // Adicionar classe de animação após a digitação
+            element.classList.add('animate__animated', 'animate__pulse');
+          }, 500);
+        }
+      }, speed);
+    }
+    
+    // Inicializar gráficos
+    function initCharts() {
+      // Gráfico de vendas
+      const vendasCtx = document.getElementById('vendasChart').getContext('2d');
+      const vendasChart = new Chart(vendasCtx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Vendas (R$)',
+            data: [],
+            backgroundColor: 'rgba(216, 49, 91, 0.2)',
+            borderColor: 'rgba(216, 49, 91, 1)',
+            borderWidth: 2,
+            tension: 0.3,
+            pointBackgroundColor: 'rgba(216, 49, 91, 1)',
+            pointRadius: 4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  return `R$ ${context.raw.toLocaleString('pt-BR')}`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                callback: function(value) {
+                  return `R$ ${value.toLocaleString('pt-BR')}`;
+                }
+              }
+            }
+          }
+        }
+      });
+      
+      // Gráfico de produtos
+      const produtosCtx = document.getElementById('produtosChart').getContext('2d');
+      const produtosChart = new Chart(produtosCtx, {
+        type: 'doughnut',
+        data: {
+          labels: [],
+          datasets: [{
+            data: [],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+              'rgba(75, 192, 192, 0.7)',
+              'rgba(153, 102, 255, 0.7)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `${context.label}: ${context.raw}%`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Gerar relatório
+    function gerarRelatorio() {
+      const dataInicial = document.getElementById('date-start').value;
+      const dataFinal = document.getElementById('date-end').value;
+      const tipoRelatorio = document.getElementById('report-type').value;
+      
+      if (!dataInicial || !dataFinal) {
+        alert('Por favor, selecione o período para o relatório.');
+        return;
+      }
+      
+      // Aqui você pode implementar a lógica para gerar o relatório com base nos filtros
+      // Por enquanto, apenas mostramos uma mensagem de sucesso
+      
+      alert(`Relatório de ${tipoRelatorio} gerado com sucesso para o período de ${dataInicial} a ${dataFinal}.`);
+    }
+    
+    // Logoff function
+    function fazerLogoff() {
+      if (confirm('Tem certeza que deseja sair do sistema?')) {
+        window.location.href = 'login.html';
+      }
+    }
+  </script>
+</body>
+</html>
