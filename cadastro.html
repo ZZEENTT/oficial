@@ -127,45 +127,158 @@
   <!-- Overlay -->
   <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
   
-  <!-- Sidebar -->
-  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 bg-[#00337a] text-white z-40 shadow-lg">
-    <div class="p-4 text-center border-b border-blue-700">
-      <h1 class="text-2xl font-bold">ZEENTT</h1>
-      <p class="text-blue-200 text-sm">Sistema de Gestão</p>
+  </head>
+<body class="bg-gray-50">
+  <!-- Tela de Carregamento -->
+  <div id="loader">
+    <div class="loader-content">
+      <div class="loader-icon">
+        <div class="loader-spinner"></div>
+      </div>
+      <h2 class="text-white text-2xl font-bold mb-2">ZEENTT</h2>
+      <p class="text-blue-300">Carregando...</p>
     </div>
-    <ul class="py-4 overflow-y-auto h-[calc(100%-80px)]">
-      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="menu.html" class="flex items-center"><i class="fas fa-home mr-3"></i> Início</a></li>
-      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="cadastro.html" class="flex items-center"><i class="fas fa-plus mr-3"></i> Cadastro</a></li>
-      <li class="px-4 py-3 bg-blue-900 hover:bg-opacity-10 hover:bg-white transition"><a href="cardapio.html" class="flex items-center"><i class="fas fa-utensils mr-3"></i> Cardápio</a></li>
-      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="pedido.html" class="flex items-center"><i class="fas fa-concierge-bell mr-3"></i> Pedidos</a></li>
-      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="cozinha.html" class="flex items-center"><i class="fas fa-blender mr-3"></i> Cozinha</a></li>
-      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="relatorio.html" class="flex items-center"><i class="fas fa-chart-bar mr-3"></i> Relatórios</a></li>
-      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="suporte.html" class="flex items-center"><i class="fas fa-headset mr-3"></i> Suporte</a></li>
-      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="informacoes.html" class="flex items-center"><i class="fas fa-info-circle mr-3"></i> Informações</a></li>
-      <li class="px-4 py-3 hover:bg-opacity-10 hover:bg-white transition"><a href="servico.html" class="flex items-center"><i class="fas fa-tools mr-3"></i> Serviços</a></li>
+  </div>
+  <!-- Sidebar -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" onclick="toggleMenu()"></div>
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 max-w-[85vw] text-white z-40 shadow-lg">
+    <div class="p-5 text-center border-b border-blue-700 logo-area">
+      <div class="flex justify-center items-center mb-2">
+        <div class="logo-icon">
+          <div class="logo-icon-inner">
+            <div class="logo-particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </div>
+        </div>
+        <h1 class="text-2xl font-bold animate__animated animate__fadeIn ml-2">ZEENTT</h1>
+      </div>
+      <p class="text-blue-300 text-sm">Sistema de Gestão</p>
+    </div>
+    <ul class="py-4 px-2">
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="menu.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-home mr-3 text-blue-300"></i> 
+          <span>Início</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cadastro.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-plus mr-3 text-blue-300"></i> 
+          <span>Cadastro</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cardapio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-utensils mr-3 text-blue-300"></i> 
+          <span>Cardápio</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="pedido.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-concierge-bell mr-3 text-blue-300"></i> 
+          <span>Pedidos</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cozinha.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-blender mr-3 text-blue-300"></i> 
+          <span>Cozinha</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="relatorio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-chart-bar mr-3 text-blue-300"></i> 
+          <span>Relatórios</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="suporte.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-headset mr-3 text-blue-300"></i> 
+          <span>Suporte</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="informacoes.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-info-circle mr-3 text-blue-300"></i> 
+          <span>Informações</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="servico.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-tools mr-3 text-blue-300"></i> 
+          <span>Serviços</span>
+        </a>
+      </li>
     </ul>
   </div>
 
-  <!-- Topbar -->
-  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-4 py-3 text-white shadow-md">
-    <div class="left-icons">
-      <button onclick="toggleMenu()" class="p-2 rounded-full hover:bg-white/10 transition">
-        <i class="fas fa-bars text-xl"></i>
+  <!-- Sidebar Overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" onclick="toggleMenu()"></div>
+
+  <!-- Top Bar -->
+  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
+    <div class="left-icons lg:hidden">
+      <button onclick="toggleMenu()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-bars text-lg sm:text-xl"></i>
       </button>
     </div>
-    <div class="logo">
-      <span class="text-xl font-bold">ZEENTT</span>
+    <div class="logo flex items-center">
+      <div class="logo-icon hidden xs:block">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+          </div>
+        </div>
+      </div>
+      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
     </div>
-    <div class="right-icons flex items-center space-x-3">
-      <button onclick="window.location.href='menu.html'" class="p-2 rounded-full hover:bg-white/10 transition">
-        <i class="fas fa-home text-xl"></i>
-      </button>
-      <button onclick="fazerLogoff()" class="p-2 rounded-full hover:bg-white/10 transition">
-        <i class="fas fa-sign-out-alt text-xl"></i>
+    
+    <!-- Menu horizontal para telas grandes -->
+    <nav class="hidden lg:flex items-center space-x-6 ml-10">
+      <a href="menu.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-home mr-3 text-blue-300"></i> Inicio
+      </a>
+      <a href="pedido.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-concierge-bell mr-2 text-blue-300"></i> Pedidos
+      </a>
+      <a href="cardapio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-utensils mr-2 text-blue-300"></i> Cardápio
+      </a>
+      <a href="relatorio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-chart-bar mr-2 text-blue-300"></i> Relatórios
+      </a>
+	  <a href="cozinha.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-blender mr-3 text-blue-300"></i>  Cozinha
+      </a>
+	  <a href="informacoes.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-info-circle mr-3 text-blue-300"></i> Informações
+      </a>
+	  <a href="Servico.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-tools mr-3 text-blue-300"></i> Serviços
+      </a>
+	  <a href="suporte.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-headset mr-3 text-blue-300"></i> Suporte
+      </a>
+    </nav>
+    
+    <div class="right-icons flex items-center space-x-2 sm:space-x-4">
+      <div class="hidden sm:block lg:hidden">
+        <button onclick="window.location.href='menu.html'" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+          <i class="fas fa-home text-lg sm:text-xl"></i>
+        </button>
+      </div>
+      <button onclick="fazerLogoff()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-sign-out-alt text-lg sm:text-xl"></i>
       </button>
     </div>
   </header>
-
   <!-- Main Content -->
   <main class="pt-20 pb-16 px-4">
     <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
