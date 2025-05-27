@@ -255,7 +255,30 @@
     
     /* Modal */
     .modal {
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease;
+    }
+    
+    .modal-content {
+      animation: modalIn 0.2s ease forwards;
+    }
+    
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal.hidden {
+      display: none;
+    }
+
+    #modalDetails > * {
+      animation-duration: 0.2s !important;
     }
     
     /* Checkbox personalizado */
@@ -710,7 +733,6 @@
     function showModal(itemElement) {
       const modal = document.getElementById('modal');
       const modalDetails = document.getElementById('modalDetails');
-      const modalContent = modal.querySelector('.modal-content');
       
       const imgSrc = itemElement.querySelector('img').src;
       const title = itemElement.querySelector('.item-title').textContent;
@@ -726,18 +748,14 @@
       
       modalDetails.innerHTML = `
         <img src="${imgSrc}" alt="${title}" class="w-full h-48 object-cover rounded-lg mb-4 shadow-md animate__animated animate__fadeIn">
-        <h3 class="text-xl font-bold mb-2 text-[var(--secondary-color)] animate__animated animate__fadeInUp animate__delay-1s">${title}</h3>
-        <p class="text-gray-700 mb-4 animate__animated animate__fadeInUp animate__delay-2s">${description}</p>
-        <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] p-3 rounded-lg text-white font-bold text-lg shadow-md animate__animated animate__fadeInUp animate__delay-3s">
+        <h3 class="text-base font-semibold mb-2 text-[var(--secondary-color)] animate__animated animate__fadeInUp">${title}</h3>
+        <p class="text-sm text-gray-700 mb-4 animate__animated animate__fadeInUp">${description}</p>
+        <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] p-3 rounded-lg text-white font-semibold text-sm shadow-md animate__animated animate__fadeInUp">
           ${price}
         </div>
       `;
       
       modal.classList.remove('hidden');
-      // Adicionar animação ao modal
-      modalContent.classList.add('animate__animated', 'animate__zoomIn');
-      
-      // Adicionar efeito de blur ao fundo
       document.body.style.overflow = 'hidden';
     }
 
@@ -746,16 +764,13 @@
       const modal = document.getElementById('modal');
       const modalContent = modal.querySelector('.modal-content');
       
-      // Adicionar animação de saída
-      modalContent.classList.remove('animate__zoomIn');
-      modalContent.classList.add('animate__zoomOut');
+      modalContent.style.animation = 'modalOut 0.2s ease forwards';
       
-      // Aguardar a animação terminar antes de esconder o modal
       setTimeout(() => {
         modal.classList.add('hidden');
-        modalContent.classList.remove('animate__zoomOut');
+        modalContent.style.animation = '';
         document.body.style.overflow = 'auto';
-      }, 300);
+      }, 200);
     }
 
     // Add item from modal to cart
@@ -1034,6 +1049,22 @@
         }
       });
     }
+
+    // Add this new style to handle modal closing animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes modalOut {
+        from {
+          opacity: 1;
+          transform: scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
