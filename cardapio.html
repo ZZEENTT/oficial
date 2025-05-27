@@ -429,7 +429,7 @@
   
 
   <!-- Main Content -->
- <main class="mt-28 mb-24 px-4">
+ <main class="mt-28 mb-14 px-2">
   <div class="grid grid-cols-1 gap-4">
     
     <!-- Item 2 -->
@@ -483,7 +483,156 @@
         <img src="img/test/2sanduiche.jpg" alt="2 Sanduíches com desconto" class="w-32 h-32 object-cover rounded-r-lg">
       </div>
     </div>
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">4 Pequenos Preços</h3>
+          <p class="text-gray-600 text-sm mb-2">Escolha 4 itens entre Cheeseburger, McFiesta, Chicken Jr...</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 32,00</p>
+        </div>
+        <img src="img/test/4lanches.jpg" alt="4 Pequenos Preços" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
 
+    <!-- Item 3 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">Oferta Nuggets</h3>
+          <p class="text-gray-600 text-sm mb-2">1 McOferta Média Clássica + acompanhamento (Nuggets, Cheeseburger ou McFlurry).</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 43,90</p>
+        </div>
+        <img src="img/test/nuggets.jpg" alt="Oferta Nuggets" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">Ofertas Médias</h3>
+          <p class="text-gray-600 text-sm mb-2">2 McOfertas Médias Clássicas para compartilhar.</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 68,90</p>
+        </div>
+        <img src="img/test/media.jpg" alt="Ofertas Médias" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+
+    <!-- Item 5 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">2 Sanduíches com desconto</h3>
+          <p class="text-gray-600 text-sm mb-2">Leve 2 sanduíches com desconto entre várias opções.</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 30,90</p>
+        </div>
+        <img src="img/test/2sanduiche.jpg" alt="2 Sanduíches com desconto" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">4 Pequenos Preços</h3>
+          <p class="text-gray-600 text-sm mb-2">Escolha 4 itens entre Cheeseburger, McFiesta, Chicken Jr...</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 32,00</p>
+        </div>
+        <img src="img/test/4lanches.jpg" alt="4 Pequenos Preços" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">Oferta Nuggets</h3>
+          <p class="text-gray-600 text-sm mb-2">1 McOferta Média Clássica + acompanhamento (Nuggets, Cheeseburger ou McFlurry).</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 43,90</p>
+        </div>
+        <img src="img/test/nuggets.jpg" alt="Oferta Nuggets" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">Ofertas Médias</h3>
+          <p class="text-gray-600 text-sm mb-2">2 McOfertas Médias Clássicas para compartilhar.</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 68,90</p>
+        </div>
+        <img src="img/test/media.jpg" alt="Ofertas Médias" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+
+    <!-- Item 5 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">2 Sanduíches com desconto</h3>
+          <p class="text-gray-600 text-sm mb-2">Leve 2 sanduíches com desconto entre várias opções.</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 30,90</p>
+        </div>
+        <img src="img/test/2sanduiche.jpg" alt="2 Sanduíches com desconto" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">4 Pequenos Preços</h3>
+          <p class="text-gray-600 text-sm mb-2">Escolha 4 itens entre Cheeseburger, McFiesta, Chicken Jr...</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 32,00</p>
+        </div>
+        <img src="img/test/4lanches.jpg" alt="4 Pequenos Preços" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">Oferta Nuggets</h3>
+          <p class="text-gray-600 text-sm mb-2">1 McOferta Média Clássica + acompanhamento (Nuggets, Cheeseburger ou McFlurry).</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 43,90</p>
+        </div>
+        <img src="img/test/nuggets.jpg" alt="Oferta Nuggets" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+
+    <!-- Item 4 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">Ofertas Médias</h3>
+          <p class="text-gray-600 text-sm mb-2">2 McOfertas Médias Clássicas para compartilhar.</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 68,90</p>
+        </div>
+        <img src="img/test/media.jpg" alt="Ofertas Médias" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
+
+    <!-- Item 5 -->
+    <div class="item relative bg-white rounded-lg overflow-hidden shadow-md">
+      <input type="checkbox" class="item-checkbox absolute top-2 right-2 h-6 w-6">
+      <div class="item-info cursor-pointer flex items-center" onclick="showModal(this.parentElement)">
+        <div class="p-4 flex-1">
+          <h3 class="item-title font-bold text-lg mb-1">2 Sanduíches com desconto</h3>
+          <p class="text-gray-600 text-sm mb-2">Leve 2 sanduíches com desconto entre várias opções.</p>
+          <p class="item-price text-[#00337a] font-bold">a partir de R$ 30,90</p>
+        </div>
+        <img src="img/test/2sanduiche.jpg" alt="2 Sanduíches com desconto" class="w-32 h-32 object-cover rounded-r-lg">
+      </div>
+    </div>
   </div>
 </main>
 
