@@ -507,8 +507,8 @@
               <p class="text-gray-600 text-xs mb-2 line-clamp-2">Escolha 4 itens entre Cheeseburger, McFiesta, Chicken Jr...</p>
               <p class="item-price text-[#00337a] font-bold text-sm">a partir de R$ 32,00</p>
             </div>
-            <div class="w-24 h-auto">
-              <img src="img/test/4lanches.jpg" alt="4 Pequenos Preços" class="w-full h-full object-cover">
+            <div class="w-32 h-32 p-2 flex-shrink-0">
+              <img src="img/test/4lanches.jpg" alt="4 Pequenos Preços" class="w-full h-full object-contain rounded-lg">
             </div>
           </div>
         </div>
@@ -522,8 +522,8 @@
               <p class="text-gray-600 text-xs mb-2 line-clamp-2">1 McOferta Média Clássica + acompanhamento (Nuggets, Cheeseburger ou McFlurry).</p>
               <p class="item-price text-[#00337a] font-bold text-sm">a partir de R$ 43,90</p>
             </div>
-            <div class="w-24 h-auto">
-              <img src="img/test/nuggets.jpg" alt="Oferta Nuggets" class="w-full h-full object-cover">
+            <div class="w-32 h-32 p-2 flex-shrink-0">
+              <img src="img/test/nuggets.jpg" alt="Oferta Nuggets" class="w-full h-full object-contain rounded-lg">
             </div>
           </div>
         </div>
@@ -537,8 +537,8 @@
               <p class="text-gray-600 text-xs mb-2 line-clamp-2">2 McOfertas Médias Clássicas para compartilhar.</p>
               <p class="item-price text-[#00337a] font-bold text-sm">a partir de R$ 68,90</p>
             </div>
-            <div class="w-24 h-auto">
-              <img src="img/test/media.jpg" alt="Ofertas Médias" class="w-full h-full object-cover">
+            <div class="w-32 h-32 p-2 flex-shrink-0">
+              <img src="img/test/media.jpg" alt="Ofertas Médias" class="w-full h-full object-contain rounded-lg">
             </div>
           </div>
         </div>
@@ -552,8 +552,8 @@
               <p class="text-gray-600 text-xs mb-2 line-clamp-2">Leve 2 sanduíches com desconto entre várias opções.</p>
               <p class="item-price text-[#00337a] font-bold text-sm">a partir de R$ 30,90</p>
             </div>
-            <div class="w-24 h-auto">
-              <img src="img/test/2sanduiche.jpg" alt="2 Sanduíches com desconto" class="w-full h-full object-cover">
+            <div class="w-32 h-32 p-2 flex-shrink-0">
+              <img src="img/test/2sanduiche.jpg" alt="2 Sanduíches com desconto" class="w-full h-full object-contain rounded-lg">
             </div>
           </div>
         </div>
@@ -581,10 +581,28 @@
         </button>
       </div>
       <div id="modalDetails" class="p-4">
-        <img src="" alt="" class="w-full h-48 object-cover rounded-lg mb-4 shadow-md animate__animated animate__fadeIn">
-        <h3 class="text-base font-semibold mb-2 text-[var(--secondary-color)] animate__animated animate__fadeInUp animate__delay-1s"></h3>
-        <p class="text-sm text-gray-700 mb-4 animate__animated animate__fadeInUp animate__delay-2s"></p>
-        <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] p-3 rounded-lg text-white font-semibold text-sm shadow-md animate__animated animate__fadeInUp animate__delay-3s">
+        <!-- Carrossel de imagens -->
+        <div class="relative">
+          <div id="imageCarousel" class="w-full h-48 relative overflow-hidden rounded-lg">
+            <div id="imageSlider" class="flex transition-transform duration-300 ease-in-out h-full">
+              <!-- As imagens serão inseridas aqui via JavaScript -->
+            </div>
+            <!-- Indicadores de imagem -->
+            <div id="imageIndicators" class="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+              <!-- Os indicadores serão inseridos aqui via JavaScript -->
+            </div>
+            <!-- Botões de navegação -->
+            <button onclick="prevImage()" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 transition-all">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button onclick="nextImage()" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 transition-all">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+        <h3 class="text-base font-semibold mb-2 mt-4 text-[var(--secondary-color)] animate__animated animate__fadeInUp"></h3>
+        <p class="text-sm text-gray-700 mb-4 animate__animated animate__fadeInUp"></p>
+        <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] p-3 rounded-lg text-white font-semibold text-sm shadow-md animate__animated animate__fadeInUp">
         </div>
       </div>
       <div class="px-4 pb-4 flex justify-between">
@@ -635,6 +653,38 @@
     let cartItems = [];
     let currentModalItem = null;
     let selectedItems = [];
+
+    // Variáveis para o carrossel
+    let currentImageIndex = 0;
+    let currentImages = [];
+
+    // Banco de imagens para cada item (simulado)
+    const itemImages = {
+      '4 Pequenos Preços': [
+        'img/test/4lanches.jpg',
+        'img/test/4lanches_2.jpg',
+        'img/test/4lanches_3.jpg',
+        'img/test/4lanches_4.jpg'
+      ],
+      'Oferta Nuggets': [
+        'img/test/nuggets.jpg',
+        'img/test/nuggets_2.jpg',
+        'img/test/nuggets_3.jpg',
+        'img/test/nuggets_4.jpg'
+      ],
+      'Ofertas Médias': [
+        'img/test/media.jpg',
+        'img/test/media_2.jpg',
+        'img/test/media_3.jpg',
+        'img/test/media_4.jpg'
+      ],
+      '2 Sanduíches com desconto': [
+        'img/test/2sanduiche.jpg',
+        'img/test/2sanduiche_2.jpg',
+        'img/test/2sanduiche_3.jpg',
+        'img/test/2sanduiche_4.jpg'
+      ]
+    };
 
     // Toggle sidebar menu
     function toggleMenu() {
@@ -729,34 +779,99 @@
       }
     }
 
-    // Show modal with item details
+    // Função para mostrar o modal com o carrossel
     function showModal(itemElement) {
       const modal = document.getElementById('modal');
       const modalDetails = document.getElementById('modalDetails');
+      const imageSlider = document.getElementById('imageSlider');
+      const imageIndicators = document.getElementById('imageIndicators');
       
-      const imgSrc = itemElement.querySelector('img').src;
       const title = itemElement.querySelector('.item-title').textContent;
       const price = itemElement.querySelector('.item-price').textContent;
       const description = itemElement.querySelector('p').textContent;
       
+      // Resetar o índice da imagem
+      currentImageIndex = 0;
+      
+      // Obter todas as imagens para este item
+      currentImages = itemImages[title] || [itemElement.querySelector('img').src];
+      
+      // Limpar o slider e indicadores
+      imageSlider.innerHTML = '';
+      imageIndicators.innerHTML = '';
+      
+      // Adicionar todas as imagens ao slider
+      currentImages.forEach((imgSrc, index) => {
+        // Adicionar imagem
+        const imgContainer = document.createElement('div');
+        imgContainer.className = 'w-full h-full flex-shrink-0';
+        imgContainer.innerHTML = `<img src="${imgSrc}" alt="${title}" class="w-full h-full object-contain">`;
+        imageSlider.appendChild(imgContainer);
+        
+        // Adicionar indicador
+        const indicator = document.createElement('button');
+        indicator.className = `w-2 h-2 rounded-full transition-all ${index === 0 ? 'bg-white' : 'bg-white/50'}`;
+        indicator.onclick = () => goToImage(index);
+        imageIndicators.appendChild(indicator);
+      });
+      
+      // Atualizar outros detalhes do modal
+      modalDetails.querySelector('h3').textContent = title;
+      modalDetails.querySelector('p').textContent = description;
+      modalDetails.querySelector('.bg-gradient-to-r').textContent = price;
+      
       currentModalItem = {
-        img: imgSrc,
         title: title,
         price: parseFloat(price.replace('a partir de R$ ', '').replace(',', '.')),
-        description: description
+        description: description,
+        img: currentImages[0]
       };
-      
-      modalDetails.innerHTML = `
-        <img src="${imgSrc}" alt="${title}" class="w-full h-48 object-cover rounded-lg mb-4 shadow-md animate__animated animate__fadeIn">
-        <h3 class="text-base font-semibold mb-2 text-[var(--secondary-color)] animate__animated animate__fadeInUp">${title}</h3>
-        <p class="text-sm text-gray-700 mb-4 animate__animated animate__fadeInUp">${description}</p>
-        <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] p-3 rounded-lg text-white font-semibold text-sm shadow-md animate__animated animate__fadeInUp">
-          ${price}
-        </div>
-      `;
       
       modal.classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+      
+      // Animar a entrada do modal
+      const modalContent = modal.querySelector('.modal-content');
+      modalContent.classList.add('animate__animated', 'animate__fadeInUp');
+    }
+
+    // Funções de navegação do carrossel
+    function updateCarousel() {
+      const slider = document.getElementById('imageSlider');
+      const indicators = document.getElementById('imageIndicators').children;
+      
+      // Mover o slider
+      slider.style.transform = `translateX(-${currentImageIndex * 100}%)`;
+      
+      // Atualizar indicadores
+      Array.from(indicators).forEach((indicator, index) => {
+        if (index === currentImageIndex) {
+          indicator.classList.remove('bg-white/50');
+          indicator.classList.add('bg-white');
+        } else {
+          indicator.classList.add('bg-white/50');
+          indicator.classList.remove('bg-white');
+        }
+      });
+    }
+
+    function prevImage() {
+      if (currentImageIndex > 0) {
+        currentImageIndex--;
+        updateCarousel();
+      }
+    }
+
+    function nextImage() {
+      if (currentImageIndex < currentImages.length - 1) {
+        currentImageIndex++;
+        updateCarousel();
+      }
+    }
+
+    function goToImage(index) {
+      currentImageIndex = index;
+      updateCarousel();
     }
 
     // Close modal
