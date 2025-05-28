@@ -4,41 +4,75 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zeentt - Cozinha</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          screens: {
-            'xs': '480px',
-          },
-          colors: {
-            primary: '#d8315b',
-            secondary: '#00337a',
-            accent: '#1e3a8a',
-          },
-          fontFamily: {
-            sans: ['Poppins', 'sans-serif'],
-          },
-          animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-          },
-        }
-      }
-    }
-  </script>
   <style>
+    /* Custom styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+    }
+    
+    .sidebar {
+      background: linear-gradient(180deg, #00337a 0%, #00337a 100%);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .sidebar.active {
+      transform: translateX(0);
+    }
+    
+    .sidebar li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .top-bar {
+      background: linear-gradient(135deg, #00337a 0%, #00337a 100%);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Overlay for sidebar when active */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 30;
+    }
+    
+    .overlay.active {
+      display: block;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #00337a;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #002a63;
+    }
+
+    /* Existing styles */
     :root {
       --primary-color: #d8315b;
       --secondary-color: #00337a;
       --accent-color: #1e3a8a;
-    }
-    
-    body {
-      font-family: 'Poppins', sans-serif;
     }
     
     /* Loader e animação de digitação */
@@ -206,27 +240,6 @@
       }
     }
     
-    /* Sidebar e navegação */
-    .sidebar {
-      transition: all 0.3s ease;
-      transform: translateX(-100%);
-      background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 250px;
-      z-index: 40;
-    }
-    
-    .sidebar.open {
-      transform: translateX(0);
-    }
-    
-    .top-bar {
-      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
-    }
-    
     /* Cards e elementos de UI */
     .pedido-card {
       transition: all 0.3s ease;
@@ -249,20 +262,14 @@
     }
   </style>
 </head>
-<body class="bg-gray-100 font-sans">
-  <!-- Tela de carregamento -->
-  <div id="loader" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-gradient-to-br from-[var(--secondary-color)] to-[var(--accent-color)]">
-    <div class="loader-icon">
-      <div class="loader-spinner"></div>
-    </div>
-    <h2 class="text-white text-2xl font-bold mt-4 mb-2">Carregando</h2>
-    <p class="text-blue-200 text-sm">Aguarde um momento...</p>
-  </div>
-
+<body class="relative min-h-screen">
+  <!-- Overlay -->
+  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+  
   <!-- Sidebar -->
-  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 text-white z-40 shadow-lg">
-    <div class="p-4 flex flex-col items-center border-b border-blue-700/50">
-      <div class="flex items-center mb-2">
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 max-w-[85vw] text-white z-40 shadow-lg">
+    <div class="p-5 text-center border-b border-blue-700 logo-area">
+      <div class="flex justify-center items-center mb-2">
         <div class="logo-icon">
           <div class="logo-icon-inner">
             <div class="logo-particles">
@@ -273,71 +280,68 @@
             </div>
           </div>
         </div>
-        <h1 class="text-2xl font-bold ml-2">ZEENTT</h1>
+        <h1 class="text-2xl font-bold animate__animated animate__fadeIn ml-2">ZEENTT</h1>
       </div>
-      <p class="text-blue-200 text-sm">Sistema de Gestão</p>
+      <p class="text-blue-300 text-sm">Sistema de Gestão</p>
     </div>
-    <ul class="py-4">
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="menu.html" class="flex items-center">
-          <i class="fas fa-home mr-3 text-blue-200"></i> 
+    <ul class="py-4 px-2">
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="menu.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-home mr-3 text-blue-300"></i> 
           <span>Início</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cadastro.html" class="flex items-center">
-          <i class="fas fa-plus-circle mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cadastro.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-plus mr-3 text-blue-300"></i> 
           <span>Cadastro</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cardapio.html" class="flex items-center">
-          <i class="fas fa-utensils mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cardapio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-utensils mr-3 text-blue-300"></i> 
           <span>Cardápio</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="pedido.html" class="flex items-center">
-          <i class="fas fa-concierge-bell mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="pedido.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-concierge-bell mr-3 text-blue-300"></i> 
           <span>Pedidos</span>
         </a>
       </li>
-      <li class="px-4 py-2 bg-white/20 hover:bg-white/30 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cozinha.html" class="flex items-center">
-          <i class="fas fa-blender mr-3 text-[var(--primary-color)]"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300 bg-white/20">
+        <a href="cozinha.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-blender mr-3 text-blue-300"></i> 
           <span>Cozinha</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="relatorio.html" class="flex items-center">
-          <i class="fas fa-chart-bar mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="relatorio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-chart-bar mr-3 text-blue-300"></i> 
           <span>Relatórios</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="suporte.html" class="flex items-center">
-          <i class="fas fa-headset mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="suporte.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-headset mr-3 text-blue-300"></i> 
           <span>Suporte</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="informacoes.html" class="flex items-center">
-          <i class="fas fa-info-circle mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="informacoes.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-info-circle mr-3 text-blue-300"></i> 
           <span>Informações</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="servico.html" class="flex items-center">
-          <i class="fas fa-tools mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="servico.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-tools mr-3 text-blue-300"></i> 
           <span>Serviços</span>
         </a>
       </li>
     </ul>
   </div>
-  
-  <!-- Overlay for sidebar -->
-  <div id="overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30" onclick="toggleMenu()"></div>
-  
+
   <!-- Top Bar -->
   <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
     <div class="left-icons lg:hidden">
@@ -361,20 +365,29 @@
     
     <!-- Menu horizontal para telas grandes -->
     <nav class="hidden lg:flex items-center space-x-6 ml-10">
-      <a href="menu.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
-        <i class="fas fa-home mr-2"></i> Início
+      <a href="menu.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-home mr-3 text-blue-300"></i> Inicio
       </a>
-      <a href="cadastro.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
-        <i class="fas fa-plus-circle mr-2"></i> Cadastro
+      <a href="pedido.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-concierge-bell mr-2 text-blue-300"></i> Pedidos
       </a>
-      <a href="cardapio.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
-        <i class="fas fa-utensils mr-2"></i> Cardápio
+      <a href="cardapio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-utensils mr-2 text-blue-300"></i> Cardápio
       </a>
-      <a href="pedido.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center">
-        <i class="fas fa-concierge-bell mr-2"></i> Pedidos
+      <a href="relatorio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-chart-bar mr-2 text-blue-300"></i> Relatórios
       </a>
-      <a href="cozinha.html" class="text-white hover:text-blue-200 transition-colors duration-300 flex items-center text-blue-200">
-        <i class="fas fa-blender mr-2"></i> Cozinha
+      <a href="cozinha.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-blender mr-3 text-blue-300"></i> Cozinha
+      </a>
+      <a href="informacoes.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-info-circle mr-3 text-blue-300"></i> Informações
+      </a>
+      <a href="Servico.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-tools mr-3 text-blue-300"></i> Serviços
+      </a>
+      <a href="suporte.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-headset mr-3 text-blue-300"></i> Suporte
       </a>
     </nav>
     
@@ -389,6 +402,16 @@
       </button>
     </div>
   </header>
+
+  <!-- Tela de carregamento -->
+  <div id="loader" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-gradient-to-br from-[var(--secondary-color)] to-[var(--accent-color)]">
+    <div class="loader-icon">
+      <div class="loader-spinner"></div>
+    </div>
+    <h2 class="text-white text-2xl font-bold mt-4 mb-2">Carregando</h2>
+    <p class="text-blue-200 text-sm">Aguarde um momento...</p>
+  </div>
+
   <!-- Conteúdo principal -->
   <main class="mt-24 mb-24 px-4 container mx-auto">
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
@@ -527,6 +550,135 @@
   </footer>
   
   <script>
+    // Variáveis globais
+    let deliveryCounter = parseInt(localStorage.getItem('deliveryCounter') || '0');
+    let pedidosPreparando = [];
+    let pedidosFinalizados = [];
+
+    // Função para formatar o título do pedido
+    function formatarTituloPedido(pedido) {
+      if (pedido.tipo === 'mesa') {
+        return `Mesa ${pedido.numeroMesa}`;
+      } else {
+        return `Delivery #${pedido.numeroDelivery}`;
+      }
+    }
+
+    // Função para adicionar novo pedido
+    function adicionarPedido(pedido) {
+      if (pedido.tipo === 'delivery') {
+        deliveryCounter++;
+        localStorage.setItem('deliveryCounter', deliveryCounter.toString());
+        pedido.numeroDelivery = deliveryCounter;
+      }
+
+      pedidosPreparando.push(pedido);
+      atualizarListaPedidos();
+    }
+
+    // Função para finalizar pedido
+    function finalizarPedido(index) {
+      const pedido = pedidosPreparando[index];
+      pedido.horaFinalizacao = new Date().toLocaleTimeString();
+      pedidosFinalizados.push(pedido);
+      pedidosPreparando.splice(index, 1);
+      atualizarListaPedidos();
+    }
+
+    // Função para atualizar a lista de pedidos na interface
+    function atualizarListaPedidos() {
+      const preparandoContainer = document.querySelector('.bg-white.rounded-lg.shadow-md.overflow-hidden:first-of-type .divide-y');
+      const finalizadoContainer = document.querySelector('.bg-white.rounded-lg.shadow-md.overflow-hidden:last-of-type .divide-y');
+      
+      // Limpar containers
+      preparandoContainer.innerHTML = '';
+      finalizadoContainer.innerHTML = '';
+      
+      // Atualizar pedidos em preparação
+      pedidosPreparando.forEach((pedido, index) => {
+        const titulo = formatarTituloPedido(pedido);
+        const elemento = document.createElement('div');
+        elemento.className = 'p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn';
+        elemento.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-lg text-gray-800">${titulo}</span>
+            <span class="text-sm text-gray-500">${pedido.hora}</span>
+          </div>
+          <div class="mt-2 flex items-center text-sm text-gray-600">
+            <i class="fas fa-utensils mr-2 text-yellow-500"></i> ${pedido.itens}
+          </div>
+          <div class="mt-1 flex justify-end">
+            <button onclick="finalizarPedido(${index})" class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
+              <i class="fas fa-check mr-1"></i> Finalizar
+            </button>
+          </div>
+        `;
+        preparandoContainer.appendChild(elemento);
+      });
+      
+      // Atualizar pedidos finalizados
+      pedidosFinalizados.forEach((pedido) => {
+        const titulo = formatarTituloPedido(pedido);
+        const elemento = document.createElement('div');
+        elemento.className = 'p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn';
+        elemento.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-lg text-gray-800">${titulo}</span>
+            <span class="text-sm text-gray-500">${pedido.hora}</span>
+          </div>
+          <div class="mt-2 flex items-center text-sm text-gray-600">
+            <i class="fas fa-utensils mr-2 text-green-500"></i> ${pedido.itens}
+          </div>
+          <div class="mt-1 flex justify-end">
+            <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
+              <i class="fas fa-clock mr-1"></i> Finalizado às ${pedido.horaFinalizacao}
+            </span>
+          </div>
+        `;
+        finalizadoContainer.appendChild(elemento);
+      });
+    }
+
+    // Exemplo de uso (para demonstração)
+    window.addEventListener('load', () => {
+      // Carregar pedidos do localStorage
+      const pedidosSalvos = JSON.parse(localStorage.getItem('pedidosCozinha') || '[]');
+      
+      // Adicionar pedidos salvos
+      pedidosSalvos.forEach(pedido => {
+        // Verificar se o pedido já está em alguma lista para evitar duplicatas
+        const jaExiste = [...pedidosPreparando, ...pedidosFinalizados].some(p => 
+          p.tipo === pedido.tipo && 
+          p.hora === pedido.hora && 
+          p.itens === pedido.itens
+        );
+        
+        if (!jaExiste) {
+          adicionarPedido(pedido);
+        }
+      });
+
+      // Limpar pedidos do localStorage após carregá-los
+      localStorage.setItem('pedidosCozinha', '[]');
+    });
+
+    // Atualizar a interface a cada 30 segundos
+    setInterval(() => {
+      const pedidosSalvos = JSON.parse(localStorage.getItem('pedidosCozinha') || '[]');
+      pedidosSalvos.forEach(pedido => {
+        const jaExiste = [...pedidosPreparando, ...pedidosFinalizados].some(p => 
+          p.tipo === pedido.tipo && 
+          p.hora === pedido.hora && 
+          p.itens === pedido.itens
+        );
+        
+        if (!jaExiste) {
+          adicionarPedido(pedido);
+        }
+      });
+      localStorage.setItem('pedidosCozinha', '[]');
+    }, 30000);
+
     // Toggle sidebar
     function toggleMenu() {
       const sidebar = document.getElementById('sidebar');
