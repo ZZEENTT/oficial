@@ -7,6 +7,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    :root {
+      --primary-color: #0a2463;
+      --secondary-color: #3e92cc;
+      --accent-color: #d8315b;
+      --light-color: #fffaff;
+      --dark-color: #1e1b18;
+      --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      --gradient-accent: linear-gradient(135deg, var(--accent-color), #ff7e5f);
+    }
+    
     /* Custom styles */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -14,9 +24,10 @@
     }
     
     .sidebar {
-      background: linear-gradient(180deg, #00337a 0%, #00337a 100%);
+      background: var(--gradient-primary);
       transform: translateX(-100%);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
     }
     
     .sidebar.active {
@@ -119,6 +130,104 @@
     
     ::-webkit-scrollbar-thumb:hover {
       background: #002a63;
+    }
+
+    /* Sidebar Styles */
+    .sidebar .logo-area {
+      padding: 1.25rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(62, 146, 204, 0.3);
+    }
+
+    .sidebar .logo-area h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar .logo-area p {
+      font-size: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar ul {
+      padding: 1rem 0.5rem;
+    }
+
+    .sidebar li {
+      margin: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar li a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.9375rem;
+      color: white;
+    }
+
+    .sidebar li i {
+      font-size: 1.125rem;
+      margin-right: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(0.5rem);
+    }
+
+    .sidebar li.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .sidebar li.active i {
+      color: white;
+      opacity: 1;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s;
+    }
+
+    .loader-content {
+      text-align: center;
+    }
+
+    .loader-icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+    }
+
+    .loader-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid white;
+      width: 100%;
+      height: 100%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -396,6 +505,58 @@
   </footer>
 
   <script>
+    // Tela de carregamento e animação de digitação
+    window.addEventListener('load', function() {
+      // Ocultar a tela de carregamento após 1 segundo
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.style.opacity = '0';
+        
+        setTimeout(() => {
+          loader.style.display = 'none';
+          // Iniciar animação de digitação após a tela de carregamento
+          const zeenttText = document.getElementById('zeentt-text');
+          typeEffect(zeenttText, 'ZEENTT', 100);
+          
+          // Animar os elementos do formulário
+          const formGroups = document.querySelectorAll('.form-group');
+          formGroups.forEach((group, index) => {
+            setTimeout(() => {
+              group.classList.add('animate__animated', 'animate__fadeInUp');
+            }, index * 50);
+          });
+        }, 300);
+      }, 1000);
+    });
+    
+    // Animação de digitação do texto ZEENTT
+    function typeEffect(element, text, speed) {
+      let i = 0;
+      element.textContent = '';
+      
+      // Criar um elemento de cursor piscante
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      cursor.textContent = '|';
+      element.appendChild(cursor);
+      
+      const timer = setInterval(function() {
+        if (i < text.length) {
+          // Inserir o texto antes do cursor
+          element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+          i++;
+        } else {
+          clearInterval(timer);
+          // Remover o cursor após a animação
+          setTimeout(() => {
+            cursor.remove();
+            // Adicionar classe de animação após a digitação
+            element.classList.add('animate__animated', 'animate__pulse');
+          }, 300);
+        }
+      }, speed);
+    }
+
     // Toggle sidebar
     function toggleMenu() {
       const sidebar = document.getElementById('sidebar');

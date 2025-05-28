@@ -16,9 +16,9 @@
             'xs': '480px',
           },
           colors: {
-            primary: '#d8315b',
-            secondary: '#00337a',
-            accent: '#1e3a8a',
+            primary: '#0a2463',
+            secondary: '#3e92cc',
+            accent: '#3e92cc',
           },
           fontFamily: {
             sans: ['Poppins', 'sans-serif'],
@@ -32,9 +32,13 @@
   </script>
   <style>
     :root {
-      --primary-color: #d8315b;
-      --secondary-color: #00337a;
-      --accent-color: #1e3a8a;
+      --primary-color: #0a2463;
+      --secondary-color: #3e92cc;
+      --accent-color: #3e92cc;
+      --light-color: #fffaff;
+      --dark-color: #1e1b18;
+      --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      --gradient-accent: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
     }
     
     body {
@@ -48,13 +52,13 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      background: var(--gradient-primary);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      transition: opacity 0.5s;
+      transition: opacity 0.3s;
     }
     
     #loader.fade-out {
@@ -208,17 +212,77 @@
     
     /* Sidebar e navegação */
     .sidebar {
-      transition: all 0.3s ease;
+      background: var(--gradient-primary);
       transform: translateX(-100%);
-      background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
     }
     
     .sidebar.open {
       transform: translateX(0);
     }
+
+    .sidebar .logo-area {
+      padding: 1.25rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(62, 146, 204, 0.3);
+    }
+
+    .sidebar .logo-area h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar .logo-area p {
+      font-size: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar ul {
+      padding: 1rem 0.5rem;
+    }
+
+    .sidebar li {
+      margin: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
     
+    .sidebar li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(0.5rem);
+    }
+    
+    .sidebar li a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.9375rem;
+      color: white;
+    }
+    
+    .sidebar li i {
+      font-size: 1.125rem;
+      margin-right: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar li.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .sidebar li.active i {
+      color: white;
+      opacity: 1;
+    }
+
+    /* Top Bar */
     .top-bar {
-      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+      background: linear-gradient(135deg, #00337a 0%, #00337a 100%);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     
     /* Cards e elementos de UI */
@@ -293,13 +357,13 @@
     
     /* Botão de adicionar */
     .btn-add {
-      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+      background: var(--gradient-primary);
       transition: all 0.3s ease;
     }
     
     .btn-add:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 51, 122, 0.3);
+      box-shadow: 0 4px 12px rgba(14, 65, 132, 0.3);
     }
     
     .scrollbar-hide {
@@ -323,6 +387,22 @@
       background-color: var(--secondary-color);
       color: white;
     }
+
+    .carrinho-header {
+      background: var(--gradient-primary);
+    }
+
+    .modal-content .bg-gradient-to-r {
+      background: var(--gradient-primary);
+    }
+
+    button[onclick="adicionarModalAoPedido()"] {
+      background: var(--gradient-primary);
+    }
+
+    button[onclick="adicionarModalAoPedido()"]:hover {
+      background: var(--gradient-accent);
+    }
   </style>
 </head>
 
@@ -336,75 +416,63 @@
     <p class="text-blue-200 text-sm">Carregando...</p>
   </div>
   <!-- Sidebar -->
-  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 text-white z-40 shadow-lg">
-    <div class="p-4 flex flex-col items-center border-b border-blue-700/50">
-      <div class="flex items-center mb-2">
-        <div class="logo-icon">
-          <div class="logo-icon-inner">
-            <div class="logo-particles">
-              <div class="particle"></div>
-              <div class="particle"></div>
-              <div class="particle"></div>
-              <div class="particle"></div>
-            </div>
-          </div>
-        </div>
-        <h1 class="text-2xl font-bold ml-2">ZEENTT</h1>
-      </div>
-      <p class="text-blue-200 text-sm">Sistema de Gestão</p>
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 max-w-[85vw] text-white z-40 shadow-lg">
+    <div class="p-5 text-center border-b border-blue-700/50 logo-area">
+      <h1 class="text-2xl font-bold">ZEENTT</h1>
+      <p class="text-blue-300 text-sm">Sistema de Gestão</p>
     </div>
-    <ul class="py-4">
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="menu.html" class="flex items-center">
-          <i class="fas fa-home mr-3 text-blue-200"></i> 
+    <ul class="py-4 px-2">
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="menu.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-home mr-3 text-blue-300"></i> 
           <span>Início</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cadastro.html" class="flex items-center">
-          <i class="fas fa-plus-circle mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cadastro.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-plus-circle mr-3 text-blue-300"></i> 
           <span>Cadastro</span>
         </a>
       </li>
-      <li class="px-4 py-2 bg-white/20 hover:bg-white/30 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cardapio.html" class="flex items-center">
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300 bg-white/20">
+        <a href="cardapio.html" class="flex items-center px-4 py-3">
           <i class="fas fa-utensils mr-3 text-[var(--primary-color)]"></i> 
           <span>Cardápio</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="pedido.html" class="flex items-center">
-          <i class="fas fa-concierge-bell mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="pedido.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-concierge-bell mr-3 text-blue-300"></i> 
           <span>Pedidos</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cozinha.html" class="flex items-center">
-          <i class="fas fa-blender mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cozinha.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-blender mr-3 text-blue-300"></i> 
           <span>Cozinha</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="relatorio.html" class="flex items-center">
-          <i class="fas fa-chart-bar mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="relatorio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-chart-bar mr-3 text-blue-300"></i> 
           <span>Relatórios</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="suporte.html" class="flex items-center">
-          <i class="fas fa-headset mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="suporte.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-headset mr-3 text-blue-300"></i> 
           <span>Suporte</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="informacoes.html" class="flex items-center">
-          <i class="fas fa-info-circle mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="informacoes.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-info-circle mr-3 text-blue-300"></i> 
           <span>Informações</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="servico.html" class="flex items-center">
-          <i class="fas fa-tools mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="servico.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-tools mr-3 text-blue-300"></i> 
           <span>Serviços</span>
         </a>
       </li>
@@ -463,14 +531,14 @@
   </header>
 
   <!-- Search Bar -->
-  <div class="fixed top-16 left-0 right-0 bg-white shadow-sm z-20 border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 py-3">
+  <div class="fixed top-[4.5rem] left-0 right-0 bg-white shadow-sm z-20 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 py-6">
       <div class="relative">
         <input 
           type="text" 
           id="searchInput"
           placeholder="Buscar por nome, descrição, preço..."
-          class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-[var(--secondary-color)] focus:ring-2 focus:ring-[var(--secondary-color)]/20 transition-all outline-none"
+          class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:border-[var(--secondary-color)] focus:ring-2 focus:ring-[var(--secondary-color)]/20 transition-all outline-none"
           onkeyup="searchItems()"
         >
         <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
@@ -486,7 +554,7 @@
   </div>
 
   <!-- Filter Menu -->
-  <div class="filter-menu fixed top-32 left-0 right-0 bg-white shadow-md z-20">
+  <div class="filter-menu fixed top-[9rem] left-0 right-0 bg-white shadow-md z-20">
     <div class="relative overflow-x-auto py-4">
       <div class="flex whitespace-nowrap px-4 gap-2 overflow-x-auto scrollbar-hide" style="scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
         <button onclick="filterItems('todos')" class="filter-btn active flex-shrink-0 px-6 py-2 rounded-full text-sm font-medium bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
@@ -518,7 +586,7 @@
   </div>
 
   <!-- Main Content -->
-  <main class="pt-48 pb-24 px-4">
+  <main class="pt-52 pb-24 px-4">
     <div class="max-w-7xl mx-auto">
       <div class="grid grid-cols-1 gap-6 mt-4 mb-6">
         <!-- Item 1 -->
@@ -597,9 +665,9 @@
   <!-- Modal -->
   <div id="modal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-50 flex items-center justify-center">
     <div class="modal-content bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-gray-100">
-      <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] py-2 px-4 flex justify-between items-center text-white">
+      <div class="bg-gradient-to-r py-2 px-4 flex justify-between items-center text-white">
         <h3 class="font-semibold text-base">Detalhes do Item</h3>
-        <button onclick="closeModal()" class="text-white hover:text-red-200 transition-colors">
+        <button onclick="closeModal()" class="text-white hover:text-blue-200 transition-colors">
           <i class="fas fa-times"></i>
         </button>
       </div>
@@ -641,7 +709,7 @@
 
   <!-- Shopping Cart Sidebar -->
   <div id="carrinho-lateral" class="carrinho-lateral fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-lg z-50 overflow-y-auto">
-    <div class="carrinho-header bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] text-white p-3 flex justify-between items-center shadow-md">
+    <div class="carrinho-header text-white p-3 flex justify-between items-center shadow-md">
       <div class="flex items-center">
         <div class="mr-3 text-[var(--primary-color)] bg-white/10 p-2 rounded-full">
           <i class="fas fa-shopping-cart text-sm"></i>
@@ -656,13 +724,13 @@
       <!-- Cart items will be inserted here -->
     </ul>
     <div class="carrinho-footer bg-gray-50 p-3 border-t border-gray-200 shadow-inner">
-      <div class="flex justify-between items-center bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] text-white p-3 rounded-lg shadow-md mb-3">
+      <div class="flex justify-between items-center bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] text-white p-3 rounded-lg shadow-md mb-3">
         <strong class="text-sm flex items-center">
-          <i class="fas fa-receipt mr-2 text-[var(--primary-color)]"></i> Total:
+          <i class="fas fa-receipt mr-2 text-white/80"></i> Total:
         </strong>
         <strong class="text-sm">R$ <span id="carrinho-total" class="text-white">0.00</span></strong>
       </div>
-      <button onclick="finalizarPedido()" class="w-full mt-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all transform hover:-translate-y-1 animate__animated animate__pulse animate__infinite animate__slower text-sm">
+      <button onclick="finalizarPedido()" class="w-full mt-3 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] hover:from-[var(--secondary-color)] hover:to-[var(--primary-color)] text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all transform hover:-translate-y-1 animate__animated animate__pulse animate__infinite animate__slower text-sm">
         <i class="fas fa-check-circle mr-2"></i> Finalizar Pedido
       </button>
     </div>
@@ -727,7 +795,7 @@
     
     // Tela de carregamento e animação de digitação
     window.addEventListener('load', function() {
-      // Ocultar a tela de carregamento após 2 segundos
+      // Ocultar a tela de carregamento após 1 segundo
       setTimeout(() => {
         const loader = document.getElementById('loader');
         loader.classList.add('fade-out');
@@ -736,17 +804,17 @@
           loader.style.display = 'none';
           // Iniciar animação de digitação após a tela de carregamento
           const zeenttText = document.getElementById('zeentt-text');
-          typeEffect(zeenttText, 'ZEENTT', 150);
+          typeEffect(zeenttText, 'ZEENTT', 100);
           
           // Animar os itens do cardápio com fade-in
           const items = document.querySelectorAll('.item');
           items.forEach((item, index) => {
             setTimeout(() => {
               item.classList.add('animate__animated', 'animate__fadeInUp');
-            }, index * 100);
+            }, index * 50);
           });
-        }, 500);
-      }, 1500);
+        }, 300);
+      }, 1000);
     });
     
     // Animação de digitação do texto ZEENTT
@@ -772,7 +840,7 @@
             cursor.remove();
             // Adicionar classe de animação após a digitação
             element.classList.add('animate__animated', 'animate__pulse');
-          }, 500);
+          }, 300);
         }
       }, speed);
     }
