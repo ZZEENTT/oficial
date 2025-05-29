@@ -16,9 +16,9 @@
             'xs': '480px',
           },
           colors: {
-            primary: '#d8315b',
-            secondary: '#00337a',
-            accent: '#1e3a8a',
+            primary: '#0a2463',
+            secondary: '#3e92cc',
+            accent: '#3e92cc',
           },
           fontFamily: {
             sans: ['Poppins', 'sans-serif'],
@@ -32,9 +32,13 @@
   </script>
   <style>
     :root {
-      --primary-color: #d8315b;
-      --secondary-color: #00337a;
-      --accent-color: #1e3a8a;
+      --primary-color: #0a2463;
+      --secondary-color: #3e92cc;
+      --accent-color: #3e92cc;
+      --light-color: #fffaff;
+      --dark-color: #1e1b18;
+      --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      --gradient-accent: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
     }
     
     body {
@@ -208,23 +212,77 @@
     
     /* Sidebar e navegação */
     .sidebar {
-      transition: all 0.3s ease;
+      background: var(--gradient-primary);
       transform: translateX(-100%);
-      background: linear-gradient(180deg, var(--secondary-color), var(--accent-color));
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 250px;
-      z-index: 40;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
     }
     
     .sidebar.open {
       transform: translateX(0);
     }
+
+    .sidebar .logo-area {
+      padding: 1.25rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(62, 146, 204, 0.3);
+    }
+
+    .sidebar .logo-area h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar .logo-area p {
+      font-size: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar ul {
+      padding: 1rem 0.5rem;
+    }
+
+    .sidebar li {
+      margin: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
     
+    .sidebar li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(0.5rem);
+    }
+    
+    .sidebar li a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.9375rem;
+      color: white;
+    }
+    
+    .sidebar li i {
+      font-size: 1.125rem;
+      margin-right: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar li.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .sidebar li.active i {
+      color: white;
+      opacity: 1;
+    }
+
+    /* Top Bar */
     .top-bar {
-      background: linear-gradient(90deg, var(--secondary-color), var(--accent-color));
+      background: var(--gradient-primary);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     
     /* Elementos de relatório */
@@ -261,110 +319,123 @@
   <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden" onclick="toggleMenu()"></div>
 
   <!-- Sidebar -->
-  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 text-white z-40 shadow-lg">
-    <div class="p-4 flex items-center border-b border-white/10">
-      <div class="logo-icon">
-        <div class="logo-icon-inner">
-          <div class="logo-particles">
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-          </div>
-        </div>
-      </div>
-      <span class="text-xl font-bold ml-2">ZEENTT</span>
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 max-w-[85vw] text-white z-40 shadow-lg">
+    <div class="p-5 text-center border-b border-blue-700/50 logo-area">
+      <h1 class="text-2xl font-bold">ZEENTT</h1>
+      <p class="text-blue-300 text-sm">Sistema de Gestão</p>
     </div>
-    <ul class="py-4">
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="menu.html" class="flex items-center">
-          <i class="fas fa-home mr-3 text-blue-200"></i> 
+    <ul class="py-4 px-2">
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="menu.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-home mr-3 text-blue-300"></i> 
           <span>Início</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cadastro.html" class="flex items-center">
-          <i class="fas fa-plus mr-3 text-green-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cadastro.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-plus-circle mr-3 text-blue-300"></i> 
           <span>Cadastro</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cardapio.html" class="flex items-center">
-          <i class="fas fa-utensils mr-3 text-yellow-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cardapio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-utensils mr-3 text-blue-300"></i> 
           <span>Cardápio</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="pedido.html" class="flex items-center">
-          <i class="fas fa-concierge-bell mr-3 text-red-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="pedido.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-concierge-bell mr-3 text-blue-300"></i> 
           <span>Pedidos</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="cozinha.html" class="flex items-center">
-          <i class="fas fa-blender mr-3 text-orange-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cozinha.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-blender mr-3 text-blue-300"></i> 
           <span>Cozinha</span>
         </a>
       </li>
-      <li class="px-4 py-2 bg-white/20 rounded-lg mx-2 my-1">
-        <a href="relatorio.html" class="flex items-center">
-          <i class="fas fa-chart-bar mr-3 text-purple-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300 bg-white/20">
+        <a href="relatorio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-chart-bar mr-3 text-[var(--primary-color)]"></i> 
           <span>Relatórios</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="suporte.html" class="flex items-center">
-          <i class="fas fa-headset mr-3 text-indigo-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="suporte.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-headset mr-3 text-blue-300"></i> 
           <span>Suporte</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="informacoes.html" class="flex items-center">
-          <i class="fas fa-info-circle mr-3 text-blue-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="informacoes.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-info-circle mr-3 text-blue-300"></i> 
           <span>Informações</span>
         </a>
       </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1">
-        <a href="servico.html" class="flex items-center">
-          <i class="fas fa-tools mr-3 text-gray-200"></i> 
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="servico.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-tools mr-3 text-blue-300"></i> 
           <span>Serviços</span>
-        </a>
-      </li>
-      <li class="px-4 py-2 hover:bg-white/10 transition duration-300 rounded-lg mx-2 my-1 mt-8">
-        <a href="#" onclick="fazerLogoff()" class="flex items-center text-red-200">
-          <i class="fas fa-sign-out-alt mr-3"></i> 
-          <span>Sair</span>
         </a>
       </li>
     </ul>
   </div>
-  <!-- Header -->
+
+  <!-- Overlay for sidebar -->
+  <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30" onclick="toggleMenu()"></div>
+
+  <!-- Top Bar -->
   <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
-    <div class="logo flex items-center">
-      <button onclick="toggleMenu()" class="mr-3 sm:mr-4 hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
-        <i class="fas fa-bars"></i>
+    <div class="left-icons lg:hidden">
+      <button onclick="toggleMenu()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-bars text-lg sm:text-xl"></i>
       </button>
-      <div class="logo-icon">
-        <div class="logo-icon-inner">
-          <div class="logo-particles">
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="logo flex items-center">      
       <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
     </div>
-    <div class="flex items-center space-x-2 sm:space-x-4">
-      <button onclick="window.location.href='menu.html'" class="btn-icon hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
-        <i class="fas fa-home"></i>
-      </button>
-      <button onclick="fazerLogoff()" class="btn-icon hover:bg-white/10 rounded-full p-2 transition-colors duration-300">
-        <i class="fas fa-sign-out-alt"></i>
+    
+    <!-- Menu horizontal para telas grandes -->
+    <nav class="hidden lg:flex items-center space-x-6 ml-10">
+      <a href="menu.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-home mr-2 text-blue-300"></i> Início
+      </a>
+      <a href="cadastro.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-plus-circle mr-2 text-blue-300"></i> Cadastro
+      </a>
+      <a href="cardapio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-utensils mr-2 text-blue-300"></i> Cardápio
+      </a>
+      <a href="pedido.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-concierge-bell mr-2 text-blue-300"></i> Pedidos
+      </a>
+      <a href="cozinha.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-blender mr-2 text-blue-300"></i> Cozinha
+      </a>
+      <a href="suporte.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-headset mr-2 text-blue-300"></i> Suporte
+      </a>
+      <a href="informacoes.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-info-circle mr-2 text-blue-300"></i> Informações
+      </a>
+      <a href="servico.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-tools mr-2 text-blue-300"></i> Serviços
+      </a>
+    </nav>
+    
+    <div class="right-icons flex items-center space-x-2 sm:space-x-4">
+      <div class="hidden sm:block lg:hidden">
+        <button onclick="window.location.href='menu.html'" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+          <i class="fas fa-home text-lg sm:text-xl"></i>
+        </button>
+      </div>
+      <button onclick="fazerLogoff()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-sign-out-alt text-lg sm:text-xl"></i>
       </button>
     </div>
   </header>
+
   <!-- Conteúdo principal -->
   <main class="container mx-auto px-4 pt-24 pb-20">
     <div class="text-center mb-8 animate__animated animate__fadeIn">
@@ -380,15 +451,15 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <label for="date-start" class="block text-sm font-medium text-gray-700 mb-1">Data Inicial</label>
-          <input type="date" id="date-start" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent">
+          <input type="date" id="date-start" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--secondary-color)] focus:border-transparent">
         </div>
         <div>
           <label for="date-end" class="block text-sm font-medium text-gray-700 mb-1">Data Final</label>
-          <input type="date" id="date-end" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent">
+          <input type="date" id="date-end" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--secondary-color)] focus:border-transparent">
         </div>
         <div>
           <label for="report-type" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Relatório</label>
-          <select id="report-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--primary-color)] focus:border-transparent">
+          <select id="report-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--secondary-color)] focus:border-transparent">
             <option value="vendas">Vendas</option>
             <option value="produtos">Produtos</option>
             <option value="clientes">Clientes</option>
@@ -396,7 +467,7 @@
           </select>
         </div>
         <div class="flex items-end">
-          <button onclick="gerarRelatorio()" class="w-full px-4 py-2 bg-[var(--primary-color)] text-white rounded-lg hover:bg-[#c02a51] transition-colors duration-300 flex items-center justify-center">
+          <button onclick="gerarRelatorio()" class="w-full px-4 py-2 bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] hover:from-[var(--secondary-color)] hover:to-[var(--primary-color)] text-white rounded-lg transition-all transform hover:-translate-y-1 flex items-center justify-center">
             <i class="fas fa-search mr-2"></i> Gerar Relatório
           </button>
         </div>
@@ -409,11 +480,11 @@
       <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-medium text-gray-800">Vendas Totais</h3>
-          <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+          <div class="w-10 h-10 rounded-full bg-[var(--secondary-color)]/10 flex items-center justify-center text-[var(--secondary-color)]">
             <i class="fas fa-shopping-cart"></i>
           </div>
         </div>
-        <p class="text-3xl font-bold text-gray-800 mb-2">R$ 0,00</p>
+        <p class="text-3xl font-bold text-[var(--primary-color)] mb-2">R$ 0,00</p>
         <div class="flex items-center text-sm">
           <span class="text-gray-500">Sem dados anteriores</span>
         </div>
@@ -423,11 +494,11 @@
       <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn animate__delay-1s">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-medium text-gray-800">Pedidos</h3>
-          <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-500">
+          <div class="w-10 h-10 rounded-full bg-[var(--secondary-color)]/10 flex items-center justify-center text-[var(--secondary-color)]">
             <i class="fas fa-receipt"></i>
           </div>
         </div>
-        <p class="text-3xl font-bold text-gray-800 mb-2">0</p>
+        <p class="text-3xl font-bold text-[var(--primary-color)] mb-2">0</p>
         <div class="flex items-center text-sm">
           <span class="text-gray-500">Sem dados anteriores</span>
         </div>
@@ -437,11 +508,11 @@
       <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn animate__delay-2s">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-medium text-gray-800">Ticket Médio</h3>
-          <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-500">
+          <div class="w-10 h-10 rounded-full bg-[var(--secondary-color)]/10 flex items-center justify-center text-[var(--secondary-color)]">
             <i class="fas fa-ticket-alt"></i>
           </div>
         </div>
-        <p class="text-3xl font-bold text-gray-800 mb-2">R$ 0,00</p>
+        <p class="text-3xl font-bold text-[var(--primary-color)] mb-2">R$ 0,00</p>
         <div class="flex items-center text-sm">
           <span class="text-gray-500">Sem dados anteriores</span>
         </div>
@@ -451,11 +522,11 @@
       <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn animate__delay-3s">
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-medium text-gray-800">Clientes</h3>
-          <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+          <div class="w-10 h-10 rounded-full bg-[var(--secondary-color)]/10 flex items-center justify-center text-[var(--secondary-color)]">
             <i class="fas fa-users"></i>
           </div>
         </div>
-        <p class="text-3xl font-bold text-gray-800 mb-2">0</p>
+        <p class="text-3xl font-bold text-[var(--primary-color)] mb-2">0</p>
         <div class="flex items-center text-sm">
           <span class="text-gray-500">Sem dados anteriores</span>
         </div>
@@ -485,7 +556,7 @@
     <div class="report-card bg-white p-4 sm:p-6 animate__animated animate__fadeIn">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-medium text-gray-800">Últimos Pedidos</h3>
-        <button class="text-[var(--primary-color)] hover:text-[#c02a51] transition-colors duration-300 flex items-center">
+        <button class="text-[var(--secondary-color)] hover:text-[var(--primary-color)] transition-colors duration-300 flex items-center">
           <span class="mr-1">Ver todos</span>
           <i class="fas fa-chevron-right text-xs"></i>
         </button>
@@ -513,47 +584,34 @@
   </main>
 
   <!-- Footer -->
-  <footer class="fixed bottom-0 left-0 right-0 bg-white py-2 md:py-3 shadow-inner z-20">
+  <footer class="fixed bottom-0 left-0 right-0 bg-white py-3 shadow-inner z-20">
     <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row items-center justify-center md:justify-between text-center md:text-left">
-        <p class="text-xs sm:text-sm text-gray-600">&copy; 2025 ZEENTT - Todos os direitos reservados</p>
-        <div class="hidden md:flex items-center mt-2 md:mt-0 space-x-4">
-          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
-            <i class="fab fa-whatsapp"></i>
-          </a>
-        </div>
-      </div>
+      <p class="text-center text-sm text-gray-600">&copy; 2025 ZEENTT - Todos os direitos reservados</p>
     </div>
   </footer>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Toggle sidebar
+    // Toggle sidebar menu
     function toggleMenu() {
       const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('overlay');
+      const overlay = document.getElementById('sidebar-overlay');
       
-      if (sidebar.classList.contains('active')) {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
+      if (sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        overlay.classList.add('hidden');
         document.body.style.overflow = 'auto';
       } else {
-        sidebar.classList.add('active');
-        overlay.classList.add('active');
+        sidebar.classList.add('open');
+        overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
       }
     }
     
     // Tela de carregamento e animação de digitação
     window.addEventListener('load', function() {
-      // Ocultar a tela de carregamento após 2 segundos
+      // Ocultar a tela de carregamento após 1 segundo
       setTimeout(() => {
         const loader = document.getElementById('loader');
         loader.classList.add('fade-out');
@@ -562,12 +620,12 @@
           loader.style.display = 'none';
           // Iniciar animação de digitação após a tela de carregamento
           const zeenttText = document.getElementById('zeentt-text');
-          typeEffect(zeenttText, 'ZEENTT', 150);
+          typeEffect(zeenttText, 'ZEENTT', 100);
           
           // Inicializar gráficos
           initCharts();
-        }, 500);
-      }, 1500);
+        }, 300);
+      }, 1000);
     });
     
     // Animação de digitação do texto ZEENTT
@@ -575,7 +633,6 @@
       let i = 0;
       element.textContent = '';
       
-      // Criar um elemento de cursor piscante
       const cursor = document.createElement('span');
       cursor.className = 'typing-cursor';
       cursor.textContent = '|';
@@ -583,17 +640,14 @@
       
       const timer = setInterval(function() {
         if (i < text.length) {
-          // Inserir o texto antes do cursor
           element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
           i++;
         } else {
           clearInterval(timer);
-          // Remover o cursor após a animação
           setTimeout(() => {
             cursor.remove();
-            // Adicionar classe de animação após a digitação
             element.classList.add('animate__animated', 'animate__pulse');
-          }, 500);
+          }, 300);
         }
       }, speed);
     }
@@ -609,11 +663,11 @@
           datasets: [{
             label: 'Vendas (R$)',
             data: [],
-            backgroundColor: 'rgba(216, 49, 91, 0.2)',
-            borderColor: 'rgba(216, 49, 91, 1)',
+            backgroundColor: 'rgba(62, 146, 204, 0.2)',
+            borderColor: 'rgba(10, 36, 99, 1)',
             borderWidth: 2,
             tension: 0.3,
-            pointBackgroundColor: 'rgba(216, 49, 91, 1)',
+            pointBackgroundColor: 'rgba(10, 36, 99, 1)',
             pointRadius: 4
           }]
         },
@@ -656,18 +710,18 @@
           datasets: [{
             data: [],
             backgroundColor: [
-              'rgba(255, 99, 132, 0.7)',
-              'rgba(54, 162, 235, 0.7)',
-              'rgba(255, 206, 86, 0.7)',
-              'rgba(75, 192, 192, 0.7)',
-              'rgba(153, 102, 255, 0.7)'
+              'rgba(10, 36, 99, 0.8)',
+              'rgba(62, 146, 204, 0.8)',
+              'rgba(10, 36, 99, 0.6)',
+              'rgba(62, 146, 204, 0.6)',
+              'rgba(10, 36, 99, 0.4)'
             ],
             borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)'
+              'rgba(10, 36, 99, 1)',
+              'rgba(62, 146, 204, 1)',
+              'rgba(10, 36, 99, 0.8)',
+              'rgba(62, 146, 204, 0.8)',
+              'rgba(10, 36, 99, 0.6)'
             ],
             borderWidth: 1
           }]
@@ -701,9 +755,6 @@
         alert('Por favor, selecione o período para o relatório.');
         return;
       }
-      
-      // Aqui você pode implementar a lógica para gerar o relatório com base nos filtros
-      // Por enquanto, apenas mostramos uma mensagem de sucesso
       
       alert(`Relatório de ${tipoRelatorio} gerado com sucesso para o período de ${dataInicial} a ${dataFinal}.`);
     }
