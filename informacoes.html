@@ -1,54 +1,476 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Zeentt - Informações</title>
-        <link rel="stylesheet" href="css/style.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-      </head>
-<body class="pagina-cadastro">
-  <div id="sidebar" class="sidebar">
-    <ul>
-      <br>
-      <br>
-      <li><a href="menu.html"><i class="fas fa-home"></i> Início</a></li>
-      <li><a href="cadastro.html"><i class="fas fa-plus"></i> Cadastro</a></li>
-      <li><a href="cardapio.html"><i class="fas fa-utensils"></i> Cardápio</a></li>
-      <li><a href="pedido.html"><i class="fas fa-concierge-bell"></i> Pedidos</a></li>
-      <li><a href="cozinha.html"><i class="fas fa-blender"></i> Cozinha</a></li>
-      <li><a href="relatorio.html"><i class="fas fa-chart-bar"></i> Relatórios</a></li>
-      <li><a href="suporte.html"><i class="fas fa-headset"></i> Suporte</a></li>
-      <li><a href="informacoes.html"><i class="fas fa-info-circle"></i> Informações</a></li>
-      <li><a href="servico.html"><i class="fas fa-tools"></i> Serviços</a></li>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeentt - Informações</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary-color: #0a2463;
+      --secondary-color: #3e92cc;
+      --accent-color: #d8315b;
+      --light-color: #fffaff;
+      --dark-color: #1e1b18;
+      --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      --gradient-accent: linear-gradient(135deg, var(--accent-color), #ff7e5f);
+    }
+    
+    /* Custom styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+    }
+    
+    .sidebar {
+      background: var(--gradient-primary);
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sidebar.active {
+      transform: translateX(0);
+    }
+    
+    .sidebar li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .top-bar {
+      background: linear-gradient(135deg, #00337a 0%, #00337a 100%);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: #00337a;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: #002a63;
+    }
+
+    /* Sidebar Styles */
+    .sidebar .logo-area {
+      padding: 1.25rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(62, 146, 204, 0.3);
+    }
+
+    .sidebar .logo-area h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar .logo-area p {
+      font-size: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar ul {
+      padding: 1rem 0.5rem;
+    }
+
+    .sidebar li {
+      margin: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar li a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.9375rem;
+      color: white;
+    }
+
+    .sidebar li i {
+      font-size: 1.125rem;
+      margin-right: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar li:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(0.5rem);
+    }
+
+    .sidebar li.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .sidebar li.active i {
+      color: white;
+      opacity: 1;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s;
+    }
+
+    .loader-content {
+      text-align: center;
+    }
+
+    .loader-icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+    }
+
+    .loader-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid white;
+      width: 100%;
+      height: 100%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Animation for info cards */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .info-card {
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    .info-card:nth-child(1) { animation-delay: 0.1s; }
+    .info-card:nth-child(2) { animation-delay: 0.2s; }
+    .info-card:nth-child(3) { animation-delay: 0.3s; }
+    .info-card:nth-child(4) { animation-delay: 0.4s; }
+  </style>
+</head>
+
+<body class="relative min-h-screen">
+  <!-- Overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" onclick="toggleMenu()"></div>
+  
+  <!-- Tela de Carregamento -->
+  <div id="loader">
+    <div class="loader-content">
+      <div class="loader-icon">
+        <div class="loader-spinner"></div>
+      </div>
+      <h2 class="text-white text-2xl font-bold mb-2">ZEENTT</h2>
+      <p class="text-blue-300">Carregando...</p>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 max-w-[85vw] text-white z-40 shadow-lg">
+    <div class="p-5 text-center border-b border-blue-700 logo-area">
+      <div class="flex justify-center items-center mb-2">
+        <div class="logo-icon">
+          <div class="logo-icon-inner">
+            <div class="logo-particles">
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+              <div class="particle"></div>
+            </div>
+          </div>
+        </div>
+        <h1 class="text-2xl font-bold animate__animated animate__fadeIn ml-2">ZEENTT</h1>
+      </div>
+      <p class="text-blue-300 text-sm">Sistema de Gestão</p>
+    </div>
+    <ul class="py-4 px-2">
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="menu.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-home mr-3 text-blue-300"></i> 
+          <span>Início</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cadastro.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-plus mr-3 text-blue-300"></i> 
+          <span>Cadastro</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cardapio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-utensils mr-3 text-blue-300"></i> 
+          <span>Cardápio</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="pedido.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-concierge-bell mr-3 text-blue-300"></i> 
+          <span>Pedidos</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="cozinha.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-blender mr-3 text-blue-300"></i> 
+          <span>Cozinha</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="relatorio.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-chart-bar mr-3 text-blue-300"></i> 
+          <span>Relatórios</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="suporte.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-headset mr-3 text-blue-300"></i> 
+          <span>Suporte</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300 bg-white/15">
+        <a href="informacoes.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-info-circle mr-3 text-white"></i> 
+          <span>Informações</span>
+        </a>
+      </li>
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300">
+        <a href="servico.html" class="flex items-center px-4 py-3">
+          <i class="fas fa-tools mr-3 text-blue-300"></i> 
+          <span>Serviços</span>
+        </a>
+      </li>
     </ul>
   </div>
-  <header class="top-bar">
-    <div class="left-icons">
-      <button onclick="toggleMenu()">
-        <i class="fas fa-bars menu-icon"></i>
+
+  <!-- Top Bar -->
+  <header class="top-bar fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 text-white shadow-lg">
+    <div class="left-icons lg:hidden">
+      <button onclick="toggleMenu()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-bars text-lg sm:text-xl"></i>
       </button>
     </div>
-      
-        <div class="logo">
-          <div class="logo">ZEENTT</div>
+    <div class="logo flex items-center">
+      <div class="logo-icon hidden xs:block">
+        <div class="logo-icon-inner">
+          <div class="logo-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+          </div>
         </div>
+      </div>
+      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
+    </div>
+    
+    <!-- Menu horizontal para telas grandes -->
+    <nav class="hidden lg:flex items-center space-x-6 ml-10">
+      <a href="menu.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-home mr-2 text-blue-300"></i> Início
+      </a>
+      <a href="cardapio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-utensils mr-2 text-blue-300"></i> Cardápio
+      </a>
+      <a href="pedido.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-concierge-bell mr-2 text-blue-300"></i> Pedidos
+      </a>
+      <a href="cozinha.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-blender mr-2 text-blue-300"></i> Cozinha
+      </a>
+      <a href="relatorio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-chart-bar mr-2 text-blue-300"></i> Relatórios
+      </a>
+      <a href="suporte.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-headset mr-2 text-blue-300"></i> Suporte
+      </a>
+      <a href="informacoes.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-info-circle mr-2 text-blue-300"></i> Informações
+      </a>
+      <a href="servico.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-tools mr-2 text-blue-300"></i> Serviços
+      </a>
+    </nav>
+    
+    <div class="right-icons flex items-center space-x-2 sm:space-x-4">
+      <div class="hidden sm:block lg:hidden">
+        <button onclick="window.location.href='menu.html'" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+          <i class="fas fa-home text-lg sm:text-xl"></i>
+        </button>
+      </div>
+      <button onclick="fazerLogoff()" class="btn-icon p-2 rounded-full hover:bg-white/15 transition-all">
+        <i class="fas fa-sign-out-alt text-lg sm:text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-20 pb-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-3xl font-bold text-[#00337a] mb-8 text-center">Informações do Sistema</h1>
       
-        <div class="right-icons">
-          <button onclick="fazerLogoff()" class="logout-button">
-            <i class="fas fa-sign-out-alt logout-icon"></i>
-          </button>
-          <button onclick="window.location.href='menu.html'">
-            <i class="fas fa-home"></i>
-          </button>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Card 1 - Sobre o Sistema -->
+        <div class="info-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="text-[#00337a] text-4xl mb-4">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-[#00337a] mb-3">Sobre o ZEENTT</h3>
+          <p class="text-gray-600 mb-4">O ZEENTT é um sistema completo de gestão para restaurantes, desenvolvido para otimizar seus processos e melhorar a experiência dos seus clientes.</p>
         </div>
-      </header>
-      <main>
-      </main>
-   <footer>
-    <p>&copy; 2025 ZEENTT - Todos os direitos reservados</p>
+
+        <!-- Card 2 - Versão -->
+        <div class="info-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="text-[#00337a] text-4xl mb-4">
+            <i class="fas fa-code-branch"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-[#00337a] mb-3">Versão do Sistema</h3>
+          <p class="text-gray-600 mb-4">Versão atual: 2.0.1<br>Última atualização: Janeiro/2024<br>Build: 2024.01.15</p>
+        </div>
+
+        <!-- Card 3 - Recursos -->
+        <div class="info-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="text-[#00337a] text-4xl mb-4">
+            <i class="fas fa-list-check"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-[#00337a] mb-3">Recursos Principais</h3>
+          <ul class="text-gray-600 space-y-2">
+            <li><i class="fas fa-check text-green-500 mr-2"></i>Gestão de Pedidos</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i>Controle de Estoque</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i>Relatórios Detalhados</li>
+            <li><i class="fas fa-check text-green-500 mr-2"></i>Interface Responsiva</li>
+          </ul>
+        </div>
+
+        <!-- Card 4 - Contato -->
+        <div class="info-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+          <div class="text-[#00337a] text-4xl mb-4">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3 class="text-xl font-semibold text-[#00337a] mb-3">Contato</h3>
+          <p class="text-gray-600 mb-4">
+            Email: contato@zeentt.com<br>
+            Telefone: (11) 4002-8922<br>
+            Horário: Seg a Sex, 8h às 18h
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-white py-3 shadow-inner z-20">
+    <div class="container mx-auto px-4">
+      <p class="text-center text-sm text-gray-600">&copy; 2024 ZEENTT - Todos os direitos reservados</p>
+    </div>
   </footer>
-    <script src="js/script.js"></script>
+
+  <script>
+    // Tela de carregamento e animação de digitação
+    window.addEventListener('load', function() {
+      // Ocultar a tela de carregamento após 1 segundo
+      setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.style.opacity = '0';
+        
+        setTimeout(() => {
+          loader.style.display = 'none';
+          // Iniciar animação de digitação após a tela de carregamento
+          const zeenttText = document.getElementById('zeentt-text');
+          typeEffect(zeenttText, 'ZEENTT', 100);
+        }, 300);
+      }, 1000);
+    });
+    
+    // Animação de digitação do texto ZEENTT
+    function typeEffect(element, text, speed) {
+      let i = 0;
+      element.textContent = '';
+      
+      // Criar um elemento de cursor piscante
+      const cursor = document.createElement('span');
+      cursor.className = 'typing-cursor';
+      cursor.textContent = '|';
+      element.appendChild(cursor);
+      
+      const timer = setInterval(function() {
+        if (i < text.length) {
+          // Inserir o texto antes do cursor
+          element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+          i++;
+        } else {
+          clearInterval(timer);
+          // Remover o cursor após a animação
+          setTimeout(() => {
+            cursor.remove();
+            // Adicionar classe de animação após a digitação
+            element.classList.add('animate__animated', 'animate__pulse');
+          }, 300);
+        }
+      }, speed);
+    }
+
+    // Toggle sidebar
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      
+      if (sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      } else {
+        sidebar.classList.add('active');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // Logoff function
+    function fazerLogoff() {
+      Swal.fire({
+        title: 'Tem certeza?',
+        text: "Você realmente deseja sair do sistema?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#00337a',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, sair',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'login.html';
+        }
+      });
+    }
+  </script>
+  
+  <!-- SweetAlert for better alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
 
