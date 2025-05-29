@@ -9,6 +9,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #0a2463;
+      --secondary-color: #3e92cc;
+      --light-color: #fffaff;
+      --dark-color: #1e1b18;
+      --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+    
     /* Custom styles */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -16,9 +24,10 @@
     }
     
     .sidebar {
-      background: linear-gradient(180deg, #00337a 0%, #00337a 100%);
+      background: linear-gradient(135deg, #00337a 0%, #00337a 100%);
       transform: translateX(-100%);
-      transition: transform 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
     }
     
     .sidebar.active {
@@ -30,7 +39,7 @@
     }
     
     .top-bar {
-      background: linear-gradient(135deg, #00337a 0%, #00337a 100%);
+      background: var(--gradient-primary);
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     
@@ -68,11 +77,119 @@
       background: #002a63;
     }
 
+    /* Sidebar Styles */
+    .sidebar .logo-area {
+      padding: 1.25rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(62, 146, 204, 0.3);
+    }
+
+    .sidebar .logo-area h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .sidebar .logo-area p {
+      font-size: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar ul {
+      padding: 1rem 0.5rem;
+    }
+
+    .sidebar li {
+      margin: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar li a {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.9375rem;
+      color: white;
+    }
+
+    .sidebar li i {
+      font-size: 1.125rem;
+      margin-right: 0.875rem;
+      color: rgb(147, 197, 253);
+      opacity: 0.9;
+    }
+
+    .sidebar li.active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .sidebar li.active i {
+      color: white;
+      opacity: 1;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+
+    .loader-content {
+      text-align: center;
+    }
+
+    .loader-icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+    }
+
+    .loader-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 4px solid white;
+      width: 100%;
+      height: 100%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Animation for cards */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .pedido-card {
+      animation: fadeIn 0.3s ease forwards;
+    }
+    
+    .pedido-card:nth-child(1) { animation-delay: 0.1s; }
+    .pedido-card:nth-child(2) { animation-delay: 0.2s; }
+    .pedido-card:nth-child(3) { animation-delay: 0.3s; }
+    .pedido-card:nth-child(4) { animation-delay: 0.4s; }
+
     /* Existing styles */
     :root {
-      --primary-color: #d8315b;
-      --secondary-color: #00337a;
-      --accent-color: #1e3a8a;
+      --primary-color: #0a2463;
+      --secondary-color: #3e92cc;
+      --accent-color: #3e92cc;
     }
     
     /* Loader e animação de digitação */
@@ -82,7 +199,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -266,22 +383,21 @@
   <!-- Overlay -->
   <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
   
+  <!-- Tela de Carregamento -->
+  <div id="loader">
+    <div class="loader-content">
+      <div class="loader-icon">
+        <div class="loader-spinner"></div>
+      </div>
+      <h2 class="text-white text-2xl font-bold mb-2">ZEENTT</h2>
+      <p class="text-blue-300">Carregando...</p>
+    </div>
+  </div>
+
   <!-- Sidebar -->
   <div id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 max-w-[85vw] text-white z-40 shadow-lg">
-    <div class="p-5 text-center border-b border-blue-700 logo-area">
-      <div class="flex justify-center items-center mb-2">
-        <div class="logo-icon">
-          <div class="logo-icon-inner">
-            <div class="logo-particles">
-              <div class="particle"></div>
-              <div class="particle"></div>
-              <div class="particle"></div>
-              <div class="particle"></div>
-            </div>
-          </div>
-        </div>
-        <h1 class="text-2xl font-bold animate__animated animate__fadeIn ml-2">ZEENTT</h1>
-      </div>
+    <div class="p-5 text-center border-b border-blue-700">
+      <h1 class="text-2xl font-bold animate__animated animate__fadeIn">ZEENTT</h1>
       <p class="text-blue-300 text-sm">Sistema de Gestão</p>
     </div>
     <ul class="py-4 px-2">
@@ -309,9 +425,9 @@
           <span>Pedidos</span>
         </a>
       </li>
-      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300 bg-white/20">
+      <li class="my-1 rounded-lg overflow-hidden hover:translate-x-2 transition-all duration-300 bg-white/15">
         <a href="cozinha.html" class="flex items-center px-4 py-3">
-          <i class="fas fa-blender mr-3 text-blue-300"></i> 
+          <i class="fas fa-blender mr-3 text-white"></i> 
           <span>Cozinha</span>
         </a>
       </li>
@@ -350,44 +466,34 @@
       </button>
     </div>
     <div class="logo flex items-center">
-      <div class="logo-icon hidden xs:block">
-        <div class="logo-icon-inner">
-          <div class="logo-particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-          </div>
-        </div>
-      </div>
-      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold ml-0 sm:ml-2">ZEENTT</span>
+      <span id="zeentt-text" class="text-xl sm:text-2xl font-bold">ZEENTT</span>
     </div>
     
     <!-- Menu horizontal para telas grandes -->
     <nav class="hidden lg:flex items-center space-x-6 ml-10">
       <a href="menu.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
-        <i class="fas fa-home mr-3 text-blue-300"></i> Inicio
-      </a>
-      <a href="pedido.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
-        <i class="fas fa-concierge-bell mr-2 text-blue-300"></i> Pedidos
+        <i class="fas fa-home mr-2 text-blue-300"></i> Início
       </a>
       <a href="cardapio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
         <i class="fas fa-utensils mr-2 text-blue-300"></i> Cardápio
       </a>
+      <a href="pedido.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-concierge-bell mr-2 text-blue-300"></i> Pedidos
+      </a>
+      <a href="cozinha.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-blender mr-2 text-blue-300"></i> Cozinha
+      </a>
       <a href="relatorio.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
         <i class="fas fa-chart-bar mr-2 text-blue-300"></i> Relatórios
       </a>
-      <a href="cozinha.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
-        <i class="fas fa-blender mr-3 text-blue-300"></i> Cozinha
+      <a href="suporte.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-headset mr-2 text-blue-300"></i> Suporte
       </a>
       <a href="informacoes.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
-        <i class="fas fa-info-circle mr-3 text-blue-300"></i> Informações
+        <i class="fas fa-info-circle mr-2 text-blue-300"></i> Informações
       </a>
-      <a href="Servico.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
-        <i class="fas fa-tools mr-3 text-blue-300"></i> Serviços
-      </a>
-      <a href="suporte.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
-        <i class="fas fa-headset mr-3 text-blue-300"></i> Suporte
+      <a href="servico.html" class="text-white hover:text-blue-300 transition-colors duration-300 flex items-center">
+        <i class="fas fa-tools mr-2 text-blue-300"></i> Serviços
       </a>
     </nav>
     
@@ -403,149 +509,129 @@
     </div>
   </header>
 
-  <!-- Tela de carregamento -->
-  <div id="loader" class="fixed inset-0 flex flex-col items-center justify-center z-50 bg-gradient-to-br from-[var(--secondary-color)] to-[var(--accent-color)]">
-    <div class="loader-icon">
-      <div class="loader-spinner"></div>
-    </div>
-    <h2 class="text-white text-2xl font-bold mt-4 mb-2">Carregando</h2>
-    <p class="text-blue-200 text-sm">Aguarde um momento...</p>
-  </div>
-
-  <!-- Conteúdo principal -->
-  <main class="mt-24 mb-24 px-4 container mx-auto">
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-      <h2 class="text-2xl font-bold text-[var(--secondary-color)] mb-4 flex items-center">
-        <i class="fas fa-blender text-[var(--primary-color)] mr-3"></i> Área da Cozinha
-      </h2>
-      <p class="text-gray-600 mb-4">Gerencie os pedidos que precisam ser preparados.</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Coluna Preparando -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-3 font-bold text-lg flex items-center">
-          <i class="fas fa-fire mr-2"></i> Preparando
-        </div>
-        <div class="divide-y divide-gray-100">
-          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-lg text-gray-800">#12567</span>
-              <span class="text-sm text-gray-500">10:25</span>
-            </div>
-            <div class="mt-2 flex items-center text-sm text-gray-600">
-              <i class="fas fa-utensils mr-2 text-yellow-500"></i> 2x Combo Clássico
-            </div>
-            <div class="mt-1 flex justify-end">
-              <button class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
-                <i class="fas fa-check mr-1"></i> Finalizar
-              </button>
-            </div>
-          </div>
-          
-          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-1s">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-lg text-gray-800">#12568</span>
-              <span class="text-sm text-gray-500">10:30</span>
-            </div>
-            <div class="mt-2 flex items-center text-sm text-gray-600">
-              <i class="fas fa-utensils mr-2 text-yellow-500"></i> 1x Combo Especial
-            </div>
-            <div class="mt-1 flex justify-end">
-              <button class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
-                <i class="fas fa-check mr-1"></i> Finalizar
-              </button>
-            </div>
-          </div>
-          
-          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-2s">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-lg text-gray-800">#12569</span>
-              <span class="text-sm text-gray-500">10:35</span>
-            </div>
-            <div class="mt-2 flex items-center text-sm text-gray-600">
-              <i class="fas fa-utensils mr-2 text-yellow-500"></i> 3x Combo Família
-            </div>
-            <div class="mt-1 flex justify-end">
-              <button class="bg-green-500 hover:bg-green-600 text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
-                <i class="fas fa-check mr-1"></i> Finalizar
-              </button>
-            </div>
-          </div>
-        </div>
+  <!-- Main Content -->
+  <main class="pt-20 pb-16 px-4">
+    <div class="max-w-7xl mx-auto">
+      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-bold text-[#0a2463] mb-4 flex items-center">
+          <i class="fas fa-blender text-[#0a2463] mr-3"></i> Área da Cozinha
+        </h2>
+        <p class="text-gray-600 mb-4">Gerencie os pedidos que precisam ser preparados.</p>
       </div>
-      
-      <!-- Coluna Finalizado -->
-      <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-3 font-bold text-lg flex items-center">
-          <i class="fas fa-check-circle mr-2"></i> Finalizado
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Coluna Preparando -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="bg-gradient-to-r from-[#0a2463] to-[#3e92cc] text-white p-3 font-bold text-lg flex items-center">
+            <i class="fas fa-fire mr-2"></i> Preparando
+          </div>
+          <div class="divide-y divide-gray-100">
+            <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-lg text-gray-800">#12567</span>
+                <span class="text-sm text-gray-500">10:25</span>
+              </div>
+              <div class="mt-2 flex items-center text-sm text-gray-600">
+                <i class="fas fa-utensils mr-2 text-[#3e92cc]"></i> 2x Combo Clássico
+              </div>
+              <div class="mt-1 flex justify-end">
+                <button class="bg-[#0a2463] hover:bg-[#3e92cc] text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
+                  <i class="fas fa-check mr-1"></i> Finalizar
+                </button>
+              </div>
+            </div>
+            
+            <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-1s">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-lg text-gray-800">#12568</span>
+                <span class="text-sm text-gray-500">10:30</span>
+              </div>
+              <div class="mt-2 flex items-center text-sm text-gray-600">
+                <i class="fas fa-utensils mr-2 text-[#3e92cc]"></i> 1x Combo Especial
+              </div>
+              <div class="mt-1 flex justify-end">
+                <button class="bg-[#0a2463] hover:bg-[#3e92cc] text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
+                  <i class="fas fa-check mr-1"></i> Finalizar
+                </button>
+              </div>
+            </div>
+            
+            <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-2s">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-lg text-gray-800">#12569</span>
+                <span class="text-sm text-gray-500">10:35</span>
+              </div>
+              <div class="mt-2 flex items-center text-sm text-gray-600">
+                <i class="fas fa-utensils mr-2 text-[#3e92cc]"></i> 3x Combo Família
+              </div>
+              <div class="mt-1 flex justify-end">
+                <button class="bg-[#0a2463] hover:bg-[#3e92cc] text-white text-xs py-1 px-3 rounded-full transition-colors duration-300 flex items-center">
+                  <i class="fas fa-check mr-1"></i> Finalizar
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="divide-y divide-gray-100">
-          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-lg text-gray-800">#12560</span>
-              <span class="text-sm text-gray-500">09:45</span>
-            </div>
-            <div class="mt-2 flex items-center text-sm text-gray-600">
-              <i class="fas fa-utensils mr-2 text-green-500"></i> 1x Combo Clássico
-            </div>
-            <div class="mt-1 flex justify-end">
-              <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
-                <i class="fas fa-clock mr-1"></i> Finalizado às 10:05
-              </span>
-            </div>
+        
+        <!-- Coluna Finalizado -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="bg-gradient-to-r from-[#0a2463] to-[#3e92cc] text-white p-3 font-bold text-lg flex items-center">
+            <i class="fas fa-check-circle mr-2"></i> Finalizado
           </div>
-          
-          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-1s">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-lg text-gray-800">#12561</span>
-              <span class="text-sm text-gray-500">09:50</span>
+          <div class="divide-y divide-gray-100">
+            <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-lg text-gray-800">#12560</span>
+                <span class="text-sm text-gray-500">09:45</span>
+              </div>
+              <div class="mt-2 flex items-center text-sm text-gray-600">
+                <i class="fas fa-utensils mr-2 text-[#3e92cc]"></i> 1x Combo Clássico
+              </div>
+              <div class="mt-1 flex justify-end">
+                <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
+                  <i class="fas fa-clock mr-1"></i> Finalizado às 10:05
+                </span>
+              </div>
             </div>
-            <div class="mt-2 flex items-center text-sm text-gray-600">
-              <i class="fas fa-utensils mr-2 text-green-500"></i> 2x Combo Especial
+            
+            <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-1s">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-lg text-gray-800">#12561</span>
+                <span class="text-sm text-gray-500">09:50</span>
+              </div>
+              <div class="mt-2 flex items-center text-sm text-gray-600">
+                <i class="fas fa-utensils mr-2 text-[#3e92cc]"></i> 2x Combo Especial
+              </div>
+              <div class="mt-1 flex justify-end">
+                <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
+                  <i class="fas fa-clock mr-1"></i> Finalizado às 10:15
+                </span>
+              </div>
             </div>
-            <div class="mt-1 flex justify-end">
-              <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
-                <i class="fas fa-clock mr-1"></i> Finalizado às 10:15
-              </span>
-            </div>
-          </div>
-          
-          <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-2s">
-            <div class="flex justify-between items-center">
-              <span class="font-bold text-lg text-gray-800">#12562</span>
-              <span class="text-sm text-gray-500">10:00</span>
-            </div>
-            <div class="mt-2 flex items-center text-sm text-gray-600">
-              <i class="fas fa-utensils mr-2 text-green-500"></i> 1x Combo Família
-            </div>
-            <div class="mt-1 flex justify-end">
-              <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
-                <i class="fas fa-clock mr-1"></i> Finalizado às 10:20
-              </span>
+            
+            <div class="p-4 hover:bg-gray-50 transition-colors duration-200 animate__animated animate__fadeIn animate__delay-2s">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-lg text-gray-800">#12562</span>
+                <span class="text-sm text-gray-500">10:00</span>
+              </div>
+              <div class="mt-2 flex items-center text-sm text-gray-600">
+                <i class="fas fa-utensils mr-2 text-[#3e92cc]"></i> 1x Combo Família
+              </div>
+              <div class="mt-1 flex justify-end">
+                <span class="bg-gray-200 text-gray-700 text-xs py-1 px-3 rounded-full flex items-center">
+                  <i class="fas fa-clock mr-1"></i> Finalizado às 10:20
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </main>
-  
+
   <!-- Footer -->
-  <footer class="fixed bottom-0 left-0 right-0 bg-white py-2 md:py-3 shadow-inner z-20">
+  <footer class="fixed bottom-0 left-0 right-0 bg-white py-3 shadow-inner z-20">
     <div class="container mx-auto px-4">
-      <div class="flex flex-col md:flex-row items-center justify-center md:justify-between text-center md:text-left">
-        <p class="text-xs sm:text-sm text-gray-600">&copy; 2025 ZEENTT - Todos os direitos reservados</p>
-        <div class="hidden md:flex items-center mt-2 md:mt-0 space-x-4">
-          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="#" class="text-gray-500 hover:text-[var(--primary-color)] transition-colors duration-300">
-            <i class="fab fa-whatsapp"></i>
-          </a>
-        </div>
-      </div>
+      <p class="text-center text-sm text-gray-600">&copy; 2024 ZEENTT - Todos os direitos reservados</p>
     </div>
   </footer>
   
@@ -583,6 +669,14 @@
       pedidosFinalizados.push(pedido);
       pedidosPreparando.splice(index, 1);
       atualizarListaPedidos();
+      
+      // Feedback visual
+      Swal.fire({
+        title: 'Pedido Finalizado!',
+        text: `O pedido foi movido para a lista de finalizados.`,
+        icon: 'success',
+        confirmButtonColor: '#0a2463'
+      });
     }
 
     // Função para atualizar a lista de pedidos na interface
@@ -700,7 +794,7 @@
       // Ocultar a tela de carregamento após 2 segundos
       setTimeout(() => {
         const loader = document.getElementById('loader');
-        loader.classList.add('fade-out');
+        loader.style.opacity = '0';
         
         setTimeout(() => {
           loader.style.display = 'none';
@@ -755,10 +849,24 @@
     
     // Logoff function
     function fazerLogoff() {
-      if (confirm('Tem certeza que deseja sair do sistema?')) {
-        window.location.href = 'login.html';
-      }
+      Swal.fire({
+        title: 'Tem certeza?',
+        text: "Você realmente deseja sair do sistema?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#0a2463',
+        cancelButtonColor: '#3e92cc',
+        confirmButtonText: 'Sim, sair',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'login.html';
+        }
+      });
     }
   </script>
+  
+  <!-- SweetAlert for better alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 </html>
