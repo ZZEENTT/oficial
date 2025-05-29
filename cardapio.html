@@ -748,6 +748,50 @@
   <!-- Overlay for cart -->
   <div id="carrinho-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40" onclick="toggleCarrinho()"></div>
 
+  <!-- Modal de Informações do Cliente -->
+  <div id="clientInfoModal" class="modal hidden fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-50 flex items-center justify-center">
+    <div class="modal-content bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border border-gray-100">
+      <div class="bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] py-2 px-4 flex justify-between items-center text-white">
+        <h3 class="font-semibold text-base">Informações do Pedido</h3>
+        <button onclick="closeClientInfoModal()" class="text-white hover:text-blue-200 transition-colors">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="p-4">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Pedido</label>
+          <div class="flex space-x-4">
+            <button id="btnMesa" onclick="setTipoPedido('mesa')" class="flex-1 py-2 px-4 rounded-lg border border-gray-300 hover:bg-blue-50 transition-colors">
+              <i class="fas fa-chair mr-2"></i>Mesa
+            </button>
+            <button id="btnDelivery" onclick="setTipoPedido('delivery')" class="flex-1 py-2 px-4 rounded-lg border border-gray-300 hover:bg-blue-50 transition-colors">
+              <i class="fas fa-motorcycle mr-2"></i>Delivery
+            </button>
+          </div>
+        </div>
+        
+        <div id="mesaInput" class="mb-4 hidden">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="numeroMesa">
+            Número da Mesa
+          </label>
+          <input type="number" id="numeroMesa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Digite o número da mesa">
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="nomeCliente">
+            Nome do Cliente
+          </label>
+          <input type="text" id="nomeCliente" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Digite o nome do cliente">
+        </div>
+      </div>
+      <div class="px-4 pb-4 flex justify-end">
+        <button onclick="confirmarPedido()" class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] hover:from-[var(--accent-color)] hover:to-[var(--secondary-color)] text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all transform hover:-translate-y-1 text-sm flex items-center">
+          <i class="fas fa-check mr-2"></i> Confirmar Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Global variables
     let cartItems = [];
@@ -1116,7 +1160,6 @@
     // Finalize order
     function finalizarPedido() {
       if (cartItems.length === 0) {
-        // Usar um alerta personalizado em vez do alerta padrão
         const carrinhoHeader = document.querySelector('.carrinho-header');
         const alertDiv = document.createElement('div');
         alertDiv.className = 'bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 animate__animated animate__shakeX';
@@ -1129,7 +1172,6 @@
         
         carrinhoHeader.insertAdjacentElement('afterend', alertDiv);
         
-        // Remover o alerta após alguns segundos
         setTimeout(() => {
           alertDiv.classList.remove('animate__shakeX');
           alertDiv.classList.add('animate__fadeOut');
@@ -1139,39 +1181,8 @@
         return;
       }
       
-      // Animar todos os itens do carrinho
-      const items = document.querySelectorAll('#carrinho-itens li');
-      items.forEach((item, i) => {
-        setTimeout(() => {
-          item.classList.add('animate__animated', 'animate__bounceOut');
-        }, i * 100);
-      });
-      
-      // Mostrar mensagem de sucesso personalizada
-      setTimeout(() => {
-        const carrinhoItens = document.getElementById('carrinho-itens');
-        carrinhoItens.innerHTML = '';
-        
-        const successMessage = document.createElement('div');
-        successMessage.className = 'p-8 text-center text-green-500 animate__animated animate__fadeIn';
-        successMessage.innerHTML = `
-          <div class="bg-green-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
-            <i class="fas fa-check-circle text-4xl text-green-500"></i>
-          </div>
-          <h3 class="text-xl font-bold mb-2">Pedido Finalizado!</h3>
-          <p class="text-gray-600">Total: R$ ${document.getElementById('carrinho-total').textContent}</p>
-          <p class="text-sm mt-4 text-gray-500">Seu pedido foi enviado para a cozinha</p>
-        `;
-        
-        carrinhoItens.appendChild(successMessage);
-        
-        // Resetar o carrinho após alguns segundos
-        setTimeout(() => {
-          cartItems = [];
-          updateCart();
-          toggleCarrinho();
-        }, 3000);
-      }, 800);
+      // Mostrar modal de informações do cliente
+      showClientInfoModal();
     }
 
     // Logoff function
@@ -1371,6 +1382,119 @@
       if (noResultsMsg) {
         noResultsMsg.remove();
       }
+    }
+
+    let pedidoSequencial = 1; // Contador para pedidos delivery
+    let tipoPedidoAtual = null;
+
+    function setTipoPedido(tipo) {
+      tipoPedidoAtual = tipo;
+      const btnMesa = document.getElementById('btnMesa');
+      const btnDelivery = document.getElementById('btnDelivery');
+      const mesaInput = document.getElementById('mesaInput');
+      
+      if (tipo === 'mesa') {
+        btnMesa.classList.add('bg-blue-100', 'border-blue-500');
+        btnDelivery.classList.remove('bg-blue-100', 'border-blue-500');
+        mesaInput.classList.remove('hidden');
+      } else {
+        btnDelivery.classList.add('bg-blue-100', 'border-blue-500');
+        btnMesa.classList.remove('bg-blue-100', 'border-blue-500');
+        mesaInput.classList.add('hidden');
+      }
+    }
+
+    function showClientInfoModal() {
+      const modal = document.getElementById('clientInfoModal');
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      
+      // Reset form
+      document.getElementById('nomeCliente').value = '';
+      document.getElementById('numeroMesa').value = '';
+      tipoPedidoAtual = null;
+      
+      const btnMesa = document.getElementById('btnMesa');
+      const btnDelivery = document.getElementById('btnDelivery');
+      btnMesa.classList.remove('bg-blue-100', 'border-blue-500');
+      btnDelivery.classList.remove('bg-blue-100', 'border-blue-500');
+      document.getElementById('mesaInput').classList.add('hidden');
+    }
+
+    function closeClientInfoModal() {
+      const modal = document.getElementById('clientInfoModal');
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    function confirmarPedido() {
+      const nomeCliente = document.getElementById('nomeCliente').value.trim();
+      const numeroMesa = document.getElementById('numeroMesa').value.trim();
+      
+      if (!tipoPedidoAtual) {
+        alert('Por favor, selecione o tipo de pedido (Mesa ou Delivery)');
+        return;
+      }
+      
+      if (!nomeCliente) {
+        alert('Por favor, insira o nome do cliente');
+        return;
+      }
+      
+      if (tipoPedidoAtual === 'mesa' && !numeroMesa) {
+        alert('Por favor, insira o número da mesa');
+        return;
+      }
+      
+      // Criar objeto do pedido
+      const pedido = {
+        tipo: tipoPedidoAtual,
+        cliente: nomeCliente,
+        mesa: tipoPedidoAtual === 'mesa' ? numeroMesa : null,
+        numero: tipoPedidoAtual === 'delivery' ? pedidoSequencial++ : null,
+        itens: cartItems,
+        total: cartItems.reduce((total, item) => total + item.price, 0),
+        data: new Date().toISOString()
+      };
+      
+      // Aqui você pode adicionar a lógica para enviar o pedido para a cozinha
+      console.log('Pedido enviado para a cozinha:', pedido);
+      
+      // Fechar modal e limpar carrinho
+      closeClientInfoModal();
+      mostrarMensagemSucesso(pedido);
+    }
+
+    function mostrarMensagemSucesso(pedido) {
+      const carrinhoItens = document.getElementById('carrinho-itens');
+      carrinhoItens.innerHTML = '';
+      
+      const successMessage = document.createElement('div');
+      successMessage.className = 'p-8 text-center text-green-500 animate__animated animate__fadeIn';
+      successMessage.innerHTML = `
+        <div class="bg-green-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-check-circle text-4xl text-green-500"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Pedido Finalizado!</h3>
+        <p class="text-gray-600">Total: R$ ${pedido.total.toFixed(2).replace('.', ',')}</p>
+        <div class="mt-4 text-sm text-gray-500">
+          <p>Cliente: ${pedido.cliente}</p>
+          ${pedido.tipo === 'mesa' 
+            ? `<p>Mesa: ${pedido.mesa}</p>` 
+            : `<p>Delivery #${pedido.numero}</p>`
+          }
+        </div>
+        <p class="text-sm mt-4 text-gray-500">Seu pedido foi enviado para a cozinha</p>
+      `;
+      
+      carrinhoItens.appendChild(successMessage);
+      
+      // Resetar o carrinho após alguns segundos
+      setTimeout(() => {
+        cartItems = [];
+        updateCart();
+        toggleCarrinho();
+      }, 3000);
     }
   </script>
 </body>

@@ -340,89 +340,101 @@
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
           <i class="fas fa-concierge-bell text-[#00337a] mr-2"></i> Gerenciamento de Pedidos
         </h2>
-        <p class="text-gray-600 mb-4">Registre e acompanhe os pedidos dos clientes.</p>
+        <p class="text-gray-600 mb-4">Acompanhe e gerencie todos os pedidos.</p>
       </div>
 
-      <!-- Área de Pedido -->
-      <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 mb-6 animate__animated animate__fadeIn">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-          <div class="flex items-center mb-4 md:mb-0">
-            <div class="mr-4">
-              <label for="order-type" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Pedido:</label>
-              <select id="order-type" onchange="toggleMesaInput()" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00337a] focus:border-transparent">
-                <option value="mesa">Mesa</option>
-                <option value="delivery">Delivery</option>
-              </select>
+      <!-- Filtros e Lista de Pedidos -->
+      <div class="flex flex-col gap-6">
+        <!-- Filtros Horizontais -->
+        <div class="bg-white rounded-lg shadow-md p-4">
+          <div class="flex flex-wrap gap-4 items-center">
+            <!-- Status -->
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <div class="flex gap-4">
+                <label class="flex items-center">
+                  <input type="checkbox" checked class="form-checkbox text-[#00337a]" onchange="filtrarPedidos()" value="preparacao">
+                  <span class="ml-2 text-sm">Em Preparação</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" checked class="form-checkbox text-[#00337a]" onchange="filtrarPedidos()" value="finalizado">
+                  <span class="ml-2 text-sm">Finalizado</span>
+                </label>
+              </div>
             </div>
-            <div id="mesa-input" class="mr-4">
-              <label for="table" class="block text-sm font-medium text-gray-700 mb-1">Mesa:</label>
-              <input type="text" id="table" placeholder="Número da mesa" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00337a] focus:border-transparent">
+
+            <!-- Tipo -->
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
+              <div class="flex gap-4">
+                <label class="flex items-center">
+                  <input type="checkbox" checked class="form-checkbox text-[#00337a]" onchange="filtrarPedidos()" value="mesa">
+                  <span class="ml-2 text-sm">Mesa</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" checked class="form-checkbox text-[#00337a]" onchange="filtrarPedidos()" value="delivery">
+                  <span class="ml-2 text-sm">Delivery</span>
+                </label>
+              </div>
             </div>
-          </div>
-          <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
-            <div class="flex items-center">
-              <span class="text-gray-600 mr-2">Total:</span>
-              <strong id="total-price" class="text-lg text-[#00337a]">R$ 0,00</strong>
+
+            <!-- Pesquisa -->
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Pesquisar Cliente</label>
+              <input type="text" placeholder="Nome do cliente..." class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00337a] focus:border-transparent" oninput="filtrarPedidos()">
             </div>
-            <div class="flex items-center">
-              <span class="text-gray-600 mr-2">Itens:</span>
-              <strong id="total-items" class="text-lg text-[#00337a]">0</strong>
+
+            <!-- Data -->
+            <div class="flex-1 min-w-[200px]">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Data</label>
+              <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#00337a] focus:border-transparent" onchange="filtrarPedidos()">
             </div>
           </div>
         </div>
 
-        <!-- Lista de Itens -->
-        <div class="mb-6">
-          <h3 class="text-lg font-medium text-gray-800 mb-3">Itens do Pedido</h3>
-          <div class="bg-gray-50 rounded-lg p-4 min-h-[100px] max-h-[300px] overflow-y-auto">
-            <ul id="pedido-list" class="divide-y divide-gray-200">
-              <!-- Os itens serão adicionados dinamicamente aqui -->
-              <li class="py-3 flex justify-between items-center text-gray-500 italic">
-                Nenhum item adicionado ao pedido.
-              </li>
-            </ul>
+        <!-- Lista de Pedidos -->
+        <div class="bg-white rounded-lg shadow-md p-4">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-medium text-gray-800">Pedidos</h3>
+            <div class="text-sm text-gray-500">Total: <span id="total-pedidos">0</span> pedidos</div>
           </div>
-        </div>
 
-        <!-- Cardápio para adicionar -->
-        <div class="mb-6">
-          <h3 class="text-lg font-medium text-gray-800 mb-3">Adicionar Itens</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-            <button onclick="adicionarItem('Hambúrguer', 25)" class="pedido-card bg-white border border-gray-200 p-3 rounded-lg flex flex-col items-center hover:shadow-md transition-all duration-300">
-              <span class="text-2xl mb-2">🍔</span>
-              <span class="font-medium">Hambúrguer</span>
-              <span class="text-sm text-gray-600 mt-1">R$ 25,00</span>
-            </button>
-            <button onclick="adicionarItem('Pizza', 40)" class="pedido-card bg-white border border-gray-200 p-3 rounded-lg flex flex-col items-center hover:shadow-md transition-all duration-300">
-              <span class="text-2xl mb-2">🍕</span>
-              <span class="font-medium">Pizza</span>
-              <span class="text-sm text-gray-600 mt-1">R$ 40,00</span>
-            </button>
-            <button onclick="adicionarItem('Refrigerante', 8)" class="pedido-card bg-white border border-gray-200 p-3 rounded-lg flex flex-col items-center hover:shadow-md transition-all duration-300">
-              <span class="text-2xl mb-2">🥤</span>
-              <span class="font-medium">Refrigerante</span>
-              <span class="text-sm text-gray-600 mt-1">R$ 8,00</span>
-            </button>
-            <button onclick="adicionarItem('Batata Frita', 15)" class="pedido-card bg-white border border-gray-200 p-3 rounded-lg flex flex-col items-center hover:shadow-md transition-all duration-300">
-              <span class="text-2xl mb-2">🍟</span>
-              <span class="font-medium">Batata Frita</span>
-              <span class="text-sm text-gray-600 mt-1">R$ 15,00</span>
-            </button>
+          <!-- Lista de Pedidos -->
+          <div id="lista-pedidos" class="space-y-4">
+            <!-- Os pedidos serão inseridos aqui dinamicamente -->
           </div>
-        </div>
-
-        <!-- Botões -->
-        <div class="flex justify-end space-x-4">
-          <button onclick="salvarPedido()" class="px-5 py-2 bg-[#00337a] text-white rounded-lg hover:bg-[#002a63] transition-colors duration-300 flex items-center">
-            <i class="fas fa-save mr-2"></i> Salvar
-          </button>
-          <button onclick="concluirPedido()" class="px-5 py-2 bg-[#00337a] text-white rounded-lg hover:bg-[#002a63] transition-colors duration-300 flex items-center">
-            <i class="fas fa-check mr-2"></i> Concluir
-          </button>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- Modal de Detalhes do Pedido -->
+  <div id="modal-detalhes" class="modal hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 animate__animated animate__fadeInUp">
+      <div class="bg-gradient-to-r from-[var(--primary-color)] to-[var(--secondary-color)] py-3 px-4 rounded-t-xl flex justify-between items-center text-white">
+        <h3 class="font-semibold text-lg">Detalhes do Pedido</h3>
+        <button onclick="fecharModal()" class="text-white hover:text-blue-200 transition-colors">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div id="modal-content" class="p-6">
+        <!-- Conteúdo do modal será inserido aqui -->
+      </div>
+      
+      <div class="bg-gray-50 px-6 py-4 rounded-b-xl flex justify-end space-x-4">
+        <button onclick="fecharModal()" class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+          Fechar
+        </button>
+        <button id="btn-finalizar" onclick="finalizarPedido()" class="px-4 py-2 bg-[#00337a] text-white rounded-lg hover:bg-[#002a63] transition-colors flex items-center">
+          <i class="fas fa-check mr-2"></i> Finalizar Pedido
+        </button>
+        <button id="btn-pagamento" onclick="solicitarPagamento()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center">
+          <i class="fas fa-dollar-sign mr-2"></i> Solicitar Pagamento
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="fixed bottom-0 left-0 right-0 bg-white py-3 shadow-inner z-20">
@@ -433,11 +445,86 @@
 
   <script>
     // Variáveis globais
-    let pedidoItems = [];
-    let totalPrice = 0;
-    
-    // Tela de carregamento e animação de digitação
+    let pedidosLista = [];
+    let pedidoAtual = null;
+
+    // Carregar pedidos ao iniciar
     window.addEventListener('load', function() {
+      // Limpar pedidos existentes
+      localStorage.removeItem('pedidos');
+      
+      // Criar pedidos fictícios
+      const pedidosFicticios = [
+        {
+          tipo: 'mesa',
+          mesa: '15',
+          cliente: 'João Silva',
+          status: 'preparacao',
+          data: new Date().toISOString(),
+          itens: [
+            { nome: 'Hambúrguer Especial', quantidade: 2, preco: 32.90 },
+            { nome: 'Batata Frita Grande', quantidade: 1, preco: 18.90 },
+            { nome: 'Refrigerante 500ml', quantidade: 2, preco: 8.90 }
+          ],
+          total: 102.40
+        },
+        {
+          tipo: 'delivery',
+          numero: 1,
+          cliente: 'Maria Santos',
+          status: 'finalizado',
+          data: new Date(Date.now() - 3600000).toISOString(), // 1 hora atrás
+          itens: [
+            { nome: 'Pizza Grande Margherita', quantidade: 1, preco: 45.90 },
+            { nome: 'Refrigerante 2L', quantidade: 1, preco: 12.90 }
+          ],
+          total: 58.80
+        },
+        {
+          tipo: 'mesa',
+          mesa: '07',
+          cliente: 'Pedro Oliveira',
+          status: 'preparacao',
+          data: new Date().toISOString(),
+          itens: [
+            { nome: 'Picanha ao Ponto', quantidade: 2, preco: 89.90 },
+            { nome: 'Salada Caesar', quantidade: 1, preco: 28.90 },
+            { nome: 'Vinho Tinto Taça', quantidade: 2, preco: 22.90 }
+          ],
+          total: 254.50
+        },
+        {
+          tipo: 'delivery',
+          numero: 2,
+          cliente: 'Ana Beatriz',
+          status: 'finalizado',
+          data: new Date(Date.now() - 7200000).toISOString(), // 2 horas atrás
+          itens: [
+            { nome: 'Combo Família', quantidade: 1, preco: 89.90 },
+            { nome: 'Sobremesa Brownie', quantidade: 2, preco: 15.90 }
+          ],
+          total: 121.70
+        },
+        {
+          tipo: 'mesa',
+          mesa: '22',
+          cliente: 'Carlos Eduardo',
+          status: 'preparacao',
+          data: new Date().toISOString(),
+          itens: [
+            { nome: 'Feijoada Completa', quantidade: 3, preco: 42.90 },
+            { nome: 'Caipirinha', quantidade: 3, preco: 18.90 }
+          ],
+          total: 185.40
+        }
+      ];
+
+      // Salvar no localStorage
+      localStorage.setItem('pedidos', JSON.stringify(pedidosFicticios));
+      
+      // Carregar pedidos
+      carregarPedidos();
+      
       // Ocultar a tela de carregamento após 1 segundo
       setTimeout(() => {
         const loader = document.getElementById('loader');
@@ -445,12 +532,267 @@
         
         setTimeout(() => {
           loader.style.display = 'none';
-          // Iniciar animação de digitação após a tela de carregamento
           const zeenttText = document.getElementById('zeentt-text');
           typeEffect(zeenttText, 'ZEENTT', 100);
         }, 300);
       }, 1000);
     });
+
+    // Carregar pedidos do localStorage
+    function carregarPedidos() {
+      const pedidosSalvos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+      pedidosLista = pedidosSalvos;
+      filtrarPedidos();
+    }
+
+    // Filtrar e exibir pedidos
+    function filtrarPedidos() {
+      const statusCheckboxes = document.querySelectorAll('input[type="checkbox"][value="preparacao"], input[type="checkbox"][value="finalizado"]');
+      const tipoCheckboxes = document.querySelectorAll('input[type="checkbox"][value="mesa"], input[type="checkbox"][value="delivery"]');
+      const pesquisa = document.querySelector('input[type="text"]').value.toLowerCase();
+      const data = document.querySelector('input[type="date"]').value;
+
+      const statusSelecionados = Array.from(statusCheckboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+      const tiposSelecionados = Array.from(tipoCheckboxes)
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+      const pedidosFiltrados = pedidosLista.filter(pedido => {
+        const matchStatus = statusSelecionados.includes(pedido.status);
+        const matchTipo = tiposSelecionados.includes(pedido.tipo);
+        const matchPesquisa = pedido.cliente.toLowerCase().includes(pesquisa);
+        const matchData = !data || pedido.data.includes(data);
+
+        return matchStatus && matchTipo && matchPesquisa && matchData;
+      });
+
+      exibirPedidos(pedidosFiltrados);
+    }
+
+    // Exibir pedidos na interface
+    function exibirPedidos(pedidos) {
+      const container = document.getElementById('lista-pedidos');
+      const totalPedidos = document.getElementById('total-pedidos');
+      
+      container.innerHTML = '';
+      totalPedidos.textContent = pedidos.length;
+
+      if (pedidos.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-gray-500">
+            <i class="fas fa-clipboard-list text-4xl mb-4"></i>
+            <p>Nenhum pedido encontrado</p>
+          </div>
+        `;
+        return;
+      }
+
+      pedidos.forEach(pedido => {
+        const card = document.createElement('div');
+        card.className = 'bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer animate__animated animate__fadeIn';
+        card.onclick = () => abrirDetalhesPedido(pedido);
+
+        const statusClass = pedido.status === 'preparacao' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
+        const statusIcon = pedido.status === 'preparacao' ? 'fa-clock' : 'fa-check-circle';
+
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="flex items-center mb-2">
+                <span class="font-medium text-gray-800">
+                  ${pedido.tipo === 'mesa' ? `Mesa ${pedido.mesa}` : `Delivery #${pedido.numero}`}
+                </span>
+                <span class="ml-3 ${statusClass} text-xs px-2 py-1 rounded-full flex items-center">
+                  <i class="fas ${statusIcon} mr-1"></i>
+                  ${pedido.status === 'preparacao' ? 'Em Preparação' : 'Finalizado'}
+                </span>
+              </div>
+              <p class="text-sm text-gray-600">Cliente: ${pedido.cliente}</p>
+              <p class="text-sm text-gray-500 mt-1">
+                <i class="far fa-clock mr-1"></i>
+                ${new Date(pedido.data).toLocaleString()}
+              </p>
+            </div>
+            <div class="text-right">
+              <p class="font-medium text-[#00337a]">R$ ${pedido.total.toFixed(2)}</p>
+              <p class="text-sm text-gray-500 mt-1">${pedido.itens.length} itens</p>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // Abrir modal de detalhes
+    function abrirDetalhesPedido(pedido) {
+      pedidoAtual = pedido;
+      const modal = document.getElementById('modal-detalhes');
+      const content = document.getElementById('modal-content');
+      const btnFinalizar = document.getElementById('btn-finalizar');
+      const btnPagamento = document.getElementById('btn-pagamento');
+
+      // Configurar visibilidade dos botões
+      btnFinalizar.style.display = pedido.status === 'preparacao' ? 'flex' : 'none';
+      btnPagamento.style.display = pedido.status === 'finalizado' ? 'flex' : 'none';
+
+      content.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex justify-between items-start">
+            <div>
+              <h4 class="text-lg font-medium text-gray-800">
+                ${pedido.tipo === 'mesa' ? `Mesa ${pedido.mesa}` : `Delivery #${pedido.numero}`}
+              </h4>
+              <p class="text-gray-600">Cliente: ${pedido.cliente}</p>
+            </div>
+            <span class="${pedido.status === 'preparacao' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'} px-3 py-1 rounded-full text-sm">
+              ${pedido.status === 'preparacao' ? 'Em Preparação' : 'Finalizado'}
+            </span>
+          </div>
+
+          <div>
+            <h5 class="font-medium text-gray-700 mb-2">Itens do Pedido</h5>
+            <div class="bg-gray-50 rounded-lg p-4">
+              ${pedido.itens.map(item => `
+                <div class="flex justify-between items-center py-2 border-b border-gray-200 last:border-0">
+                  <div>
+                    <p class="font-medium">${item.nome}</p>
+                    <p class="text-sm text-gray-500">Quantidade: ${item.quantidade}</p>
+                  </div>
+                  <p class="font-medium">R$ ${(item.preco * item.quantidade).toFixed(2)}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center bg-gray-50 p-4 rounded-lg">
+            <span class="font-medium text-gray-700">Total do Pedido:</span>
+            <span class="text-lg font-bold text-[#00337a]">R$ ${pedido.total.toFixed(2)}</span>
+          </div>
+
+          <div class="text-sm text-gray-500">
+            <p><i class="far fa-clock mr-1"></i> Pedido realizado em: ${new Date(pedido.data).toLocaleString()}</p>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Fechar modal
+    function fecharModal() {
+      const modal = document.getElementById('modal-detalhes');
+      modal.classList.add('hidden');
+      document.body.style.overflow = 'auto';
+      pedidoAtual = null;
+    }
+
+    // Finalizar pedido
+    function finalizarPedido() {
+      if (!pedidoAtual) return;
+
+      Swal.fire({
+        title: 'Finalizar Pedido',
+        text: 'Tem certeza que deseja finalizar este pedido?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#00337a',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim, finalizar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Atualizar status do pedido
+          pedidoAtual.status = 'finalizado';
+          
+          // Atualizar no localStorage
+          const index = pedidosLista.findIndex(p => p.data === pedidoAtual.data);
+          if (index !== -1) {
+            pedidosLista[index] = pedidoAtual;
+            localStorage.setItem('pedidos', JSON.stringify(pedidosLista));
+          }
+
+          // Atualizar interface
+          fecharModal();
+          filtrarPedidos();
+
+          Swal.fire(
+            'Finalizado!',
+            'O pedido foi finalizado com sucesso.',
+            'success'
+          );
+        }
+      });
+    }
+
+    // Solicitar pagamento
+    function solicitarPagamento() {
+      if (!pedidoAtual) return;
+
+      Swal.fire({
+        title: 'Formas de Pagamento',
+        html: `
+          <div class="text-left">
+            <p class="mb-4">Total a pagar: <strong>R$ ${pedidoAtual.total.toFixed(2)}</strong></p>
+            <div class="space-y-2">
+              <button onclick="processarPagamento('dinheiro')" class="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
+                <i class="fas fa-money-bill-wave mr-2"></i> Dinheiro
+              </button>
+              <button onclick="processarPagamento('cartao')" class="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                <i class="fas fa-credit-card mr-2"></i> Cartão
+              </button>
+              <button onclick="processarPagamento('pix')" class="w-full px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors">
+                <i class="fas fa-qrcode mr-2"></i> PIX
+              </button>
+            </div>
+          </div>
+        `,
+        showConfirmButton: false,
+        showCloseButton: true
+      });
+    }
+
+    // Processar pagamento
+    function processarPagamento(tipo) {
+      Swal.fire({
+        title: 'Processando Pagamento',
+        text: 'Aguarde enquanto processamos o pagamento...',
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      }).then(() => {
+        Swal.fire(
+          'Pagamento Concluído!',
+          'O pagamento foi processado com sucesso.',
+          'success'
+        ).then(() => {
+          fecharModal();
+          // Aqui você pode adicionar a lógica para marcar o pedido como pago
+        });
+      });
+    }
+
+    // Toggle sidebar
+    function toggleMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      
+      if (sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      } else {
+        sidebar.classList.add('active');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
     
     // Animação de digitação do texto ZEENTT
     function typeEffect(element, text, speed) {
@@ -478,229 +820,6 @@
           }, 300);
         }
       }, speed);
-    }
-
-    // Toggle sidebar
-    function toggleMenu() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.getElementById('sidebar-overlay');
-      
-      if (sidebar.classList.contains('active')) {
-        sidebar.classList.remove('active');
-        overlay.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-      } else {
-        sidebar.classList.add('active');
-        overlay.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-    
-    // Toggle visibilidade do campo de mesa
-    function toggleMesaInput() {
-      const orderType = document.getElementById('order-type').value;
-      const mesaInput = document.getElementById('mesa-input');
-      mesaInput.style.display = orderType === 'mesa' ? 'block' : 'none';
-      if (orderType === 'delivery') {
-        document.getElementById('table').value = '';
-      }
-    }
-    
-    // Adicionar item ao pedido
-    function adicionarItem(nome, preco) {
-      // Verificar se o item já existe no pedido
-      const existingItemIndex = pedidoItems.findIndex(item => item.nome === nome);
-      
-      if (existingItemIndex !== -1) {
-        // Se o item já existe, aumentar a quantidade
-        pedidoItems[existingItemIndex].quantidade++;
-      } else {
-        // Se o item não existe, adicionar ao array
-        pedidoItems.push({
-          nome: nome,
-          preco: preco,
-          quantidade: 1
-        });
-      }
-      
-      // Atualizar a interface
-      atualizarListaPedido();
-      atualizarTotais();
-      
-      // Animação de feedback
-      const totalElement = document.getElementById('total-price');
-      totalElement.classList.add('animate__animated', 'animate__heartBeat');
-      setTimeout(() => {
-        totalElement.classList.remove('animate__animated', 'animate__heartBeat');
-      }, 1000);
-    }
-    
-    // Remover item do pedido
-    function removerItem(index) {
-      if (pedidoItems[index].quantidade > 1) {
-        // Se houver mais de um, diminuir a quantidade
-        pedidoItems[index].quantidade--;
-      } else {
-        // Se houver apenas um, remover o item
-        pedidoItems.splice(index, 1);
-      }
-      
-      // Atualizar a interface
-      atualizarListaPedido();
-      atualizarTotais();
-    }
-    
-    // Atualizar a lista de itens na interface
-    function atualizarListaPedido() {
-      const pedidoList = document.getElementById('pedido-list');
-      pedidoList.innerHTML = '';
-      
-      if (pedidoItems.length === 0) {
-        pedidoList.innerHTML = `
-          <li class="py-3 flex justify-between items-center text-gray-500 italic">
-            Nenhum item adicionado ao pedido.
-          </li>
-        `;
-        return;
-      }
-      
-      pedidoItems.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.className = 'py-3 flex justify-between items-center animate__animated animate__fadeIn';
-        
-        const itemTotal = item.preco * item.quantidade;
-        
-        li.innerHTML = `
-          <div class="flex items-center">
-            <span class="font-medium">${item.nome}</span>
-            <span class="ml-2 text-sm text-gray-600">(${item.quantidade}x R$ ${item.preco.toFixed(2)})</span>
-          </div>
-          <div class="flex items-center">
-            <span class="mr-4 font-medium">R$ ${itemTotal.toFixed(2)}</span>
-            <button onclick="removerItem(${index})" class="text-red-500 hover:text-red-700 transition-colors duration-300">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        `;
-        
-        pedidoList.appendChild(li);
-      });
-    }
-    
-    // Atualizar os totais (preço e quantidade)
-    function atualizarTotais() {
-      const totalPriceElement = document.getElementById('total-price');
-      const totalItemsElement = document.getElementById('total-items');
-      
-      // Calcular o total
-      totalPrice = pedidoItems.reduce((total, item) => total + (item.preco * item.quantidade), 0);
-      const totalItems = pedidoItems.reduce((total, item) => total + item.quantidade, 0);
-      
-      // Atualizar a interface
-      totalPriceElement.textContent = `R$ ${totalPrice.toFixed(2)}`;
-      totalItemsElement.textContent = totalItems;
-    }
-    
-    // Salvar pedido
-    function salvarPedido() {
-      const orderType = document.getElementById('order-type').value;
-      const mesa = document.getElementById('table').value;
-      
-      if (orderType === 'mesa' && !mesa) {
-        Swal.fire({
-          title: 'Atenção!',
-          text: 'Por favor, informe o número da mesa.',
-          icon: 'warning',
-          confirmButtonColor: '#00337a'
-        });
-        return;
-      }
-      
-      if (pedidoItems.length === 0) {
-        Swal.fire({
-          title: 'Atenção!',
-          text: 'Adicione pelo menos um item ao pedido.',
-          icon: 'warning',
-          confirmButtonColor: '#00337a'
-        });
-        return;
-      }
-      
-      // Animação de feedback
-      const saveButton = document.querySelector('.bg-[#00337a]');
-      saveButton.classList.add('animate__animated', 'animate__pulse');
-      setTimeout(() => {
-        saveButton.classList.remove('animate__animated', 'animate__pulse');
-        Swal.fire({
-          title: 'Sucesso!',
-          text: `Pedido ${orderType === 'mesa' ? `da mesa ${mesa}` : 'delivery'} salvo com sucesso!`,
-          icon: 'success',
-          confirmButtonColor: '#00337a'
-        });
-      }, 500);
-    }
-    
-    // Concluir pedido
-    function concluirPedido() {
-      const orderType = document.getElementById('order-type').value;
-      const mesa = document.getElementById('table').value;
-      
-      if (orderType === 'mesa' && !mesa) {
-        Swal.fire({
-          title: 'Atenção!',
-          text: 'Por favor, informe o número da mesa.',
-          icon: 'warning',
-          confirmButtonColor: '#00337a'
-        });
-        return;
-      }
-      
-      if (pedidoItems.length === 0) {
-        Swal.fire({
-          title: 'Atenção!',
-          text: 'Adicione pelo menos um item ao pedido.',
-          icon: 'warning',
-          confirmButtonColor: '#00337a'
-        });
-        return;
-      }
-      
-      // Criar objeto do pedido
-      const pedido = {
-        tipo: orderType,
-        hora: new Date().toLocaleTimeString(),
-        itens: pedidoItems.map(item => `${item.quantidade}x ${item.nome}`).join(', ')
-      };
-
-      if (orderType === 'mesa') {
-        pedido.numeroMesa = mesa;
-      }
-      
-      // Enviar pedido para a cozinha (usando localStorage para demonstração)
-      const pedidosCozinha = JSON.parse(localStorage.getItem('pedidosCozinha') || '[]');
-      pedidosCozinha.push(pedido);
-      localStorage.setItem('pedidosCozinha', JSON.stringify(pedidosCozinha));
-      
-      // Animação de feedback
-      const concludeButton = document.querySelector('.bg-[#00337a]');
-      concludeButton.classList.add('animate__animated', 'animate__pulse');
-      setTimeout(() => {
-        concludeButton.classList.remove('animate__animated', 'animate__pulse');
-        Swal.fire({
-          title: 'Sucesso!',
-          text: `Pedido ${orderType === 'mesa' ? `da mesa ${mesa}` : 'delivery'} enviado para a cozinha!`,
-          icon: 'success',
-          confirmButtonColor: '#00337a'
-        }).then(() => {
-          // Limpar o pedido
-          pedidoItems = [];
-          atualizarListaPedido();
-          atualizarTotais();
-          if (orderType === 'mesa') {
-            document.getElementById('table').value = '';
-          }
-        });
-      }, 500);
     }
     
     // Logoff function
