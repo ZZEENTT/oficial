@@ -86,14 +86,14 @@ if (typeof setInterval !== 'undefined') {
 }
 
 function fazerLogoff() {
-    console.log("SCRIPT: fazerLogoff() CHAMADO. Limpando localStorage e sessionStorage."); // Adicionado para depuração
+    console.log("SCRIPT: fazerLogoff() CHAMADO. Limpando localStorage e sessionStorage.");
     localStorage.clear();
     sessionStorage.clear();
-    if (window.location.pathname.indexOf("login.html") === -1) {
-        console.log("SCRIPT: fazerLogoff() - Não está em login.html, redirecionando..."); // Adicionado para depuração
+    if (window.location.pathname.indexOf("login.html") === -1 && !window.location.pathname.endsWith("/")) { // Adicionado !window.location.pathname.endsWith("/") para evitar redirect da raiz se for o caso
+        console.log("SCRIPT: fazerLogoff() - Não está em login.html, redirecionando...");
         window.location.href = "login.html";
     } else {
-        console.log("SCRIPT: fazerLogoff() - Já está em login.html, não redireciona."); // Adicionado para depuração
+        console.log("SCRIPT: fazerLogoff() - Já está em login.html ou na raiz, não redireciona (apenas limpa).");
     }
 }
 
@@ -164,9 +164,15 @@ function exibirMensagemBoasVindas() {
     }
 }
 
+// Funções de Menu, Pedidos, Cardápio, Carrinho (sem alterações, omitidas para brevidade, mas devem estar aqui)
+// ... (cole aqui as funções: loadMenu, addItem, deleteItem, selecionarItem, toggleMenu)
+// ... (cole aqui as funções: loadOrders, removeOrder, updateSummary)
+// ... (cole aqui as funções: updateCardapioTotal, showModal, closeModal, adicionarItemAoCarrinho, adicionarSelecionadosAoPedido)
+// ... (cole aqui as funções: toggleCarrinho, atualizarCarrinhoVisual, removerItemDoCarrinho)
+////////////////////////////////////// MENU (Geralmente em menu.html ou páginas com lista de menu)
 function loadMenu() {
     const menuList = document.getElementById("menuList");
-    if (!menuList) return; 
+    if (!menuList) return;
 
     const menu = JSON.parse(localStorage.getItem("menu")) || [];
     menuList.innerHTML = "";
@@ -183,7 +189,7 @@ function addItem() {
     const nameInput = document.getElementById("itemName");
     const priceInput = document.getElementById("itemPrice");
 
-    if (!nameInput || !priceInput) return; 
+    if (!nameInput || !priceInput) return;
 
     const name = nameInput.value;
     const price = parseFloat(priceInput.value);
@@ -218,7 +224,7 @@ function selecionarItem(item) {
 }
 
 function toggleMenu() {
-    const menu = document.querySelector('.sidebar');
+    const menu = document.querySelector('.sidebar'); // ou #sidebar se for ID
     const overlay = document.getElementById('sidebar-overlay');
     if (menu) {
         menu.classList.toggle("active");
@@ -233,6 +239,7 @@ function toggleMenu() {
     }
 }
 
+//////////////////////////////////////// PEDIDOS (Geralmente em pedido.html ou páginas com lista de pedidos)
 function loadOrders() {
     const list = document.querySelector(".list");
     if (!list) return;
@@ -269,6 +276,7 @@ function updateSummary() {
     totalItemsEl.textContent = totalItems;
 }
 
+//////////////////////////////////////// LÓGICA DO CARDÁPIO INTERATIVO (Geralmente em cardapio.html)
 let carrinho = [];
 
 function updateCardapioTotal() {
@@ -440,27 +448,41 @@ function removerItemDoCarrinho(index) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("SCRIPT: DOMContentLoaded iniciado. Página atual:", window.location.pathname); // Adicionado para depuração
 
-    if (window.location.pathname.indexOf("login.html") === -1) {
-        console.log("SCRIPT: Não é login.html."); // Adicionado para depuração
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("SCRIPT: DOMContentLoaded iniciado. Página atual:", window.location.pathname);
+
+    // Verifica se a página atual é 'login.html' ou a página raiz (index.html, frequentemente servida como '/')
+    // Assume-se que a página raiz também pode ser um ponto de entrada que deveria levar ao login se não houver sessão.
+    const paginaAtualEhLogin = window.location.pathname.includes("login.html");
+    const paginaAtualEhRaiz = window.location.pathname === '/' || window.location.pathname.endsWith("index.html");
+
+
+    if (!paginaAtualEhLogin) { // Se NÃO for a página de login explicitamente
+        console.log("SCRIPT: Não é login.html explicitamente.");
         const justLoggedIn = sessionStorage.getItem('justLoggedIn');
-        console.log("SCRIPT: Flag 'justLoggedIn' =", justLoggedIn); // Adicionado para depuração
+        console.log("SCRIPT: Flag 'justLoggedIn' =", justLoggedIn);
 
         if (justLoggedIn === 'true') {
-            console.log("SCRIPT: 'justLoggedIn' é true. Removendo flag, verificando sessão."); // Adicionado para depuração
+            // Permite acesso se acabou de logar
+            console.log("SCRIPT: 'justLoggedIn' é true. Removendo flag, verificando sessão.");
             sessionStorage.removeItem('justLoggedIn');
-            verificarSessao();
-            exibirMensagemBoasVindas();
+            verificarSessao(); // Verifica a sessão (deve estar válida)
+            exibirMensagemBoasVindas(); // Mostra a mensagem de boas-vindas
         } else {
-            console.log("SCRIPT: 'justLoggedIn' NÃO é true ou não existe. Chamando fazerLogoff()."); // Adicionado para depuração
-            fazerLogoff();
+            // Força logoff se não acabou de logar (acesso direto, refresh, etc.)
+            // ou se for a página raiz e não acabou de logar.
+            console.log("SCRIPT: 'justLoggedIn' NÃO é true ou não existe. Chamando fazerLogoff() para redirecionar/limpar.");
+            fazerLogoff(); // Esta chamada irá redirecionar se não for login.html, ou apenas limpar se for a raiz (e a raiz for o login)
         }
-    } else {
-        console.log("SCRIPT: É login.html."); // Adicionado para depuração
+    } else { // Se FOR a página de login (login.html)
+        console.log("SCRIPT: É login.html. Chamando fazerLogoff() para limpar qualquer sessão residual (sem redirecionar).");
+        // Mesmo na página de login, chamamos fazerLogoff para limpar qualquer sessão anterior.
+        // A própria função fazerLogoff não redirecionará se já estiver em login.html.
+        fazerLogoff(); 
     }
 
+    // Configurações de listeners e outras inicializações
     const formLogin = document.getElementById("loginForm");
     if (formLogin) {
         formLogin.addEventListener("submit", fazerLogin);
