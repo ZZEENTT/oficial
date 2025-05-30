@@ -22,10 +22,8 @@ function fazerLogin(evento) {
 
     if (usuarioEncontrado) {
         salvarSessao(usuarioEncontrado);
-        // Limpa o flag de mensagem de boas-vindas para que ela apareça na próxima página
         sessionStorage.removeItem('welcomeMessageShown');
-        // Define um flag para indicar que o login acabou de ser feito
-        sessionStorage.setItem('justLoggedIn', 'true'); // MODIFICAÇÃO: Adicionado flag
+        sessionStorage.setItem('justLoggedIn', 'true');
         window.location.href = "menu.html";
     } else {
         exibirMensagem("Usuário ou senha incorretos!", "erro");
@@ -88,41 +86,41 @@ if (typeof setInterval !== 'undefined') {
 }
 
 function fazerLogoff() {
+    console.log("SCRIPT: fazerLogoff() CHAMADO. Limpando localStorage e sessionStorage."); // Adicionado para depuração
     localStorage.clear();
     sessionStorage.clear();
-    // Se não estiver na página de login, redireciona para ela
     if (window.location.pathname.indexOf("login.html") === -1) {
+        console.log("SCRIPT: fazerLogoff() - Não está em login.html, redirecionando..."); // Adicionado para depuração
         window.location.href = "login.html";
+    } else {
+        console.log("SCRIPT: fazerLogoff() - Já está em login.html, não redireciona."); // Adicionado para depuração
     }
 }
 
 function exibirMensagem(texto, tipo) {
-    let mensagemEl = document.querySelector(".mensagem-feedback-geral"); // Usando uma classe diferente para não conflitar
+    let mensagemEl = document.querySelector(".mensagem-feedback-geral");
 
     if (!mensagemEl) {
         mensagemEl = document.createElement("div");
-        mensagemEl.className = "mensagem-feedback-geral"; // Classe para estilização
-        // Tenta adicionar ao .container, senão ao body, idealmente teria um local específico
-        const containerPrincipal = document.querySelector(".container") || document.body;  //
+        mensagemEl.className = "mensagem-feedback-geral";
+        const containerPrincipal = document.querySelector(".container") || document.body;
         if (containerPrincipal) {
-             // Adiciona no início do container ou body para melhor visibilidade
             containerPrincipal.insertBefore(mensagemEl, containerPrincipal.firstChild);
         }
     }
 
-    // Estilo aplicado via JS para garantir que apareça (pode ser movido para CSS)
     mensagemEl.style.backgroundColor = tipo === "erro" ? "#f44336" : "#4CAF50";
     mensagemEl.style.color = "white";
     mensagemEl.style.padding = "10px";
-    mensagemEl.style.marginTop = (document.querySelector(".container")) ? "0" : "10px"; // Ajusta margin se não for no container
+    mensagemEl.style.marginTop = (document.querySelector(".container")) ? "0" : "10px";
     mensagemEl.style.marginBottom = "10px";
     mensagemEl.style.borderRadius = "5px";
     mensagemEl.style.textAlign = "center";
-    mensagemEl.style.position = (document.querySelector(".container")) ? "relative" : "fixed"; // Posição fixa se fora do container
+    mensagemEl.style.position = (document.querySelector(".container")) ? "relative" : "fixed";
     mensagemEl.style.top = (document.querySelector(".container")) ? "auto" : "20px";
     mensagemEl.style.left = (document.querySelector(".container")) ? "auto" : "50%";
     mensagemEl.style.transform = (document.querySelector(".container")) ? "none" : "translateX(-50%)";
-    mensagemEl.style.zIndex = "10001"; // Z-index alto
+    mensagemEl.style.zIndex = "10001";
     mensagemEl.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
     
     mensagemEl.textContent = texto;
@@ -134,43 +132,38 @@ function exibirMensagem(texto, tipo) {
     }, 3000);
 }
 
-// NOVA FUNÇÃO: Exibir mensagem de boas-vindas
 function exibirMensagemBoasVindas() {
     const dadosSessaoJSON = sessionStorage.getItem("dadosSessao");
     const welcomeMessageShown = sessionStorage.getItem('welcomeMessageShown');
 
-    // Só mostra se estiver logado e se a mensagem ainda não foi exibida nesta sessão
     if (dadosSessaoJSON && !welcomeMessageShown) {
         const dadosSessao = JSON.parse(dadosSessaoJSON);
         if (dadosSessao.nome) {
             const container = document.getElementById('welcome-message-container');
-            const messageDiv = document.getElementById('welcome-message-text'); // Elemento específico para o texto
+            const messageDiv = document.getElementById('welcome-message-text');
 
             if (container && messageDiv) {
                 messageDiv.textContent = `Bem-vindo(a) de volta, ${dadosSessao.nome}!`;
-                container.style.display = 'block'; // Garante que o container está visível
+                container.style.display = 'block';
                 container.classList.add('welcome-message-show');
 
-                sessionStorage.setItem('welcomeMessageShown', 'true'); // Marca que a mensagem foi exibida
+                sessionStorage.setItem('welcomeMessageShown', 'true');
 
                 setTimeout(() => {
                     container.classList.remove('welcome-message-show');
                     container.classList.add('welcome-message-hide');
-                    // Após a animação de saída, esconde o elemento completamente
                     setTimeout(() => {
-                        if (container) { // Verifica se o container ainda existe
+                        if (container) {
                            container.style.display = 'none';
                            container.classList.remove('welcome-message-hide');
                         }
-                    }, 500); // Duração da animação de fadeOutUpWelcome
-                }, 4000); // Tempo que a mensagem fica visível (4 segundos)
+                    }, 500);
+                }, 4000);
             }
         }
     }
 }
 
-
-////////////////////////////////////// MENU (Geralmente em menu.html ou páginas com lista de menu)
 function loadMenu() {
     const menuList = document.getElementById("menuList");
     if (!menuList) return; 
@@ -195,12 +188,12 @@ function addItem() {
     const name = nameInput.value;
     const price = parseFloat(priceInput.value);
 
-    if (name && !isNaN(price)) {  //
+    if (name && !isNaN(price)) {
         const menu = JSON.parse(localStorage.getItem("menu")) || [];
         menu.push({ name, price });
         localStorage.setItem("menu", JSON.stringify(menu));
-        loadMenu();  //
-        nameInput.value = '';  //
+        loadMenu();
+        nameInput.value = '';
         priceInput.value = '';
     } else {
         alert("Por favor, insira nome e preço válidos.");
@@ -215,7 +208,7 @@ function deleteItem(index) {
 }
 
 function selecionarItem(item) {
-    const items = document.querySelectorAll('#menuList .item');  //
+    const items = document.querySelectorAll('#menuList .item');
     if (items) {
         items.forEach(i => i.classList.remove('selected'));
     }
@@ -224,15 +217,15 @@ function selecionarItem(item) {
     }
 }
 
-function toggleMenu() { 
-    const menu = document.querySelector('.sidebar'); // ou #sidebar se for ID
-    const overlay = document.getElementById('sidebar-overlay');  //
+function toggleMenu() {
+    const menu = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
     if (menu) {
-        menu.classList.toggle("active");  //
+        menu.classList.toggle("active");
     }
     if (overlay) {
-        overlay.classList.toggle("active");  //
-        if (menu && menu.classList.contains('active')) { //
+        overlay.classList.toggle("active");
+        if (menu && menu.classList.contains('active')) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'auto';
@@ -240,9 +233,8 @@ function toggleMenu() {
     }
 }
 
-//////////////////////////////////////// PEDIDOS (Geralmente em pedido.html ou páginas com lista de pedidos)
 function loadOrders() {
-    const list = document.querySelector(".list");  //
+    const list = document.querySelector(".list");
     if (!list) return;
 
     const savedOrders = JSON.parse(localStorage.getItem("orders")) || [];
@@ -259,7 +251,7 @@ function removeOrder(index) {
     let orders = JSON.parse(localStorage.getItem("orders")) || [];
     orders.splice(index, 1);
     localStorage.setItem("orders", JSON.stringify(orders));
-    loadOrders();  //
+    loadOrders();
 }
 
 function updateSummary() {
@@ -271,26 +263,25 @@ function updateSummary() {
     const savedOrders = JSON.parse(localStorage.getItem("orders")) || [];
 
     const totalPrice = savedOrders.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-    const totalItems = savedOrders.reduce((sum, item) => sum + parseInt(item.quantity, 10), 0);  //
+    const totalItems = savedOrders.reduce((sum, item) => sum + parseInt(item.quantity, 10), 0);
 
     totalPriceEl.textContent = `R$ ${totalPrice.toFixed(2)}`;
     totalItemsEl.textContent = totalItems;
 }
 
-//////////////////////////////////////// LÓGICA DO CARDÁPIO INTERATIVO (Geralmente em cardapio.html)
-let carrinho = [];  //
+let carrinho = [];
 
 function updateCardapioTotal() {
     let totalCardapio = 0;
-    const itemElementsCardapio = document.querySelectorAll("#menuList .item input[type='checkbox']");  //
-    if (itemElementsCardapio && itemElementsCardapio.length > 0) { //
+    const itemElementsCardapio = document.querySelectorAll("#menuList .item input[type='checkbox']");
+    if (itemElementsCardapio && itemElementsCardapio.length > 0) {
         itemElementsCardapio.forEach((checkbox) => {
-            if (checkbox.checked) { //
-                const itemEl = checkbox.closest(".item");  //
+            if (checkbox.checked) {
+                const itemEl = checkbox.closest(".item");
                 if (itemEl) {
-                    const priceAttr = itemEl.getAttribute("data-price"); //
+                    const priceAttr = itemEl.getAttribute("data-price");
                     if (priceAttr) {
-                        const price = parseFloat(priceAttr); //
+                        const price = parseFloat(priceAttr);
                         if (!isNaN(price)) {
                             totalCardapio += price;
                         }
@@ -299,14 +290,14 @@ function updateCardapioTotal() {
             }
         });
     }
-    const totalElementCardapio = document.getElementById("total");  //
+    const totalElementCardapio = document.getElementById("total");
     if (totalElementCardapio) {
-        totalElementCardapio.textContent = totalCardapio.toFixed(2); //
+        totalElementCardapio.textContent = totalCardapio.toFixed(2);
     }
 }
 
 window.showModal = function (element) {
-    const item = element.closest(".item");  //
+    const item = element.closest(".item");
     if (!item) {
         console.error("Elemento .item não encontrado para o modal.");
         return;
@@ -352,53 +343,48 @@ function adicionarItemAoCarrinho(itemDetails) {
 }
 
 window.adicionarSelecionadosAoPedido = function () {
-    // Este seletor busca por checkboxes dentro de elementos .item na lista com ID #menuList
-    // Se a sua página de cardápio usa uma estrutura diferente, ajuste este seletor.
-    const itemElementsCardapio = document.querySelectorAll("#menuList .item");  //
+    const itemElementsCardapio = document.querySelectorAll("#menuList .item");
     let itensAdicionados = 0;
 
-    if (itemElementsCardapio && itemElementsCardapio.length > 0) { //
+    if (itemElementsCardapio && itemElementsCardapio.length > 0) {
         itemElementsCardapio.forEach((itemEl) => {
-            const checkbox = itemEl.querySelector("input[type='checkbox']"); //
-            if (checkbox && checkbox.checked) { //
-                const title = itemEl.getAttribute("data-title") || itemEl.querySelector('.item-title')?.textContent; //
-                const priceAttr = itemEl.getAttribute("data-price") || itemEl.querySelector('.item-price')?.textContent.replace(/[^0-9.,]/g, '').replace(',', '.'); //
-                const price = priceAttr ? parseFloat(priceAttr) : 0; //
-                const img = itemEl.getAttribute("data-img") || itemEl.querySelector('img')?.src; //
-                const description = itemEl.getAttribute("data-description") || itemEl.querySelector('p:not(.item-price)')?.textContent; //
+            const checkbox = itemEl.querySelector("input[type='checkbox']");
+            if (checkbox && checkbox.checked) {
+                const title = itemEl.getAttribute("data-title") || itemEl.querySelector('.item-title')?.textContent;
+                const priceAttr = itemEl.getAttribute("data-price") || itemEl.querySelector('.item-price')?.textContent.replace(/[^0-9.,]/g, '').replace(',', '.');
+                const price = priceAttr ? parseFloat(priceAttr) : 0;
+                const img = itemEl.getAttribute("data-img") || itemEl.querySelector('img')?.src;
+                const description = itemEl.getAttribute("data-description") || itemEl.querySelector('p:not(.item-price)')?.textContent;
 
-                if (title && !isNaN(price)) { //
-                    adicionarItemAoCarrinho({ title, price, img, description }); // Adiciona ao carrinho global
+                if (title && !isNaN(price)) {
+                    adicionarItemAoCarrinho({ title, price, img, description });
                     itensAdicionados++;
                 }
-                checkbox.checked = false;  //
+                checkbox.checked = false;
             }
         });
     }
 
     if (itensAdicionados > 0) {
-        // alert(itensAdicionados + " item(ns) adicionado(s) ao carrinho!");
-        const cartCountEl = document.getElementById('cart-count'); //
-        if(cartCountEl) cartCountEl.classList.add('animate__animated', 'animate__heartBeat'); // Animação no ícone do carrinho
+        const cartCountEl = document.getElementById('cart-count');
+        if(cartCountEl) cartCountEl.classList.add('animate__animated', 'animate__heartBeat');
         setTimeout(() => {
-            if(cartCountEl) cartCountEl.classList.remove('animate__animated', 'animate__heartBeat'); //
+            if(cartCountEl) cartCountEl.classList.remove('animate__animated', 'animate__heartBeat');
         }, 1000);
-    } else {
-        // alert("Nenhum item selecionado para adicionar.");
     }
-    updateCardapioTotal();  //
+    updateCardapioTotal();
 };
 
 function toggleCarrinho() {
   const carrinhoLateral = document.getElementById('carrinho-lateral');
   const overlay = document.getElementById('carrinho-overlay');
-  if (carrinhoLateral && overlay) { //
+  if (carrinhoLateral && overlay) {
     carrinhoLateral.classList.toggle('open');
-    overlay.classList.toggle('show');  //
-    if (carrinhoLateral.classList.contains('open')) { //
-        document.body.style.overflow = 'hidden';  //
+    overlay.classList.toggle('show');
+    if (carrinhoLateral.classList.contains('open')) {
+        document.body.style.overflow = 'hidden';
     } else {
-        document.body.style.overflow = 'auto'; //
+        document.body.style.overflow = 'auto';
     }
     atualizarCarrinhoVisual();
   }
@@ -413,11 +399,11 @@ function atualizarCarrinhoVisual() {
         return;
     }
 
-    lista.innerHTML = '';  //
+    lista.innerHTML = '';
     let totalValorCarrinho = 0;
     let totalItensCarrinho = 0;
 
-    if (carrinho.length === 0) { //
+    if (carrinho.length === 0) {
         lista.innerHTML = '<li class="text-center text-gray-500 py-4">Seu carrinho está vazio.</li>';
     } else {
         carrinho.forEach((item, index) => {
@@ -444,80 +430,78 @@ function atualizarCarrinhoVisual() {
 }
 
 function removerItemDoCarrinho(index) {
-    if (carrinho[index]) { //
-        if (carrinho[index].quantity > 1) { //
-            carrinho[index].quantity--; //
+    if (carrinho[index]) {
+        if (carrinho[index].quantity > 1) {
+            carrinho[index].quantity--;
         } else {
-            carrinho.splice(index, 1); //
+            carrinho.splice(index, 1);
         }
         atualizarCarrinhoVisual();
     }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // MODIFICAÇÃO: Lógica de login forçado movida para o início e condicionada
-    if (window.location.pathname.indexOf("login.html") === -1) { // Se não estiver na página de login
+    console.log("SCRIPT: DOMContentLoaded iniciado. Página atual:", window.location.pathname); // Adicionado para depuração
+
+    if (window.location.pathname.indexOf("login.html") === -1) {
+        console.log("SCRIPT: Não é login.html."); // Adicionado para depuração
         const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+        console.log("SCRIPT: Flag 'justLoggedIn' =", justLoggedIn); // Adicionado para depuração
+
         if (justLoggedIn === 'true') {
-            // Se o usuário acabou de fazer login, remove o flag e continua normalmente
+            console.log("SCRIPT: 'justLoggedIn' é true. Removendo flag, verificando sessão."); // Adicionado para depuração
             sessionStorage.removeItem('justLoggedIn');
-            verificarSessao(); // Verifica a sessão (deve estar válida)
-            exibirMensagemBoasVindas(); // Mostra a mensagem de boas-vindas
+            verificarSessao();
+            exibirMensagemBoasVindas();
         } else {
-            // Se NÃO acabou de fazer login (ex: acesso direto à URL, recarregou a página, reabriu aba)
-            // força o logoff.
-            fazerLogoff(); //
-            // Não é necessário chamar verificarSessao() ou exibirMensagemBoasVindas() aqui,
-            // pois o usuário será redirecionado para login.html pela função fazerLogoff().
+            console.log("SCRIPT: 'justLoggedIn' NÃO é true ou não existe. Chamando fazerLogoff()."); // Adicionado para depuração
+            fazerLogoff();
         }
+    } else {
+        console.log("SCRIPT: É login.html."); // Adicionado para depuração
     }
 
-    // Listener para o formulário de login
-    const formLogin = document.getElementById("loginForm"); //
+    const formLogin = document.getElementById("loginForm");
     if (formLogin) {
-        formLogin.addEventListener("submit", fazerLogin); //
+        formLogin.addEventListener("submit", fazerLogin);
     }
 
-    // Demais listeners e inicializações que estavam no DOMContentLoaded original
-    const modalPrincipal = document.getElementById("modal"); //
+    const modalPrincipal = document.getElementById("modal");
     if (modalPrincipal) {
-        modalPrincipal.addEventListener("click", function (e) { //
-            if (e.target.id === "modal") {  //
-                closeModal(); //
+        modalPrincipal.addEventListener("click", function (e) {
+            if (e.target.id === "modal") { 
+                closeModal();
             }
         });
     }
     
-    const menuListCardapio = document.getElementById("menuList");  //
-    const totalCardapioEl = document.getElementById("total");  //
+    const menuListCardapio = document.getElementById("menuList"); 
+    const totalCardapioEl = document.getElementById("total"); 
 
-    if (menuListCardapio && totalCardapioEl) { //
-        const checkboxesCardapio = menuListCardapio.querySelectorAll(".item input[type='checkbox']"); //
+    if (menuListCardapio && totalCardapioEl) {
+        const checkboxesCardapio = menuListCardapio.querySelectorAll(".item input[type='checkbox']");
         checkboxesCardapio.forEach(checkbox => {
-            checkbox.addEventListener("change", updateCardapioTotal); //
+            checkbox.addEventListener("change", updateCardapioTotal);
         });
-        updateCardapioTotal();  //
+        updateCardapioTotal(); 
     }
 
-    if (document.querySelector(".list")) {  //
-        loadOrders();  //
+    if (document.querySelector(".list")) { 
+        loadOrders(); 
     }
 
-    const carrinhoItensEl = document.getElementById('carrinho-itens'); //
-    const carrinhoTotalEl = document.getElementById('carrinho-total'); //
-    const cartCountEl = document.getElementById('cart-count'); //
-    const carrinhoOverlayEl = document.getElementById('carrinho-overlay'); //
+    const carrinhoItensEl = document.getElementById('carrinho-itens');
+    const carrinhoTotalEl = document.getElementById('carrinho-total');
+    const cartCountEl = document.getElementById('cart-count');
+    const carrinhoOverlayEl = document.getElementById('carrinho-overlay');
 
-    if (carrinhoItensEl && carrinhoTotalEl && cartCountEl) { //
-        atualizarCarrinhoVisual();  //
+    if (carrinhoItensEl && carrinhoTotalEl && cartCountEl) {
+        atualizarCarrinhoVisual(); 
     }
 
-    if (carrinhoOverlayEl) { //
-        carrinhoOverlayEl.addEventListener('click', () => { //
-            toggleCarrinho(); //
+    if (carrinhoOverlayEl) {
+        carrinhoOverlayEl.addEventListener('click', () => {
+            toggleCarrinho();
         });
     }
-
-    // A antiga lógica de verificação de sessão e boas-vindas no final do DOMContentLoaded
-    // foi incorporada na nova estrutura condicional no início deste listener.
 });
