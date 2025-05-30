@@ -15,184 +15,219 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(45deg,#00386f, #003366);
+            background: linear-gradient(45deg, #00203FFF, #003366, #00407F);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-            transform: translateY(0);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #fff;
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-            to { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6); }
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
             position: relative;
         }
 
-        .form-group i {
+        .animation-background {
             position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            border-radius: 25px;
-            color: #fff;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .form-group input:focus + i {
-            transform: translateY(-50%) scale(1.2);
-            color: #00386f;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, #0066cc, #004d99);
-            border: none;
-            border-radius: 25px;
-            color: #fff;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        button:hover {
-            background: linear-gradient(45deg, #004d99, #0066cc);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-
-        button:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(100, 100);
-                opacity: 0;
-            }
-        }
-
-        .mensagem-login {
-            margin-top: 1rem;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            animation: slideIn 0.3s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Partículas de fundo */
-        .particles {
-            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -1;
+            z-index: 0;
+            overflow: hidden;
         }
 
-        .particle {
+        #plexus-canvas { /* NOVO: Estilo para o canvas do Plexus */
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            animation: particleFloat 20s infinite linear;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Coloca atrás dos outros elementos animados se necessário */
         }
 
-        @keyframes particleFloat {
-            0% { transform: translateY(0) translateX(0); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        .device {
+            position: absolute;
+            border: 1px solid rgba(173, 216, 230, 0.3);
+            border-radius: 8px;
+            opacity: 0;
+            animation: device-flow 12s infinite ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 5px rgba(173, 216, 230, 0.1), 0 0 10px rgba(173, 216, 230, 0.1);
+            z-index: 0; /* Para garantir que fique acima do canvas plexus se z-index do plexus for -1 */
         }
+
+        .device-screen {
+            width: 80%;
+            height: 70%;
+            background: rgba(0, 150, 255, 0.1);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .device-screen::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                transparent,
+                transparent 1px,
+                rgba(0, 100, 150, 0.1) 1px,
+                rgba(0, 100, 150, 0.1) 2px
+            );
+            opacity: 0.5;
+        }
+
+        .phone { width: 25px; height: 50px; }
+        .tablet { width: 60px; height: 40px; }
+        .computer { width: 70px; height: 45px; }
+        .computer .device-screen { height: 75%; }
+        .computer::after {
+            content: '';
+            position: absolute;
+            bottom: 3px; left: 5%; right: 5%;
+            height: 5px;
+            background-color: rgba(173, 216, 230, 0.2);
+            border-radius: 0 0 3px 3px;
+        }
+
+        @keyframes device-flow {
+            0% {
+                opacity: 0;
+                transform: translateY(10vh) translateX(-10vw) scale(0.5) rotate(-30deg);
+            }
+            10% {
+                opacity: 0.8;
+                transform: translateY(0) translateX(0) scale(0.8) rotate(10deg);
+            }
+            20%, 30% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                box-shadow: 0 0 15px rgba(173, 216, 230, 0.6), 0 0 30px rgba(173, 216, 230, 0.4);
+            }
+            30% { }
+            60% {
+                opacity: 0.7;
+                transform: translateY(-5vh) translateX(5vw) scale(0.9) rotate(-10deg);
+                box-shadow: 0 0 5px rgba(173, 216, 230, 0.2);
+            }
+            80% {
+                opacity: 0.3;
+                 transform: translateY(-15vh) translateX(15vw) scale(0.6) rotate(20deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-25vh) translateX(25vw) scale(0.2) rotate(45deg);
+            }
+        }
+
+        .data-line {
+            position: absolute;
+            background: linear-gradient(90deg, rgba(173, 216, 230,0), rgba(173, 216, 230,0.5), rgba(173, 216, 230,0));
+            height: 1px;
+            opacity: 0;
+            animation: flow-line 12s infinite ease-in-out;
+            border-radius: 1px;
+            z-index: 0; /* Para garantir que fique acima do canvas plexus se z-index do plexus for -1 */
+        }
+        @keyframes flow-line {
+            0%, 100% { opacity: 0; width: 0%; }
+            20% { opacity: 0.6; width: 50%; transform: translateX(0); }
+            70% { opacity: 0.6; width: 50%; transform: translateX(100%); }
+            90% { opacity: 0; width: 0%; transform: translateX(200%);}
+        }
+
+        .animation-background .device:nth-child(1) { animation-delay: 0s; top: 20%; left: 15%; }
+        .animation-background .device:nth-child(2) { animation-delay: 3s; top: 60%; right: 10%; }
+        .animation-background .device:nth-child(3) { animation-delay: 1.5s; bottom: 15%; left: 30%; }
+        .animation-background .device:nth-child(4) { animation-delay: 4.5s; top: 10%; right: 25%; }
+        .animation-background .device:nth-child(5) { animation-delay: 2s; bottom: 50%; left: 5%; }
+        .animation-background .device:nth-child(6) { animation-delay: 5s; top: 35%; right: 40%; }
+
+        .animation-background .data-line:nth-child(7) { top: 25%; left: 5%; animation-delay: 0.5s; transform-origin: left; }
+        .animation-background .data-line:nth-child(8) { top: 55%; right: 5%; animation-delay: 3.5s; transform-origin: right; transform: scaleX(-1); }
+        .animation-background .data-line:nth-child(9) { bottom: 20%; left: 40%; animation-delay: 2s; width: 30vw !important;}
+
+
+        .container {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            transform: translateY(0);
+            animation: float 6s ease-in-out infinite;
+            position: relative;
+            z-index: 1; /* Garante que o container fique na frente das animações */
+            margin-bottom: 20px;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .logo { text-align: center; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.5rem; position: relative; }
+        .form-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #aaaaaa; transition: all 0.3s ease; }
+        .form-group input { width: 100%; padding: 12px 40px; background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0,0,0,0.1); border-radius: 25px; color: #333333; font-size: 1rem; transition: all 0.3s ease; }
+        .form-group input:focus { outline: none; background: rgba(0, 0, 0, 0.02); box-shadow: 0 0 0 2px rgba(0, 56, 111, 0.2); border-color: #00386f; }
+        .form-group input::placeholder { color: #999999; }
+        .form-group input:focus + i { transform: translateY(-50%) scale(1.2); color: #00386f; }
+
+        button[type="submit"] { width: 100%; padding: 12px; background: linear-gradient(45deg, #0066cc, #004d99); border: none; border-radius: 25px; color: #fff; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        button[type="submit"]:hover { background: linear-gradient(45deg, #004d99, #0066cc); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); }
+        button[type="submit"]:active { transform: translateY(0); }
+        button[type="submit"]::after { content: ''; position: absolute; top: 50%; left: 50%; width: 5px; height: 5px; background: rgba(255, 255, 255, 0.5); opacity: 0; border-radius: 100%; transform: scale(1, 1) translate(-50%); transform-origin: 50% 50%; }
+        button[type="submit"]:focus:not(:active)::after { animation: ripple 1s ease-out; }
+
+        @keyframes ripple {
+            0% { transform: scale(0, 0); opacity: 0.5; }
+            100% { transform: scale(100, 100); opacity: 0; }
+        }
+
+        .mensagem-login { margin-top: 1rem; padding: 10px; border-radius: 5px; text-align: center; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; } /* z-index ajustado para -1 para ficar atrás do plexus se necessário */
+        .particle { position: absolute; width: 1px; height: 1px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; animation: particleFloat 30s infinite linear; }
+        @keyframes particleFloat {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) translateX(Math.random() * 200 - 100 + 'px') scale(1); opacity: 0; }
+        }
+
+        .slogan-container { text-align: center; width: 100%; padding: 10px 20px; margin-top: 15px; z-index: 1; height: 2em; }
+        #slogan-digitado { color: #FFFFFF; font-size: 1.1em; font-weight: 500; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); display: inline-block; font-family: 'Courier New', Courier, monospace; white-space: nowrap; overflow: hidden; border-right: .15em solid orange; animation: blink-caret .75s step-end infinite; }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: orange; } }
     </style>
 </head>
 <body>
+    <div class="animation-background">
+        <canvas id="plexus-canvas"></canvas> 
+        <div class="device phone"><div class="device-screen"></div></div>
+        <div class="device tablet"><div class="device-screen"></div></div>
+        <div class="device computer"><div class="device-screen"></div></div>
+        <div class="device phone"><div class="device-screen"></div></div>
+        <div class="device tablet"><div class="device-screen"></div></div>
+        <div class="device computer"><div class="device-screen"></div></div>
+        <div class="data-line"></div>
+        <div class="data-line"></div>
+        <div class="data-line"></div>
+    </div>
+
     <div class="particles" id="particles"></div>
+
     <div class="container">
-        <div class="logo">ZEENTT</div>
+        <div class="logo">
+            <img src="img/Zeentt Logo.png" alt="Zeentt Logo" style="width: 200px; height: auto; margin: 0 auto; display: block;">
+        </div>
         <form id="loginForm">
             <div class="form-group">
                 <input type="text" id="username" placeholder="Usuário" required>
@@ -205,23 +240,193 @@
             <button type="submit">Entrar</button>
         </form>
     </div>
+
+    <div class="slogan-container">
+        <p id="slogan-digitado"></p>
+    </div>
+
     <script src="js/script.js"></script>
     <script>
-        // Cria partículas de fundo
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + 'vw';
-                particle.style.animationDelay = Math.random() * 20 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particlesContainer.appendChild(particle);
+        // --- INÍCIO DO CÓDIGO PLEXUS ---
+        const canvasPlexus = document.getElementById('plexus-canvas');
+        const ctxPlexus = canvasPlexus.getContext('2d');
+        let animationFrameIdPlexus;
+
+        function resizeCanvasPlexus() {
+            canvasPlexus.width = window.innerWidth;
+            canvasPlexus.height = window.innerHeight;
+        }
+        resizeCanvasPlexus();
+        window.addEventListener('resize', resizeCanvasPlexus);
+
+        let particlesPlexusArray = [];
+        const numberOfParticlesPlexus = calculateNumberOfParticles();
+        const connectDistancePlexus = calculateConnectDistance();
+
+
+        function calculateNumberOfParticles() {
+            // Ajusta o número de partículas com base na largura da tela
+            if (window.innerWidth < 768) {
+                return 30; // Menos partículas para telas pequenas
+            } else if (window.innerWidth < 1200) {
+                return 60;
+            } else {
+                return 80; // Mais partículas para telas maiores
             }
         }
 
-        // Inicializa as partículas quando a página carregar
-        window.addEventListener('load', createParticles);
+        function calculateConnectDistance() {
+             // Ajusta a distância de conexão
+            if (window.innerWidth < 768) {
+                return 80;
+            } else if (window.innerWidth < 1200) {
+                return 100;
+            } else {
+                return 120;
+            }
+        }
+
+
+        class ParticlePlexus {
+            constructor(x, y, size, color, speedX, speedY) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.color = color;
+                this.speedX = speedX;
+                this.speedY = speedY;
+            }
+            draw() {
+                ctxPlexus.beginPath();
+                ctxPlexus.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctxPlexus.fillStyle = this.color;
+                ctxPlexus.fill();
+            }
+            update() {
+                if (this.x + this.size > canvasPlexus.width || this.x - this.size < 0) {
+                    this.speedX = -this.speedX;
+                }
+                if (this.y + this.size > canvasPlexus.height || this.y - this.size < 0) {
+                    this.speedY = -this.speedY;
+                }
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.draw();
+            }
+        }
+
+        function initPlexusParticles() {
+            particlesPlexusArray = [];
+            const numParticles = calculateNumberOfParticles(); // Recalcula ao inicializar
+            for (let i = 0; i < numParticles; i++) {
+                let size = Math.random() * 2 + 1; // Tamanho entre 1 e 3
+                let x = Math.random() * (canvasPlexus.width - size * 2) + size;
+                let y = Math.random() * (canvasPlexus.height - size * 2) + size;
+                let speedX = (Math.random() * 0.4) - 0.2; // Velocidade entre -0.2 e 0.2
+                let speedY = (Math.random() * 0.4) - 0.2;
+                let color = 'rgba(173, 216, 230, 0.7)'; // Cor LightBlue semi-transparente
+                particlesPlexusArray.push(new ParticlePlexus(x, y, size, color, speedX, speedY));
+            }
+        }
+        initPlexusParticles();
+
+
+        function connectPlexusParticles() {
+            const connectDist = calculateConnectDistance(); // Recalcula a distância de conexão
+            for (let a = 0; a < particlesPlexusArray.length; a++) {
+                for (let b = a + 1; b < particlesPlexusArray.length; b++) {
+                    let dx = particlesPlexusArray[a].x - particlesPlexusArray[b].x;
+                    let dy = particlesPlexusArray[a].y - particlesPlexusArray[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectDist) {
+                        ctxPlexus.strokeStyle = `rgba(173, 216, 230, ${1 - distance / connectDist})`; // Opacidade baseada na distância
+                        ctxPlexus.lineWidth = 0.5; // Linhas finas
+                        ctxPlexus.beginPath();
+                        ctxPlexus.moveTo(particlesPlexusArray[a].x, particlesPlexusArray[a].y);
+                        ctxPlexus.lineTo(particlesPlexusArray[b].x, particlesPlexusArray[b].y);
+                        ctxPlexus.stroke();
+                    }
+                }
+            }
+        }
+
+        function animatePlexus() {
+            ctxPlexus.clearRect(0, 0, canvasPlexus.width, canvasPlexus.height);
+            for (let i = 0; i < particlesPlexusArray.length; i++) {
+                particlesPlexusArray[i].update();
+            }
+            connectPlexusParticles();
+            animationFrameIdPlexus = requestAnimationFrame(animatePlexus);
+        }
+
+
+        // Lidar com redimensionamento da janela para o Plexus
+        window.addEventListener('resize', () => {
+            cancelAnimationFrame(animationFrameIdPlexus); // Cancela a animação anterior
+            resizeCanvasPlexus();
+            initPlexusParticles(); // Reinicializa as partículas para as novas dimensões
+            animatePlexus(); // Reinicia a animação
+        });
+
+        animatePlexus();
+        // --- FIM DO CÓDIGO PLEXUS ---
+
+
+        // --- Código existente ---
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            if (particlesContainer) {
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + 'vw';
+                    particle.style.top = Math.random() * 100 + 'vh';
+                    particle.style.animationDelay = Math.random() * 15 + 's';
+                    particle.style.animationDuration = (Math.random() * 20 + 15) + 's';
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        }
+
+        function typeWriter(element, text, speed, pauseTime) {
+            let i = 0;
+            let isDeleting = false;
+            const initialDelay = 1500;
+
+            function type() {
+                if (!element) return;
+                const currentText = text;
+                if (isDeleting) {
+                    element.textContent = currentText.substring(0, i - 1);
+                    i--;
+                    if (i === 0) {
+                        isDeleting = false;
+                        setTimeout(type, pauseTime);
+                        return;
+                    }
+                } else {
+                    element.textContent = currentText.substring(0, i + 1);
+                    i++;
+                    if (i === currentText.length) {
+                        isDeleting = true;
+                        setTimeout(type, pauseTime + 1000);
+                        return;
+                    }
+                }
+                setTimeout(type, isDeleting ? speed / 2 : speed);
+            }
+            setTimeout(type, initialDelay);
+        }
+
+        window.addEventListener('load', () => {
+            createParticles();
+            const sloganElement = document.getElementById('slogan-digitado');
+            const sloganText = "Zeentt - Precisou? deixa com a Zeentt...";
+            if (sloganElement) {
+                typeWriter(sloganElement, sloganText, 100, 2000);
+            }
+        });
     </script>
 </body>
 </html>
