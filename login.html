@@ -196,12 +196,28 @@
         }
 
         .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; } /* z-index ajustado para -1 para ficar atrás do plexus se necessário */
-        .particle { position: absolute; width: 1px; height: 1px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; animation: particleFloat 30s infinite linear; }
-        @keyframes particleFloat {
+        .particle { position: absolute; width: 1px; height: 1px; background: rgba(255, 255, 255, 0.2); border-radius: 50%; animation: particleFloat-1 30s infinite linear; }
+        @keyframes particleFloat-1 {
             0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
             50% { opacity: 0.6; }
-            100% { transform: translateY(-100vh) translateX(Math.random() * 200 - 100 + 'px') scale(1); opacity: 0; }
+            100% { transform: translateY(-100vh) translateX(50px) scale(1); opacity: 0; }
         }
+
+        @keyframes particleFloat-2 {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) translateX(-50px) scale(1); opacity: 0; }
+        }
+
+        @keyframes particleFloat-3 {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) translateX(0) scale(1); opacity: 0; }
+        }
+
+        .particle-1 { animation: particleFloat-1 30s infinite linear; }
+        .particle-2 { animation: particleFloat-2 30s infinite linear; }
+        .particle-3 { animation: particleFloat-3 30s infinite linear; }
 
         .slogan-container { text-align: center; width: 100%; padding: 10px 20px; margin-top: 15px; z-index: 1; height: 2em; }
         #slogan-digitado { color: #FFFFFF; font-size: 1.1em; font-weight: 500; letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); display: inline-block; font-family: 'Courier New', Courier, monospace; white-space: nowrap; overflow: hidden; border-right: .15em solid orange; animation: blink-caret .75s step-end infinite; }
@@ -379,7 +395,8 @@
             if (particlesContainer) {
                 for (let i = 0; i < 30; i++) {
                     const particle = document.createElement('div');
-                    particle.className = 'particle';
+                    const particleType = Math.floor(Math.random() * 3) + 1;
+                    particle.className = `particle particle-${particleType}`;
                     particle.style.left = Math.random() * 100 + 'vw';
                     particle.style.top = Math.random() * 100 + 'vh';
                     particle.style.animationDelay = Math.random() * 15 + 's';
@@ -422,7 +439,7 @@
         window.addEventListener('load', () => {
             createParticles();
             const sloganElement = document.getElementById('slogan-digitado');
-            const sloganText = "Zeentt - Precisou? deixa com a Zeentt...";
+            const sloganText = "Precisou? deixa com a Zeentt...";
             if (sloganElement) {
                 typeWriter(sloganElement, sloganText, 100, 2000);
             }
