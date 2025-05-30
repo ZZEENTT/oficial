@@ -351,7 +351,7 @@
             <!-- Status -->
             <div class="flex-1 min-w-[200px]">
               <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-              <div class="flex gap-4">
+              <div class="flex gap-4 flex-wrap">
                 <label class="flex items-center">
                   <input type="checkbox" checked class="form-checkbox text-[#00337a]" onchange="filtrarPedidos()" value="preparacao">
                   <span class="ml-2 text-sm">Em Preparação</span>
@@ -359,6 +359,14 @@
                 <label class="flex items-center">
                   <input type="checkbox" checked class="form-checkbox text-[#00337a]" onchange="filtrarPedidos()" value="finalizado">
                   <span class="ml-2 text-sm">Finalizado</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" checked class="form-checkbox text-[#00337a]" onchange="filtrarPedidos()" value="servido">
+                  <span class="ml-2 text-sm">Servido</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="checkbox" checked class="form-checkbox text-[#00337a]" onchange="filtrarPedidos()" value="concluido">
+                  <span class="ml-2 text-sm">Concluído</span>
                 </label>
               </div>
             </div>
@@ -484,7 +492,7 @@
           tipo: 'mesa',
           mesa: '07',
           cliente: 'Pedro Oliveira',
-          status: 'preparacao',
+          status: 'servido',
           data: new Date().toISOString(),
           itens: [
             { nome: 'Picanha ao Ponto', quantidade: 2, preco: 89.90 },
@@ -494,16 +502,16 @@
           total: 254.50
         },
         {
-          tipo: 'delivery',
-          numero: 2,
-          cliente: 'Ana Beatriz',
-          status: 'finalizado',
-          data: new Date(Date.now() - 7200000).toISOString(), // 2 horas atrás
+          tipo: 'mesa',
+          mesa: '12',
+          cliente: 'Roberto Almeida',
+          status: 'concluido',
+          data: new Date(Date.now() - 5400000).toISOString(), // 1.5 horas atrás
           itens: [
-            { nome: 'Combo Família', quantidade: 1, preco: 89.90 },
-            { nome: 'Sobremesa Brownie', quantidade: 2, preco: 15.90 }
+            { nome: 'Filé à Parmegiana', quantidade: 2, preco: 52.90 },
+            { nome: 'Suco Natural', quantidade: 2, preco: 9.90 }
           ],
-          total: 121.70
+          total: 125.60
         },
         {
           tipo: 'mesa',
@@ -516,6 +524,30 @@
             { nome: 'Caipirinha', quantidade: 3, preco: 18.90 }
           ],
           total: 185.40
+        },
+        {
+          tipo: 'mesa',
+          mesa: '12',
+          cliente: 'Roberto Almeida',
+          status: 'servido',
+          data: new Date(Date.now() - 5400000).toISOString(), // 1.5 horas atrás
+          itens: [
+            { nome: 'Filé à Parmegiana', quantidade: 2, preco: 52.90 },
+            { nome: 'Suco Natural', quantidade: 2, preco: 9.90 }
+          ],
+          total: 125.60
+        },
+        {
+          tipo: 'delivery',
+          numero: 3,
+          cliente: 'Fernanda Lima',
+          status: 'servido',
+          data: new Date(Date.now() - 10800000).toISOString(), // 3 horas atrás
+          itens: [
+            { nome: 'Yakisoba Especial', quantidade: 1, preco: 48.90 },
+            { nome: 'Rolinho Primavera', quantidade: 2, preco: 12.90 }
+          ],
+          total: 74.70
         }
       ];
 
@@ -547,7 +579,7 @@
 
     // Filtrar e exibir pedidos
     function filtrarPedidos() {
-      const statusCheckboxes = document.querySelectorAll('input[type="checkbox"][value="preparacao"], input[type="checkbox"][value="finalizado"]');
+      const statusCheckboxes = document.querySelectorAll('input[type="checkbox"][value="preparacao"], input[type="checkbox"][value="finalizado"], input[type="checkbox"][value="servido"], input[type="checkbox"][value="concluido"]');
       const tipoCheckboxes = document.querySelectorAll('input[type="checkbox"][value="mesa"], input[type="checkbox"][value="delivery"]');
       const pesquisa = document.querySelector('input[type="text"]').value.toLowerCase();
       const data = document.querySelector('input[type="date"]').value;
@@ -595,8 +627,29 @@
         card.className = 'bg-gray-50 rounded-lg p-4 hover:shadow-md transition-all cursor-pointer animate__animated animate__fadeIn';
         card.onclick = () => abrirDetalhesPedido(pedido);
 
-        const statusClass = pedido.status === 'preparacao' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
-        const statusIcon = pedido.status === 'preparacao' ? 'fa-clock' : 'fa-check-circle';
+        let statusClass, statusIcon, statusText;
+        switch(pedido.status) {
+          case 'preparacao':
+            statusClass = 'bg-yellow-100 text-yellow-800';
+            statusIcon = 'fa-clock';
+            statusText = 'Em Preparação';
+            break;
+          case 'finalizado':
+            statusClass = 'bg-blue-100 text-blue-800';
+            statusIcon = 'fa-check-circle';
+            statusText = 'Finalizado';
+            break;
+          case 'servido':
+            statusClass = 'bg-green-100 text-green-800';
+            statusIcon = 'fa-utensils';
+            statusText = 'Servido';
+            break;
+          case 'concluido':
+            statusClass = 'bg-gray-100 text-gray-800';
+            statusIcon = 'fa-check-circle';
+            statusText = 'Concluído';
+            break;
+        }
 
         card.innerHTML = `
           <div class="flex justify-between items-start">
@@ -607,7 +660,7 @@
                 </span>
                 <span class="ml-3 ${statusClass} text-xs px-2 py-1 rounded-full flex items-center">
                   <i class="fas ${statusIcon} mr-1"></i>
-                  ${pedido.status === 'preparacao' ? 'Em Preparação' : 'Finalizado'}
+                  ${statusText}
                 </span>
               </div>
               <p class="text-sm text-gray-600">Cliente: ${pedido.cliente}</p>
@@ -635,9 +688,29 @@
       const btnFinalizar = document.getElementById('btn-finalizar');
       const btnPagamento = document.getElementById('btn-pagamento');
 
-      // Configurar visibilidade dos botões
-      btnFinalizar.style.display = pedido.status === 'preparacao' ? 'flex' : 'none';
-      btnPagamento.style.display = pedido.status === 'finalizado' ? 'flex' : 'none';
+      // Mostrar botão finalizar sempre e pagamento apenas quando servido
+      btnFinalizar.style.display = 'flex';
+      btnPagamento.style.display = pedido.status === 'servido' ? 'flex' : 'none';
+
+      let statusClass, statusText;
+      switch(pedido.status) {
+        case 'preparacao':
+          statusClass = 'bg-yellow-100 text-yellow-800';
+          statusText = 'Em Preparação';
+          break;
+        case 'finalizado':
+          statusClass = 'bg-blue-100 text-blue-800';
+          statusText = 'Finalizado pela Cozinha';
+          break;
+        case 'servido':
+          statusClass = 'bg-green-100 text-green-800';
+          statusText = 'Servido ao Cliente';
+          break;
+        case 'concluido':
+          statusClass = 'bg-gray-100 text-gray-800';
+          statusText = 'Concluído';
+          break;
+      }
 
       content.innerHTML = `
         <div class="space-y-6">
@@ -648,8 +721,8 @@
               </h4>
               <p class="text-gray-600">Cliente: ${pedido.cliente}</p>
             </div>
-            <span class="${pedido.status === 'preparacao' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'} px-3 py-1 rounded-full text-sm">
-              ${pedido.status === 'preparacao' ? 'Em Preparação' : 'Finalizado'}
+            <span class="${statusClass} px-3 py-1 rounded-full text-sm">
+              ${statusText}
             </span>
           </div>
 
@@ -695,19 +768,62 @@
     function finalizarPedido() {
       if (!pedidoAtual) return;
 
+      // Definir próximo status baseado no status atual
+      const statusOptions = {
+        preparacao: 'finalizado',
+        finalizado: 'servido',
+        servido: 'concluido'
+      };
+
+      const statusTexts = {
+        preparacao: 'Em Preparação',
+        finalizado: 'Finalizado pela Cozinha',
+        servido: 'Servido ao Cliente',
+        concluido: 'Concluído'
+      };
+
+      const nextStatus = statusOptions[pedidoAtual.status];
+      
+      // Se o pedido já estiver concluído, não permitir mudança
+      if (pedidoAtual.status === 'concluido') {
+        Swal.fire({
+          title: 'Pedido Concluído',
+          text: 'Este pedido já foi concluído e não pode ser alterado.',
+          icon: 'info'
+        });
+        return;
+      }
+
+      let confirmMessage;
+      switch(pedidoAtual.status) {
+        case 'preparacao':
+          confirmMessage = 'Confirmar que a cozinha finalizou o preparo?';
+          break;
+        case 'finalizado':
+          confirmMessage = 'Confirmar que o pedido foi entregue ao cliente?';
+          break;
+        case 'servido':
+          confirmMessage = 'Confirmar que o cliente pagou e o pedido está concluído?';
+          break;
+      }
+
       Swal.fire({
-        title: 'Finalizar Pedido',
-        text: 'Tem certeza que deseja finalizar este pedido?',
+        title: 'Alterar Status do Pedido',
+        html: `
+          <p>${confirmMessage}</p>
+          <p class="text-sm text-gray-600 mt-2">Status atual: ${statusTexts[pedidoAtual.status]}</p>
+          <p class="text-sm text-gray-600">Próximo status: ${statusTexts[nextStatus]}</p>
+        `,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#00337a',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Sim, finalizar',
+        confirmButtonText: 'Sim, confirmar',
         cancelButtonText: 'Cancelar'
       }).then((result) => {
         if (result.isConfirmed) {
           // Atualizar status do pedido
-          pedidoAtual.status = 'finalizado';
+          pedidoAtual.status = nextStatus;
           
           // Atualizar no localStorage
           const index = pedidosLista.findIndex(p => p.data === pedidoAtual.data);
@@ -720,11 +836,25 @@
           fecharModal();
           filtrarPedidos();
 
-          Swal.fire(
-            'Finalizado!',
-            'O pedido foi finalizado com sucesso.',
-            'success'
-          );
+          // Mensagem personalizada baseada no novo status
+          let successMessage;
+          switch(nextStatus) {
+            case 'finalizado':
+              successMessage = 'O pedido foi finalizado pela cozinha e está pronto para ser servido';
+              break;
+            case 'servido':
+              successMessage = 'O pedido foi entregue ao cliente';
+              break;
+            case 'concluido':
+              successMessage = 'O pedido foi concluído com sucesso';
+              break;
+          }
+
+          Swal.fire({
+            title: 'Status Atualizado!',
+            text: successMessage,
+            icon: 'success'
+          });
         }
       });
     }
@@ -767,13 +897,23 @@
           Swal.showLoading();
         }
       }).then(() => {
+        // Atualizar status do pedido para servido
+        pedidoAtual.status = 'servido';
+        
+        // Atualizar no localStorage
+        const index = pedidosLista.findIndex(p => p.data === pedidoAtual.data);
+        if (index !== -1) {
+          pedidosLista[index] = pedidoAtual;
+          localStorage.setItem('pedidos', JSON.stringify(pedidosLista));
+        }
+
         Swal.fire(
           'Pagamento Concluído!',
-          'O pagamento foi processado com sucesso.',
+          'O pagamento foi processado e o pedido foi marcado como servido.',
           'success'
         ).then(() => {
           fecharModal();
-          // Aqui você pode adicionar a lógica para marcar o pedido como pago
+          filtrarPedidos();
         });
       });
     }
@@ -839,6 +979,42 @@
         }
       });
     }
+
+    // Modificar o texto do botão finalizar baseado no status atual
+    document.addEventListener('DOMContentLoaded', function() {
+      const btnFinalizar = document.getElementById('btn-finalizar');
+      if (btnFinalizar) {
+        const updateFinalizarButton = () => {
+          if (pedidoAtual) {
+            let buttonText, buttonIcon;
+            switch(pedidoAtual.status) {
+              case 'preparacao':
+                buttonText = 'Finalizar Preparo';
+                buttonIcon = 'fa-utensils';
+                break;
+              case 'finalizado':
+                buttonText = 'Marcar como Servido';
+                buttonIcon = 'fa-check';
+                break;
+              case 'servido':
+                buttonText = 'Concluir Pedido';
+                buttonIcon = 'fa-flag-checkered';
+                break;
+              case 'concluido':
+                buttonText = 'Pedido Concluído';
+                buttonIcon = 'fa-check-circle';
+                btnFinalizar.disabled = true;
+                btnFinalizar.classList.add('opacity-50', 'cursor-not-allowed');
+                break;
+            }
+            btnFinalizar.innerHTML = `<i class="fas ${buttonIcon} mr-2"></i> ${buttonText}`;
+          }
+        };
+
+        // Observar mudanças no pedidoAtual
+        setInterval(updateFinalizarButton, 100);
+      }
+    });
   </script>
   
   <!-- SweetAlert for better alerts -->
