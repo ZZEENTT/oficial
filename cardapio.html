@@ -702,6 +702,34 @@
         </div>
         <h3 class="text-base font-semibold mb-2 mt-4 text-[var(--secondary-color)] animate__animated animate__fadeInUp"></h3>
         <p class="text-sm text-gray-700 mb-4 animate__animated animate__fadeInUp"></p>
+        
+        <!-- Controle de Quantidade -->
+        <div class="flex items-center justify-between mb-4 bg-gray-50 p-3 rounded-lg animate__animated animate__fadeInUp">
+          <span class="text-sm font-medium text-gray-700">Quantidade:</span>
+          <div class="flex items-center space-x-3">
+            <button onclick="decrementQuantity()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
+              <i class="fas fa-minus text-gray-600"></i>
+            </button>
+            <span id="quantityDisplay" class="text-lg font-semibold text-gray-800 w-8 text-center">1</span>
+            <button onclick="incrementQuantity()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition-colors">
+              <i class="fas fa-plus text-gray-600"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Campo de Observações -->
+        <div class="mb-4 animate__animated animate__fadeInUp">
+          <label for="observacoes" class="block text-sm font-medium text-gray-700 mb-2">
+            <i class="fas fa-pencil-alt mr-2"></i>Observações
+          </label>
+          <textarea
+            id="observacoes"
+            rows="3"
+            placeholder="Ex: Remover cebola, sem molho, etc..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--secondary-color)]/20 focus:border-[var(--secondary-color)] transition-all resize-none text-sm"
+          ></textarea>
+        </div>
+
         <div class="bg-gradient-to-r from-[var(--secondary-color)] to-[var(--accent-color)] p-3 rounded-lg text-white font-semibold text-sm shadow-md animate__animated animate__fadeInUp">
         </div>
       </div>
@@ -757,7 +785,8 @@
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div class="p-4">
+      <div class="p-4 max-h-[80vh] overflow-y-auto">
+        <!-- Tipo de Pedido -->
         <div class="mb-4">
           <label class="block text-gray-700 text-sm font-bold mb-2">Tipo de Pedido</label>
           <div class="flex space-x-4">
@@ -769,19 +798,88 @@
             </button>
           </div>
         </div>
-        
+
+        <!-- Informações do Cliente -->
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="nomeCliente">
+            <i class="fas fa-user mr-2"></i>Nome do Cliente
+          </label>
+          <input type="text" id="nomeCliente" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Digite o nome do cliente">
+        </div>
+
+        <!-- Número da Mesa (visível apenas para pedidos na mesa) -->
         <div id="mesaInput" class="mb-4 hidden">
           <label class="block text-gray-700 text-sm font-bold mb-2" for="numeroMesa">
-            Número da Mesa
+            <i class="fas fa-hashtag mr-2"></i>Número da Mesa
           </label>
           <input type="number" id="numeroMesa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Digite o número da mesa">
         </div>
-        
-        <div class="mb-4">
-          <label class="block text-gray-700 text-sm font-bold mb-2" for="nomeCliente">
-            Nome do Cliente
-          </label>
-          <input type="text" id="nomeCliente" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Digite o nome do cliente">
+
+        <!-- Informações de Entrega (visível apenas para delivery) -->
+        <div id="deliveryInfo" class="hidden space-y-4">
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="telefone">
+              <i class="fas fa-phone mr-2"></i>Telefone para Contato
+            </label>
+            <input type="tel" id="telefone" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="(00) 00000-0000">
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="cep">
+              <i class="fas fa-map-marker-alt mr-2"></i>CEP
+            </label>
+            <input type="text" id="cep" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="00000-000" onblur="buscarCep()">
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="rua">
+              <i class="fas fa-road mr-2"></i>Rua
+            </label>
+            <input type="text" id="rua" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Nome da rua">
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="numero">
+              <i class="fas fa-home mr-2"></i>Número
+            </label>
+            <input type="text" id="numero" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Número do endereço">
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="complemento">
+              <i class="fas fa-info-circle mr-2"></i>Complemento
+            </label>
+            <input type="text" id="complemento" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Apto, Bloco, etc">
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="bairro">
+              <i class="fas fa-map mr-2"></i>Bairro
+            </label>
+            <input type="text" id="bairro" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Nome do bairro">
+          </div>
+
+          <!-- Forma de Pagamento (movido para dentro do deliveryInfo) -->
+          <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">
+              <i class="fas fa-credit-card mr-2"></i>Forma de Pagamento
+            </label>
+            <select id="formaPagamento" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+              <option value="">Selecione a forma de pagamento</option>
+              <option value="dinheiro">Dinheiro</option>
+              <option value="cartao_credito">Cartão de Crédito</option>
+              <option value="cartao_debito">Cartão de Débito</option>
+              <option value="pix">PIX</option>
+            </select>
+          </div>
+
+          <!-- Campo para troco (visível apenas quando selecionar dinheiro) -->
+          <div id="trocoInfo" class="mb-4 hidden">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="troco">
+              <i class="fas fa-money-bill-wave mr-2"></i>Troco para
+            </label>
+            <input type="number" id="troco" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Digite o valor para calcular o troco">
+          </div>
         </div>
       </div>
       <div class="px-4 pb-4 flex justify-end">
@@ -1035,7 +1133,17 @@
     // Add item from modal to cart
     function adicionarModalAoPedido() {
       if (currentModalItem) {
-        addToCart(currentModalItem);
+        const quantidade = parseInt(document.getElementById('quantityDisplay').textContent);
+        const observacoes = document.getElementById('observacoes').value.trim();
+        
+        const itemWithDetails = {
+          ...currentModalItem,
+          quantidade: quantidade,
+          observacoes: observacoes,
+          precoTotal: currentModalItem.price * quantidade
+        };
+        
+        addToCart(itemWithDetails);
         closeModal();
       }
     }
@@ -1097,7 +1205,7 @@
       } else {
         // Adicionar itens ao carrinho com animações
         cartItems.forEach((item, index) => {
-          total += item.price;
+          total += item.precoTotal || item.price;
           
           const li = document.createElement('li');
           li.className = 'p-3 flex items-start border-b border-gray-100 hover:bg-gray-50 transition-colors duration-300';
@@ -1106,9 +1214,15 @@
               <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover rounded-lg shadow-sm">
             </div>
             <div class="flex-1 ml-3">
-              <h3 class="font-semibold text-sm text-[var(--secondary-color)]">${item.title}</h3>
+              <h3 class="font-semibold text-sm text-[var(--secondary-color)]">
+                ${item.title}
+                ${item.quantidade > 1 ? `<span class="text-gray-500"> (x${item.quantidade})</span>` : ''}
+              </h3>
               <p class="text-gray-600 text-xs line-clamp-1">${item.description}</p>
-              <p class="text-[var(--primary-color)] font-semibold text-sm mt-1">R$ ${item.price.toFixed(2).replace('.', ',')}</p>
+              ${item.observacoes ? `<p class="text-gray-500 text-xs mt-1 italic">Obs: ${item.observacoes}</p>` : ''}
+              <p class="text-[var(--primary-color)] font-semibold text-sm mt-1">
+                R$ ${(item.precoTotal || item.price).toFixed(2).replace('.', ',')}
+              </p>
             </div>
             <button onclick="removeFromCart(${index})" class="text-gray-400 hover:text-[var(--primary-color)] transition-colors duration-300 p-2 rounded-full hover:bg-gray-100">
               <i class="fas fa-trash-alt text-sm"></i>
@@ -1392,17 +1506,44 @@
       const btnMesa = document.getElementById('btnMesa');
       const btnDelivery = document.getElementById('btnDelivery');
       const mesaInput = document.getElementById('mesaInput');
+      const deliveryInfo = document.getElementById('deliveryInfo');
       
       if (tipo === 'mesa') {
         btnMesa.classList.add('bg-blue-100', 'border-blue-500');
         btnDelivery.classList.remove('bg-blue-100', 'border-blue-500');
         mesaInput.classList.remove('hidden');
+        deliveryInfo.classList.add('hidden');
       } else {
         btnDelivery.classList.add('bg-blue-100', 'border-blue-500');
         btnMesa.classList.remove('bg-blue-100', 'border-blue-500');
         mesaInput.classList.add('hidden');
+        deliveryInfo.classList.remove('hidden');
       }
     }
+
+    // Função para buscar CEP
+    async function buscarCep() {
+      const cep = document.getElementById('cep').value.replace(/\D/g, '');
+      if (cep.length !== 8) return;
+
+      try {
+        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+        const data = await response.json();
+        
+        if (!data.erro) {
+          document.getElementById('rua').value = data.logradouro;
+          document.getElementById('bairro').value = data.bairro;
+        }
+      } catch (error) {
+        console.error('Erro ao buscar CEP:', error);
+      }
+    }
+
+    // Mostrar/ocultar campo de troco
+    document.getElementById('formaPagamento').addEventListener('change', function() {
+      const trocoInfo = document.getElementById('trocoInfo');
+      trocoInfo.classList.toggle('hidden', this.value !== 'dinheiro');
+    });
 
     function showClientInfoModal() {
       const modal = document.getElementById('clientInfoModal');
@@ -1412,6 +1553,15 @@
       // Reset form
       document.getElementById('nomeCliente').value = '';
       document.getElementById('numeroMesa').value = '';
+      document.getElementById('telefone').value = '';
+      document.getElementById('cep').value = '';
+      document.getElementById('rua').value = '';
+      document.getElementById('numero').value = '';
+      document.getElementById('complemento').value = '';
+      document.getElementById('bairro').value = '';
+      document.getElementById('formaPagamento').value = '';
+      document.getElementById('troco').value = '';
+      
       tipoPedidoAtual = null;
       
       const btnMesa = document.getElementById('btnMesa');
@@ -1419,6 +1569,8 @@
       btnMesa.classList.remove('bg-blue-100', 'border-blue-500');
       btnDelivery.classList.remove('bg-blue-100', 'border-blue-500');
       document.getElementById('mesaInput').classList.add('hidden');
+      document.getElementById('deliveryInfo').classList.add('hidden');
+      document.getElementById('trocoInfo').classList.add('hidden');
     }
 
     function closeClientInfoModal() {
@@ -1429,7 +1581,6 @@
 
     function confirmarPedido() {
       const nomeCliente = document.getElementById('nomeCliente').value.trim();
-      const numeroMesa = document.getElementById('numeroMesa').value.trim();
       
       if (!tipoPedidoAtual) {
         alert('Por favor, selecione o tipo de pedido (Mesa ou Delivery)');
@@ -1441,26 +1592,55 @@
         return;
       }
       
-      if (tipoPedidoAtual === 'mesa' && !numeroMesa) {
-        alert('Por favor, insira o número da mesa');
-        return;
+      if (tipoPedidoAtual === 'mesa') {
+        const numeroMesa = document.getElementById('numeroMesa').value.trim();
+        if (!numeroMesa) {
+          alert('Por favor, insira o número da mesa');
+          return;
+        }
+      } else {
+        // Validar campos de delivery
+        const telefone = document.getElementById('telefone').value.trim();
+        const cep = document.getElementById('cep').value.trim();
+        const rua = document.getElementById('rua').value.trim();
+        const numero = document.getElementById('numero').value.trim();
+        const bairro = document.getElementById('bairro').value.trim();
+        const formaPagamento = document.getElementById('formaPagamento').value;
+        
+        if (!telefone || !cep || !rua || !numero || !bairro) {
+          alert('Por favor, preencha todos os campos obrigatórios do endereço de entrega');
+          return;
+        }
+
+        if (!formaPagamento) {
+          alert('Por favor, selecione a forma de pagamento');
+          return;
+        }
       }
       
       // Criar objeto do pedido
       const pedido = {
         tipo: tipoPedidoAtual,
         cliente: nomeCliente,
-        mesa: tipoPedidoAtual === 'mesa' ? numeroMesa : null,
+        mesa: tipoPedidoAtual === 'mesa' ? document.getElementById('numeroMesa').value : null,
+        delivery: tipoPedidoAtual === 'delivery' ? {
+          telefone: document.getElementById('telefone').value,
+          cep: document.getElementById('cep').value,
+          rua: document.getElementById('rua').value,
+          numero: document.getElementById('numero').value,
+          complemento: document.getElementById('complemento').value,
+          bairro: document.getElementById('bairro').value,
+          formaPagamento: document.getElementById('formaPagamento').value,
+          troco: document.getElementById('formaPagamento').value === 'dinheiro' ? document.getElementById('troco').value : null
+        } : null,
         numero: tipoPedidoAtual === 'delivery' ? pedidoSequencial++ : null,
         itens: cartItems,
-        total: cartItems.reduce((total, item) => total + item.price, 0),
+        total: cartItems.reduce((total, item) => total + (item.precoTotal || item.price), 0),
         data: new Date().toISOString()
       };
       
-      // Aqui você pode adicionar a lógica para enviar o pedido para a cozinha
       console.log('Pedido enviado para a cozinha:', pedido);
       
-      // Fechar modal e limpar carrinho
       closeClientInfoModal();
       mostrarMensagemSucesso(pedido);
     }
@@ -1471,6 +1651,20 @@
       
       const successMessage = document.createElement('div');
       successMessage.className = 'p-8 text-center text-green-500 animate__animated animate__fadeIn';
+      
+      let enderecoInfo = '';
+      if (pedido.tipo === 'delivery') {
+        enderecoInfo = `
+          <div class="mt-2 text-sm">
+            <p>Endereço: ${pedido.delivery.rua}, ${pedido.delivery.numero}</p>
+            <p>Bairro: ${pedido.delivery.bairro}</p>
+            <p>Telefone: ${pedido.delivery.telefone}</p>
+            <p class="mt-2">Forma de Pagamento: ${pedido.delivery.formaPagamento.replace('_', ' ').toUpperCase()}</p>
+            ${pedido.delivery.troco ? `<p>Troco para: R$ ${pedido.delivery.troco}</p>` : ''}
+          </div>
+        `;
+      }
+      
       successMessage.innerHTML = `
         <div class="bg-green-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
           <i class="fas fa-check-circle text-4xl text-green-500"></i>
@@ -1481,7 +1675,7 @@
           <p>Cliente: ${pedido.cliente}</p>
           ${pedido.tipo === 'mesa' 
             ? `<p>Mesa: ${pedido.mesa}</p>` 
-            : `<p>Delivery #${pedido.numero}</p>`
+            : `<p>Delivery #${pedido.numero}</p>${enderecoInfo}`
           }
         </div>
         <p class="text-sm mt-4 text-gray-500">Seu pedido foi enviado para a cozinha</p>
@@ -1489,12 +1683,37 @@
       
       carrinhoItens.appendChild(successMessage);
       
-      // Resetar o carrinho após alguns segundos
       setTimeout(() => {
         cartItems = [];
         updateCart();
         toggleCarrinho();
-      }, 3000);
+      }, 5000);
+    }
+
+    // Funções de controle de quantidade
+    function incrementQuantity() {
+      const display = document.getElementById('quantityDisplay');
+      const currentValue = parseInt(display.textContent);
+      display.textContent = currentValue + 1;
+      updateModalPrice();
+    }
+
+    function decrementQuantity() {
+      const display = document.getElementById('quantityDisplay');
+      const currentValue = parseInt(display.textContent);
+      if (currentValue > 1) {
+        display.textContent = currentValue - 1;
+        updateModalPrice();
+      }
+    }
+
+    function updateModalPrice() {
+      if (currentModalItem) {
+        const quantidade = parseInt(document.getElementById('quantityDisplay').textContent);
+        const precoTotal = currentModalItem.price * quantidade;
+        const priceDisplay = document.querySelector('#modalDetails .bg-gradient-to-r');
+        priceDisplay.textContent = `R$ ${precoTotal.toFixed(2).replace('.', ',')}`;
+      }
     }
   </script>
 </body>
